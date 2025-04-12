@@ -19,10 +19,10 @@ model GuestParty {
   token             String
   guestType         String
   inviteCode        String
-  fridayParty       Boolean
-  paid              Boolean
-  needsBus          Boolean
-  accommodationCost Int
+  fridayParty       Boolean?
+  paid              Boolean?
+  needsBus          Boolean?
+  accommodationCost Int?
   cabinId           Int?
   cabin             Cabin?            @relation(fields: [cabinId], references: [id])
   guests            IndividualGuest[] // ✅ FIXED
