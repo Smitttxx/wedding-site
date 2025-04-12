@@ -63,7 +63,7 @@ const StyledLink = styled.a`
 
 export default function GuestPage() {
   const router = useRouter();
-  const { partyName } = router.query;
+  const { inviteCode } = router.query;
   const [party, setParty] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [formData, setFormData] = useState([]);
@@ -74,7 +74,7 @@ export default function GuestPage() {
   const [hasSelectedOnsite, setHasSelectedOnsite] = useState(false);
 
   const fetchParty = async () => {
-    const res = await axios.get(`/api/guest/${partyName}`);
+    const res = await axios.get(`/api/invite/${inviteCode}`);
     const data = res.data;
     setParty(data);
     setFormData(
@@ -89,20 +89,20 @@ export default function GuestPage() {
   };
 
   useEffect(() => {
-    if (partyName) {
+    if (inviteCode) {
       fetchParty();
     }
-  }, [partyName]);
+  }, [inviteCode]);
 
   useEffect(() => {
     const accessGranted = sessionStorage.getItem('hasAccess');
   
     if (!accessGranted) {
       router.replace('/invite');
-    } else {
+    } else if (inviteCode) {
       fetchParty();
     }
-  }, [partyName]);  
+  }, [inviteCode]);
 
   useEffect(() => {
     if (accommodationOption === 'onsite') {

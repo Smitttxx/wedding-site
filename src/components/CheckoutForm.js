@@ -52,7 +52,7 @@ export default function CheckoutForm({ guestId, clientSecret }) {
     if (result.error) {
       alert(result.error.message);
     } else if (result.paymentIntent.status === 'succeeded') {
-      await axios.post('/api/guest/markPaid', { guestId });
+      await axios.post('/api/invite/markPaid', { guestId });
       router.replace(`${router.asPath.split('?')[0]}?success=true`);
     }
 

@@ -47,14 +47,14 @@ export default function InvitePage() {
   
 	try {
 	  // Optional: Validate the code via API
-	  const res = await fetch(`/api/guest/${code}`);
+	  const res = await fetch(`/api/invite/${code}`);
 	  if (!res.ok) throw new Error();
   
 	  // ✅ Set session access flag
 	  sessionStorage.setItem('hasAccess', 'true');
   
 	  // ✅ Navigate to their guest page
-	  router.push(`/guest/${code}`);
+	  router.push(`/invite/${code}`);
 	} catch {
 	  setError('That code doesn’t seem to work. Double check it and try again!');
 	}

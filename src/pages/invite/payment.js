@@ -4,8 +4,8 @@ import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import styled from 'styled-components';
-import CheckoutForm from '../../../components/CheckoutForm';
-import PartyHeader from '../../../components/PartyHeader';
+import CheckoutForm from '../../components/CheckoutForm';
+import PartyHeader from '../../components/PartyHeader';
 import Link from 'next/link';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
@@ -36,7 +36,7 @@ export default function PaymentPage() {
 
   useEffect(() => {
     const fetchParty = async () => {
-      const res = await axios.get(`/api/guest/${partyName}`);
+      const res = await axios.get(`/api/invite/${partyName}`);
       const data = res.data;
       setParty(data);
 
