@@ -15,10 +15,10 @@ datasource db {
 
 model GuestParty {
   id                Int               @id @default(autoincrement())
-  partyName         String
-  token             String
+  partyName         String            @unique
+  token             String            @unique
   guestType         String
-  inviteCode        String
+  inviteCode        String            @unique
   fridayParty       Boolean?
   paid              Boolean?
   needsBus          Boolean?

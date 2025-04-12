@@ -10,18 +10,18 @@ async function main() {
       name: 'Farmhouse',
       rooms: {
         create: [
-          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true},
-          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: true},
-          { name: 'Room 3', roomType: 'Double', capacity: 2, enSuite: true},
-          { name: 'Room 4', roomType: 'Double and Bunk', capacity: 4, enSuite: false},
-          { name: 'Room 5', roomType: 'Double and Bunk', capacity: 4, enSuite: false},
-          { name: 'Room 6', roomType: 'Double and Bunk', capacity: 4, enSuite: false}
+          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
+          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: true },
+          { name: 'Room 3', roomType: 'Double', capacity: 2, enSuite: true },
+          { name: 'Room 4', roomType: 'Double and Bunk', capacity: 4, enSuite: false },
+          { name: 'Room 5', roomType: 'Double and Bunk', capacity: 4, enSuite: false },
+          { name: 'Room 6', roomType: 'Double and Bunk', capacity: 4, enSuite: false }
         ]
       }
     },
     include: { rooms: true }
   });
-  
+
   const longhouse = await prisma.Cabin.create({
     data: {
       name: 'Longhouse',
@@ -75,42 +75,42 @@ async function main() {
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
           { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
           { name: 'Room 3', roomType: 'Bunk', capacity: 3, enSuite: false }
-        
+
         ]
       }
     },
     include: { rooms: true }
   });
 
-const benlawyers = await prisma.Cabin.create({
-  data: {
-    name: 'Ben Lawyers',
-    rooms: {
-      create: [
-        { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
-        { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
-        { name: 'Room 3', roomType: 'Bunk', capacity: 4, enSuite: false }
-      
-      ]
-    }
-  },
-  include: { rooms: true }
-});
+  const benlawyers = await prisma.Cabin.create({
+    data: {
+      name: 'Ben Lawyers',
+      rooms: {
+        create: [
+          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
+          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
+          { name: 'Room 3', roomType: 'Bunk', capacity: 4, enSuite: false }
 
-const cottage = await prisma.Cabin.create({
-  data: {
-    name: 'Cottage',
-    rooms: {
-      create: [
-        { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
-        { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
-        { name: 'Room 3', roomType: 'Bunk', capacity: 4, enSuite: false }
-      
-      ]
-    }
-  },
-  include: { rooms: true }
-});
+        ]
+      }
+    },
+    include: { rooms: true }
+  });
+
+  const cottage = await prisma.Cabin.create({
+    data: {
+      name: 'Cottage',
+      rooms: {
+        create: [
+          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
+          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
+          { name: 'Room 3', roomType: 'Bunk', capacity: 4, enSuite: false }
+
+        ]
+      }
+    },
+    include: { rooms: true }
+  });
 
   //guests
   const joeAndLaura = await prisma.GuestParty.create({
@@ -119,9 +119,6 @@ const cottage = await prisma.Cabin.create({
       token: 'joeAndLaura',
       guestType: 'OnSite',
       inviteCode: 'jir6',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -149,9 +146,6 @@ const cottage = await prisma.Cabin.create({
       token: 'sonnyAndBecca',
       guestType: 'OnSite',
       inviteCode: 'oh7k',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -171,7 +165,7 @@ const cottage = await prisma.Cabin.create({
         ]
       }
     }
-  }); 
+  });
 
   const jayAndBecky = await prisma.GuestParty.create({
     data: {
@@ -179,9 +173,6 @@ const cottage = await prisma.Cabin.create({
       token: 'jayAndBecky',
       guestType: 'OnSite',
       inviteCode: '4yhb',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -201,17 +192,14 @@ const cottage = await prisma.Cabin.create({
         ]
       }
     }
-  }); 
-  
+  });
+
   const tomAndToni = await prisma.GuestParty.create({
     data: {
       partyName: 'Tom & Toni',
       token: 'tomAndToni',
       guestType: 'OnSite',
       inviteCode: '8fg0',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 22000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -231,7 +219,7 @@ const cottage = await prisma.Cabin.create({
         ]
       }
     }
-  }); 
+  });
 
   const connorAndEllie = await prisma.GuestParty.create({
     data: {
@@ -239,9 +227,6 @@ const cottage = await prisma.Cabin.create({
       token: 'connorAndEllie',
       guestType: 'OnSite',
       inviteCode: '2jiu',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 22000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -261,7 +246,7 @@ const cottage = await prisma.Cabin.create({
         ]
       }
     }
-  }); 
+  });
 
   const grahamAndPuja = await prisma.GuestParty.create({
     data: {
@@ -269,9 +254,6 @@ const cottage = await prisma.Cabin.create({
       token: 'grahamAndPuja',
       guestType: 'OnSite',
       inviteCode: 'x6mp',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 22000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -299,9 +281,6 @@ const cottage = await prisma.Cabin.create({
       token: 'seanAndKim',
       guestType: 'OnSite',
       inviteCode: '0gh3',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 22000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -329,9 +308,6 @@ const cottage = await prisma.Cabin.create({
       token: 'maddieAndNatasha',
       guestType: 'OnSite',
       inviteCode: '5msi',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 22000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -359,9 +335,6 @@ const cottage = await prisma.Cabin.create({
       token: 'barry',
       guestType: 'OnSite',
       inviteCode: 'nm1p',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 11000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -384,9 +357,6 @@ const cottage = await prisma.Cabin.create({
       token: 'markAndHelen',
       guestType: 'OnSite',
       inviteCode: '4bg7',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 26000,
       cabin: {
         connect: { id: longhouse.id }
@@ -414,9 +384,6 @@ const cottage = await prisma.Cabin.create({
       token: 'jakeAndAnthia',
       guestType: 'OnSite',
       inviteCode: 'b58x',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 26000,
       cabin: {
         connect: { id: longhouse.id }
@@ -444,9 +411,6 @@ const cottage = await prisma.Cabin.create({
       token: 'leeAndAlly',
       guestType: 'OnSite',
       inviteCode: '9i4o',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 26000,
       cabin: {
         connect: { id: longhouse.id }
@@ -474,9 +438,6 @@ const cottage = await prisma.Cabin.create({
       token: 'peteAndCynthia',
       guestType: 'OnSite',
       inviteCode: 'c2g6',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 26000,
       cabin: {
         connect: { id: longhouse.id }
@@ -504,9 +465,6 @@ const cottage = await prisma.Cabin.create({
       token: 'nigelAndRuth',
       guestType: 'OnSite',
       inviteCode: 'k56p',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: bencurchan.id }
@@ -534,9 +492,6 @@ const cottage = await prisma.Cabin.create({
       token: 'mikeAndAnne',
       guestType: 'OnSite',
       inviteCode: '4gf5',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: bencurchan.id }
@@ -564,9 +519,6 @@ const cottage = await prisma.Cabin.create({
       token: 'mikeAndEllen',
       guestType: 'OnSite',
       inviteCode: '7cvt',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 26000,
       cabin: {
         connect: { id: bencurchan.id }
@@ -594,9 +546,6 @@ const cottage = await prisma.Cabin.create({
       token: 'david',
       guestType: 'OnSite',
       inviteCode: 'drg4',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 11000,
       cabin: {
         connect: { id: bencurchan.id }
@@ -619,9 +568,6 @@ const cottage = await prisma.Cabin.create({
       token: 'steven',
       guestType: 'OnSite',
       inviteCode: '76gj',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 11000,
       cabin: {
         connect: { id: bencurchan.id }
@@ -644,9 +590,6 @@ const cottage = await prisma.Cabin.create({
       token: 'tom',
       guestType: 'OnSite',
       inviteCode: 'c90l',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 11000,
       cabin: {
         connect: { id: bencurchan.id }
@@ -661,7 +604,7 @@ const cottage = await prisma.Cabin.create({
         ]
       }
     }
-  }); 
+  });
 
   const georgeAndRebecca = await prisma.GuestParty.create({
     data: {
@@ -669,9 +612,6 @@ const cottage = await prisma.Cabin.create({
       token: 'georgeAndRebecca',
       guestType: 'OnSite',
       inviteCode: '46vy',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: schehallion.id }
@@ -691,7 +631,7 @@ const cottage = await prisma.Cabin.create({
         ]
       }
     }
-  }); 
+  });
 
   const eddieAndMaureen = await prisma.GuestParty.create({
     data: {
@@ -699,9 +639,6 @@ const cottage = await prisma.Cabin.create({
       token: 'eddieAndMaureen',
       guestType: 'OnSite',
       inviteCode: 'zv60',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: schehallion.id }
@@ -721,7 +658,7 @@ const cottage = await prisma.Cabin.create({
         ]
       }
     }
-  }); 
+  });
 
   const kevinAndLynn = await prisma.GuestParty.create({
     data: {
@@ -729,9 +666,6 @@ const cottage = await prisma.Cabin.create({
       token: 'kevinAndLynn',
       guestType: 'OnSite',
       inviteCode: '0ba3',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 22000,
       cabin: {
         connect: { id: schehallion.id }
@@ -751,7 +685,7 @@ const cottage = await prisma.Cabin.create({
         ]
       }
     }
-  }); 
+  });
 
   const cieranAndChole = await prisma.GuestParty.create({
     data: {
@@ -759,9 +693,6 @@ const cottage = await prisma.Cabin.create({
       token: 'cieranAndChole',
       guestType: 'OnSite',
       inviteCode: 'j8s4',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 22000,
       cabin: {
         connect: { id: schehallion.id }
@@ -789,9 +720,6 @@ const cottage = await prisma.Cabin.create({
       token: 'johnAndAndrea',
       guestType: 'OnSite',
       inviteCode: 'k8z3',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: schehallion.id }
@@ -819,9 +747,6 @@ const cottage = await prisma.Cabin.create({
       token: 'dougieAndMaria',
       guestType: 'OnSite',
       inviteCode: 'f57n',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: bendrummod.id }
@@ -849,9 +774,6 @@ const cottage = await prisma.Cabin.create({
       token: 'rossAndNicci',
       guestType: 'OnSite',
       inviteCode: 'b0pl',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: bendrummod.id }
@@ -897,9 +819,6 @@ const cottage = await prisma.Cabin.create({
       token: 'ryanAndVicky',
       guestType: 'OnSite',
       inviteCode: 'z16f',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: benlawyers.id }
@@ -939,9 +858,6 @@ const cottage = await prisma.Cabin.create({
       token: 'williamAndShona',
       guestType: 'OnSite',
       inviteCode: '0pag',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 30000,
       cabin: {
         connect: { id: benlawyers.id }
@@ -981,9 +897,6 @@ const cottage = await prisma.Cabin.create({
       token: 'kennyAndUna',
       guestType: 'OnSite',
       inviteCode: 'c57x',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 22000,
       cabin: {
         connect: { id: cottage.id }
@@ -1011,9 +924,6 @@ const cottage = await prisma.Cabin.create({
       token: 'una',
       guestType: 'OnSite',
       inviteCode: 'q4mg',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 11000,
       cabin: {
         connect: { id: cottage.id }
@@ -1036,9 +946,6 @@ const cottage = await prisma.Cabin.create({
       token: 'steveAndLinda',
       guestType: 'OnSite',
       inviteCode: 'z61b',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 26000,
       cabin: {
         connect: { id: cottage.id }
@@ -1066,9 +973,6 @@ const cottage = await prisma.Cabin.create({
       token: 'kevin',
       guestType: 'OnSite',
       inviteCode: 'q92x',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 11000,
       cabin: {
         connect: { id: cottage.id }
@@ -1091,9 +995,6 @@ const cottage = await prisma.Cabin.create({
       token: 'rhys',
       guestType: 'OnSite',
       inviteCode: 'f6z2',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
       accommodationCost: 11000,
       cabin: {
         connect: { id: cottage.id }
@@ -1116,9 +1017,6 @@ const cottage = await prisma.Cabin.create({
       token: 'bazAndMary',
       guestType: 'OtherAccommodation',
       inviteCode: 'm93h',
-      fridayParty: false,
-      needsBus: false,
-     
       guests: {
         create: [
           {
@@ -1140,9 +1038,6 @@ const cottage = await prisma.Cabin.create({
       token: 'sarah',
       guestType: 'OtherAccommodation',
       inviteCode: 'e5u8',
-      fridayParty: false,
-      needsBus: false,
-     
       guests: {
         create: [
           {
@@ -1160,9 +1055,6 @@ const cottage = await prisma.Cabin.create({
       token: 'jamieAndTabitha',
       guestType: 'OtherAccommodation',
       inviteCode: 'rtv4',
-      fridayParty: false,
-      needsBus: false,
-     
       guests: {
         create: [
           {
@@ -1184,9 +1076,6 @@ const cottage = await prisma.Cabin.create({
       token: 'ianAndSylvia',
       guestType: 'OtherAccommodation',
       inviteCode: 'wvt5',
-      fridayParty: false,
-      needsBus: false,
-     
       guests: {
         create: [
           {
@@ -1208,9 +1097,6 @@ const cottage = await prisma.Cabin.create({
       token: 'partnerAndMaxine',
       guestType: 'OtherAccommodation',
       inviteCode: 'lsy7',
-      fridayParty: false,
-      needsBus: false,
-     
       guests: {
         create: [
           {
@@ -1232,9 +1118,6 @@ const cottage = await prisma.Cabin.create({
       token: 'paulAndAnne',
       guestType: 'OtherAccommodation',
       inviteCode: '5xt8',
-      fridayParty: false,
-      needsBus: false,
-     
       guests: {
         create: [
           {
@@ -1256,9 +1139,6 @@ const cottage = await prisma.Cabin.create({
       token: 'nigelAndDebra',
       guestType: 'OtherAccommodation',
       inviteCode: 'q492',
-      fridayParty: false,
-      needsBus: false,
-     
       guests: {
         create: [
           {
@@ -1280,9 +1160,6 @@ const cottage = await prisma.Cabin.create({
       token: 'stuartAndDebbie',
       guestType: 'OtherAccommodation',
       inviteCode: 'qzx5',
-      fridayParty: false,
-      needsBus: false,
-     
       guests: {
         create: [
           {
