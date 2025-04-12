@@ -1,11 +1,11 @@
 import prisma from '../../../lib/prisma';
 
 export default async function handler(req, res) {
-  const { partyName } = req.query;
+  const { inviteCode } = req.query;
 
   try {
     const party = await prisma.guestParty.findUnique({
-      where: { partyName },
+      where: { inviteCode: inviteCode },
       include: {
         guests: true
       }

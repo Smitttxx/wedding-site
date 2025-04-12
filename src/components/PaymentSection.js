@@ -41,7 +41,7 @@ export default function PaymentPage() {
 
   useEffect(() => {
     const fetchParty = async () => {
-      const res = await axios.get(`/api/guest/${partyName}`);
+      const res = await axios.get(`/api/invite/${partyName}`);
       const data = res.data;
       setParty(data);
 

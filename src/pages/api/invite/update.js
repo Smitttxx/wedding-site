@@ -1,4 +1,4 @@
-// File: pages/api/guest/update.js
+// File: pages/api/invite/update.js
 import prisma from '../../../lib/prisma';
 
 export default async function handler(req, res) {
