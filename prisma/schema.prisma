@@ -14,31 +14,34 @@ datasource db {
 }
 
 model GuestParty {
-  id                String           @id @default(cuid())
-  token             String           @unique
-  partyName         String           @unique  // e.g. "maria-and-dougie"
-  inviteCode        String           @unique  // ✅ NEW
-  guestType         GuestType
-  roomInfo          String?
-  fridayParty       Boolean?
-  paid              Boolean          @default(false)
-  needsBus          Boolean?
-  accommodationCost Int?
-  guests            IndividualGuest[]
+  id                Int               @id @default(autoincrement())
+  partyName         String
+  token             String
+  guestType         String
+  inviteCode        String
+  fridayParty       Boolean
+  paid              Boolean
+  needsBus          Boolean
+  accommodationCost Int
+  cabinId           Int?
+  cabin             Cabin?            @relation(fields: [cabinId], references: [id])
+  guests            IndividualGuest[] // ✅ FIXED
 }
 
 model IndividualGuest {
-  id         String       @id @default(cuid())
-  partyId    String
-  firstName  String
-  lastName   String
-  dietary    String?
-  rsvp       RSVPStatus?  @default(Pending)
-  isChild Boolean?
-  age     Int?
-  note    String?
+  id        String      @id @default(cuid())
+  partyId   Int
+  firstName String
+  lastName  String
+  dietary   String?
+  rsvp      RSVPStatus? @default(Pending)
+  isChild   Boolean?
+  age       Int?
+  note      String?
 
-  party      GuestParty   @relation(fields: [partyId], references: [id])
+  party  GuestParty @relation(fields: [partyId], references: [id])
+  roomId Int?
+  room   Room?      @relation(fields: [roomId], references: [id])
 }
 
 enum GuestType {
@@ -53,3 +56,20 @@ enum RSVPStatus {
   Pending
 }
 
+model Cabin {
+  id          Int          @id @default(autoincrement())
+  name        String
+  rooms       Room[]
+  parties     GuestParty[] // 👈 NEW: back relation (optional)
+}
+
+model Room {
+  id       Int               @id @default(autoincrement())
+  name     String
+  roomType String
+  capacity Int
+  enSuite  Boolean
+  cabinId  Int
+  cabin    Cabin             @relation(fields: [cabinId], references: [id])
+  guests   IndividualGuest[] // 👈 Back relation
+}
