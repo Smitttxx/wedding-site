@@ -3,89 +3,108 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  // OnSite party with 2 guests
-  const mariaAndDougie = await prisma.guestParty.create({
+  // cabins 
+  const mainLodge = await prisma.Cabin.create({
     data: {
-      partyName: 'maria-and-dougie',
-      token: 'maria-and-dougie',
-      guestType: 'OnSite',
-      inviteCode: '1234',
-      roomInfo: 'Garden Cabin 🌲 – 2 nights stay',
-      fridayParty: true,
-      paid: false,
-      needsBus: false,
-      accommodationCost: 30000,
-      guests: {
+      name: 'Main Lodge',
+      rooms: {
         create: [
-          { firstName: 'Maria', lastName: 'Smith', dietary: 'Vegetarian' },
-          { firstName: 'Dougie', lastName: 'Smith' }
+          { name: 'Room 1 – Double', roomType: 'Double', capacity: 2, enSuite: false},
+          { name: 'Room 2 – Bunk Room', roomType: 'Bunk', capacity: 4, enSuite: true}
         ]
       }
-    }
+    },
+    include: { rooms: true }
   });
-
-  // Other Accommodation with bus needed, 3 guests
-  const evieRoryMila = await prisma.guestParty.create({
+  
+  const bunkhouse = await prisma.Cabin.create({
     data: {
-      partyName: 'evie-rory-mila',
-      token: 'evie-rory-mila',
-      guestType: 'OtherAccommodation',
-      inviteCode: '1234',
-      fridayParty: true,
-      paid: false,
-      needsBus: true,
-      accommodationCost: null,
-      guests: {
+      name: 'Bunkhouse',
+      rooms: {
         create: [
-          { firstName: 'Evie', lastName: 'Jones', dietary: 'Gluten-free' },
-          { firstName: 'Rory', lastName: 'Jones' },
-          { firstName: 'Mila', lastName: 'Jones', isChild: true, age: 6 }
+          { name: 'Room 1 – Twin', roomType: 'Twin', capacity: 2, enSuite: true },
+          { name: 'Room 2 – Twin', roomType: 'Twin', capacity: 2, enSuite: true }
         ]
       }
-    }
+    },
+    include: { rooms: true }
   });
+  
 
-  // Day & Evening guest, 1 guest
-  const tom = await prisma.guestParty.create({
-    data: {
-      partyName: 'tom-hughes',
-      token: 'tom-hughes',
-      guestType: 'DayEveningOnly',
-      inviteCode: '1234',
-      fridayParty: false,
-      paid: false,
-      needsBus: false,
-      accommodationCost: null,
-      guests: {
-        create: [
-          { firstName: 'Tom', lastName: 'Hughes' }
-        ]
-      }
-    }
-  });
-
-  // OnSite party, already paid, 4 guests
-  const smithFamily = await prisma.guestParty.create({
+  // OnSite party with 4 guests
+  const smithFamily = await prisma.GuestParty.create({
     data: {
       partyName: 'smith-family',
       token: 'smith-family',
       guestType: 'OnSite',
       inviteCode: '1234',
-      roomInfo: 'Main Lodge – Family Suite',
       fridayParty: true,
       paid: true,
       needsBus: false,
       accommodationCost: 60000,
+      cabin: {
+        connect: { id: mainLodge.id }
+      },
       guests: {
         create: [
-          { firstName: 'Sarah', lastName: 'Smith' },
-          { firstName: 'Ben', lastName: 'Smith' },
-          { firstName: 'Olivia', lastName: 'Smith', isChild: true, age: 10 },
-          { firstName: 'Leo', lastName: 'Smith', isChild: true, age: 7 }
+          {
+            firstName: 'Sarah',
+            lastName: 'Smith',
+            room: { connect: { id: mainLodge.rooms[0].id } } // Room 1 – Parents
+          },
+          {
+            firstName: 'Ben',
+            lastName: 'Smith',
+            room: { connect: { id: mainLodge.rooms[0].id } }
+          },
+          {
+            firstName: 'Olivia',
+            lastName: 'Smith',
+            isChild: true,
+            age: 10,
+            room: { connect: { id: mainLodge.rooms[1].id } } // Room 2 – Kids
+          },
+          {
+            firstName: 'Leo',
+            lastName: 'Smith',
+            isChild: true,
+            age: 7,
+            room: { connect: { id: mainLodge.rooms[1].id } }
+          }
         ]
       }
     }
-  });
+  });  
+
+  const leeFamily = await prisma.GuestParty.create({
+    data: {
+      partyName: 'lee-family',
+      token: 'lee-family',
+      guestType: 'OnSite',
+      inviteCode: '5678',
+      fridayParty: false,
+      paid: false,
+      needsBus: true,
+      accommodationCost: 30000,
+      cabin: {
+        connect: { id: bunkhouse.id }
+      },
+      guests: {
+        create: [
+          {
+            firstName: 'Emma',
+            lastName: 'Lee',
+            room: { connect: { id: bunkhouse.rooms[0].id } }
+          },
+          {
+            firstName: 'James',
+            lastName: 'Lee',
+            room: { connect: { id: bunkhouse.rooms[0].id } }
+          }
+        ]
+      }
+    }
+  });  
 
   console.log('🌱 Seeded GuestParties and IndividualGuests');
 }
