@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model GuestParty {
+  id                String           @id @default(cuid())
+  token             String           @unique
+  partyName         String           @unique  // e.g. "maria-and-dougie"
+  inviteCode        String           @unique  // ✅ NEW
+  guestType         GuestType
+  roomInfo          String?
+  fridayParty       Boolean?
+  paid              Boolean          @default(false)
+  needsBus          Boolean?
+  accommodationCost Int?
+  guests            IndividualGuest[]
+}
+
+model IndividualGuest {
+  id         String       @id @default(cuid())
+  partyId    String
+  firstName  String
+  lastName   String
+  dietary    String?
+  rsvp       RSVPStatus?  @default(Pending)
+  isChild Boolean?
+  age     Int?
+  note    String?
+
+  party      GuestParty   @relation(fields: [partyId], references: [id])
+}
+
+enum GuestType {
+  OnSite
+  OtherAccommodation
+  DayEveningOnly
+}
+
+enum RSVPStatus {
+  Yes
+  No
+  Pending
+}
+
