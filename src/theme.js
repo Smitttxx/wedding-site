@@ -3,6 +3,7 @@ const theme = {
 	  primary: '#0b3d2e',        // Deep forest green (buttons/headers)
 	  primaryDark: '#062d21',    // Darker green for hover states
 		accent: '#bfa14e',         // Gold accent for contrast and detail
+		lightAccent: '#f5e8c4',
 	  tertiary: "#0d1f33",
 	  background: '#f8f5f0',     // Rich navy blue for page backgrounds
 	  text: '#1e1e1e',           // Soft white for body text

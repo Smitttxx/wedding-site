@@ -8,6 +8,8 @@ async function main() {
   const farmhouse = await prisma.Cabin.create({
     data: {
       name: 'Farmhouse',
+      videoUrl: 'https://m.youtube.com/watch?v=kFmoTPF2UEQ&pp=ygUbQm9yZWxhbmQgbG9jaCB0YXkgZmFybWhvdXNl',
+      imageFileName: 'farmhouse.jpg',
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
@@ -25,6 +27,8 @@ async function main() {
   const longhouse = await prisma.Cabin.create({
     data: {
       name: 'Longhouse',
+      videoUrl: "https://m.youtube.com/watch?v=AGobMia64XM&pp=ygUbQm9yZWxhbmQgbG9jaCB0YXkgbG9uZ2hvdXNl",
+      imageFileName: 'longhouse.jpg',
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: false },
@@ -37,9 +41,11 @@ async function main() {
     include: { rooms: true }
   });
 
-  const bencurchan = await prisma.Cabin.create({
+  const benCruachan = await prisma.Cabin.create({
     data: {
-      name: 'Ben Curchan',
+      name: 'Ben Cruachan',
+      videoUrl: "https://m.youtube.com/watch?v=5v5DUIyRBNk&pp=ygUeYm9yZWxhbmQgbG9jaCB0YXkgc2NoaWVoYWxsaW9u",
+      imageFileName: 'benCruachan.jpg',
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
@@ -52,9 +58,11 @@ async function main() {
     include: { rooms: true }
   });
 
-  const schehallion = await prisma.Cabin.create({
+  const schiehallion = await prisma.Cabin.create({
     data: {
-      name: 'Schehallion',
+      name: 'Schiehallion',
+      videoUrl: "https://m.youtube.com/watch?v=5v5DUIyRBNk&pp=ygUeQm9yZWxhbmQgbG9jaCB0YXkgc2NoaWVoYWxsaW9u",
+      imageFileName: 'schiehallion.jpg',
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: false },
@@ -67,9 +75,11 @@ async function main() {
     include: { rooms: true }
   });
 
-  const bendrummod = await prisma.Cabin.create({
+  const benDrummond = await prisma.Cabin.create({
     data: {
-      name: 'Ben Drummod',
+      name: 'Ben Drummond',
+      videoUrl: "https://m.youtube.com/watch?v=ti_-jLmQrII&pp=ygUaQm9yZWxhbmQgbG9jaCB0YXkgZHJ1bW1vbmQ%3D",
+      imageFileName: 'benDrummond.jpeg',
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
@@ -82,9 +92,11 @@ async function main() {
     include: { rooms: true }
   });
 
-  const benlawyers = await prisma.Cabin.create({
+  const benLawers = await prisma.Cabin.create({
     data: {
-      name: 'Ben Lawyers',
+      name: 'Ben Lawers',
+      videoUrl: "https://m.youtube.com/watch?v=ti_-jLmQrII&pp=ygUaQm9yZWxhbmQgbG9jaCB0YXkgZHJ1bW1vbmQ%3D",
+      imageFileName: 'benLawers.jpg',
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
@@ -100,12 +112,13 @@ async function main() {
   const cottage = await prisma.Cabin.create({
     data: {
       name: 'Cottage',
+      videoUrl: "https://m.youtube.com/watch?v=zxve8-GkZRU&pp=ygUZQm9yZWxhbmQgbG9jaCB0YXkgY290dGFnZQ%3D%3D",
+      imageFileName: 'cottage.jpg',
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
           { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
           { name: 'Room 3', roomType: 'Bunk', capacity: 4, enSuite: false }
-
         ]
       }
     },

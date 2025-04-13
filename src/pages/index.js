@@ -179,9 +179,9 @@ export default function HomePage() {
             <Snapshot src="/cruise.webp" alt="Gifts" width={700} height={400} layout="responsive"
             />
             <Paragraph>
-              Your presence is the best gift. But if youd like to contribute, we’ve set up a honeymoon experience catalogue full of
-              cocktails, adventures, spa days, and dinner dates.
+              Your presence is the best gift. But if youd like to contribute, we’ve set up a page for you to view our wishes.
             </Paragraph>
+            <RSVPButton href="/gifts">Go to Gifts Page →</RSVPButton>
           </AnimatedSection>
         </Page>
       </Layout>

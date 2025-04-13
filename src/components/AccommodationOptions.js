@@ -29,7 +29,7 @@ export default function AccommodationOptions({
   options={[
     {
       value: 'onsite',
-      label: "Yes please — we'd love to stay on-site and are happy to cover the cost."
+      label: "Yes please — show me my reserved room and details on the next page."
     },
     {
       value: 'other',
