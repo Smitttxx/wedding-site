@@ -1,283 +1,190 @@
-// pages/index.js
-import styled, { ThemeProvider, keyframes } from 'styled-components';
-import Head from 'next/head';
+import styled from 'styled-components';
 import Image from 'next/image';
-import { useState } from 'react';
-import theme from '../theme';
+import Layout from '../components/Layout';
+import NavBar from '../components/NavBar';
+import {AnimatedSection, Section, SectionHeading} from '../components/Section';
+import {Page} from "@/components/Page";
+import {differenceInDays} from 'date-fns';
+import {TartanInfoBox} from "@/components/TartanInfoBox";
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const Nav = styled.nav`
-  background: ${props => props.theme.colors.background};
-  padding: 1rem;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 1px solid #ccc;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Logo = styled.div`
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: ${props => props.theme.colors.primary};
-`;
-
-const MenuToggle = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  gap: 1rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    width: 100%;
-    display: ${props => (props.open ? 'flex' : 'none')};
-    margin-top: 1rem;
-  }
-`;
-
-const NavLink = styled.a`
-  color: ${props => props.theme.colors.primary};
-  font-weight: bold;
-  text-decoration: none;
-  scroll-behavior: smooth;
-`;
-
-const HeroSection = styled.section`
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-`;
-
-const BackgroundImg = styled(Image)`
-  z-index: 1;
-`;
-
-const TextOverlay = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 2rem;
+const TopNotice = styled.div`
+  background: ${props => props.theme.colors.accent};
+  color: white;
+  padding: 1rem 1.5rem;
   border-radius: 8px;
-  max-width: 700px;
-  text-align: center;
-`;
-
-const Section = styled.section`
-  padding: 4rem 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
-  text-align: center;
-`;
-
-const FillerText = styled.h3`
-  font-size: 2.5rem;
-  color: ${props => props.theme.colors.text};
-  text-align: center;
-  margin: 6rem auto 3rem;
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 2rem;
-  color: ${props => props.theme.colors.text};
-  margin-bottom: 1rem;
-`;
-
-const SectionImage = styled(Image)`
-  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
   margin-bottom: 2rem;
 `;
 
+const RSVPButton = styled.a`
+  display: inline-block;
+  margin-top: 1rem;
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: ${props => props.theme.colors.primaryDark};
+  }
+`;
+
 const Paragraph = styled.p`
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   line-height: 1.6;
   color: ${props => props.theme.colors.text};
-  margin-bottom: 1rem;
+  margin: 1.5rem auto;
+  max-width: 700px;
 `;
 
 const PhotoRow = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
   justify-content: center;
-  margin-top: 2rem;
+  gap: 1rem;
+  margin: 2rem auto;
 `;
 
 const Snapshot = styled(Image)`
-  border-radius: 8px;
-  object-fit: cover;
+  border-radius: 12px;
 `;
 
-const Timeline = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin-top: 1rem;
-  color: white;
+const IntroImage = styled(Image)`
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  max-width: 100%;
+  height: auto;
 `;
 
-const TimelineItem = styled.li`
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-
-  &::before {
-    content: '⏰';
-    margin-right: 0.5rem;
-  }
+const ExcitedMessage = styled.p`
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: ${props => props.theme.colors.text};
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  text-align: center;
 `;
 
-export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
+const Countdown = () => {
+  const weddingDate = new Date('2025-09-13');
+  const today = new Date();
+  const days = differenceInDays(weddingDate, today);
+  return <>{days}</>;
+};
 
+export default function HomePage() {
   return (
-    <ThemeProvider theme={theme}>
-      <>
-        <Head>
-          <title>Borelands | Laura and Joe</title>
-        </Head>
+    <>
+      <NavBar />
+      <Layout>
+        <Page>
+          <SectionHeading>Laura & Joe’s Wedding</SectionHeading>
+          <IntroImage src="/outdoor-wedding.avif" alt="View of Loch Tay" width={700} height={400} />
+          <ExcitedMessage>
+            We’re so excited to welcome you to Borelands and share the beautiful views of Loch Tay with you!<br />
+            It’s going to be the best weekend of our lives — and we’re so happy you’ll be part of it. Let’s celebrate, laugh, cry, dance (a lot), and make some magic memories together. ✨
+          </ExcitedMessage>
+          <TartanInfoBox>
+            Only <span><Countdown /></span> days until the big day!
+          </TartanInfoBox>
 
-        <Nav>
-          <Logo>🌿 L&J</Logo>
-          <MenuToggle onClick={() => setMenuOpen(!menuOpen)}>☰</MenuToggle>
-          <NavLinks open={menuOpen}>
-            <NavLink href="#story">Our Story</NavLink>
-            <NavLink href="#venue">The Venue</NavLink>
-            <NavLink href="#friday">Friday Night</NavLink>
-            <NavLink href="#order">Order of Day</NavLink>
-            <NavLink href="#bar">Bar</NavLink>
-            <NavLink href="#rsvp">RSVP</NavLink>
-            <NavLink href="#gifts">Gifts</NavLink>
-          </NavLinks>
-        </Nav>
 
-        <HeroSection>
-          <BackgroundImg src="/outdoor-wedding.avif" alt="Hero" layout="fill" objectFit="cover" />
-          <TextOverlay>
-            <h1>BORELANDS</h1>
-            <h2>LAURA AND JOE ARE GETTING MARRIED</h2>
-            <p>Join us in the heart of the Highlands to celebrate our love!</p>
-          </TextOverlay>
-        </HeroSection>
+          <AnimatedSection >
+            <SectionHeading>Got your invite?</SectionHeading>
 
-        <FillerText>A love that started with laughter and late-night games...</FillerText>
-
-        <Section id="story">
-          <SectionTitle>Our Story</SectionTitle>
-          <Paragraph>
-            We met four years ago at a gaming event in Liverpool — not online (though we basically lived online after that). We started as best friends, gaming into the early hours, until one Halloween, Joe made the first move. From that moment, we were inseparable. We moved in together in Liverpool, became an unbeatable team, and spent the next few years adventuring together — from holidays abroad to cruises and countless game nights. In 2022, our greatest adventure began: we became parents to our little whirlwind, Sully. Somewhere along the way, Joe popped the question (Laura said yes, obviously), and here we are — planning a wedding with our favourite people.
-          </Paragraph>
-          <PhotoRow>
-            <Snapshot src="/image.png" alt="Gaming computers" width={250} height={200} />
-            <Snapshot src="/TLP.jpeg" alt="TLP event" width={250} height={200} />
-            <Snapshot src="/together.jpeg" alt="Couple holiday" width={250} height={200} />
-            <Snapshot src="/now.jpeg" alt="Our son Sully" width={250} height={200} />
-          </PhotoRow>
-        </Section>
-
-        <FillerText>Now it’s time to gather the people we love most, in the place we love best.</FillerText>
-
-        <Section id="venue">
-          <SectionTitle>The Venue</SectionTitle>
-          <SectionImage src="/loachtay.jpg" alt="The Venue" width={1000} height={600} />
-          <Paragraph>
-            The wedding weekend takes place at Borelands, perched above the stunning Loch Tay. Join us for a relaxed celebration full of Scottish charm — think views, bonfires, and togetherness.
-          </Paragraph>
-          <Paragraph>
-            The ceremony will be held on Saturday afternoon, followed by food, drinks, and dancing through the night.
-          </Paragraph>
-        </Section>
-
-        <FillerText>🔥 Before the vows... a little Friday fun</FillerText>
-
-        <Section id="friday">
-          <SectionTitle>Friday Night</SectionTitle>
-          <SectionImage src="/cowshed.webp" alt="Friday Night" width={1000} height={600} />
-          <Paragraph>
-            We’re hosting a laid-back, family-style BBQ to welcome everyone to Borelands. Food will be provided by us, but it’s BYOB — so bring along your favourite drinks. Expect great music, roaring fires, and a cosy chance to meet everyone before the big day. Dress comfy, soak in the views, and try not to be too hungover for Saturday! 😉
-          </Paragraph>
-        </Section>
-
-        <FillerText>📋 Here’s how the big day will unfold</FillerText>
-
-        <HeroSection id="order">
-          <BackgroundImg src="/indoor-wedding.jpeg" alt="Order of Day" layout="fill" objectFit="cover" />
-          <TextOverlay>
-            <SectionTitle>Order of the Day</SectionTitle>
             <Paragraph>
-              Here’s how our Saturday unfolds — filled with laughter, love, and just a little dancing:
+              Amazing! You can head straight to the RSVP page to confirm your details — or, have a little nosey around first!
+              There’s info here about Friday’s welcome BBQ, the venue, the bar, and more.
+              If you have any questions, just give Laura or Joe a shout.
             </Paragraph>
-            <Timeline>
-              <TimelineItem>12:30 – 💍 Vows & Ceremony</TimelineItem>
-              <TimelineItem>13:00 – 🥂 Drinks & Family Photos</TimelineItem>
-              <TimelineItem>13:30 – 🎶 Music, Canapés & Entertainment</TimelineItem>
-              <TimelineItem>15:30 – 🍽️ Wedding Breakfast</TimelineItem>
-              <TimelineItem>17:30 – 🗣️ Speeches</TimelineItem>
-              <TimelineItem>18:00 – 🍰 Dessert</TimelineItem>
-              <TimelineItem>19:00 – 💃 Party Begins (Band starts)</TimelineItem>
-              <TimelineItem>23:00 – 🎤 Band Ends</TimelineItem>
-              <TimelineItem>00:00 – 💤 Lodges & Carriages</TimelineItem>
-            </Timeline>
-          </TextOverlay>
-        </HeroSection>
 
-        <FillerText>🍻 Cheers to that! What about drinks?</FillerText>
+            <RSVPButton href="/invite">Go to RSVP Page →</RSVPButton>
+          </AnimatedSection>
 
-        <Section id="bar">
-          <SectionTitle>Bar Details</SectionTitle>
-          <SectionImage src="/bar.jpeg" alt="Bar" width={1000} height={600} />
+          <AnimatedSection >
+            <SectionHeading>Our Story</SectionHeading>
+            <Paragraph>
+              We met four years ago at a gaming event in Liverpool — not online (though we basically lived online after that).
+              We started as best friends, gaming into the early hours, until one Halloween, Joe made the first move. From that
+              moment, we were inseparable. In 2022, our greatest adventure began: we became parents to our little whirlwind, Sully.
+              Somewhere along the way, Joe popped the question (Laura said yes, obviously), and here we are — planning a wedding with
+              our favourite people.
+            </Paragraph>
+
+            <PhotoRow>
+              <Snapshot src="/image.png" alt="Gaming computers" width={250} height={200} />
+              <Snapshot src="/TLP.jpeg" alt="TLP event" width={250} height={200} />
+              <Snapshot src="/together.jpeg" alt="Couple holiday" width={250} height={200} />
+              <Snapshot src="/now.jpeg" alt="Our son Sully" width={250} height={200} />
+            </PhotoRow>
+
+          </AnimatedSection>
+          <AnimatedSection >
+          <SectionHeading>The Venue</SectionHeading>
+          <Snapshot
+            src="/loachtay.jpg"
+            alt="The Venue"
+            width={700}
+            height={400}
+            layout="responsive"
+          />
           <Paragraph>
-            The Friday is BYOB. On Saturday, a fully stocked bar will be open for the evening. No need to bring anything — just bring your best dance moves!
+            The wedding weekend takes place at Borelands, perched above the stunning Loch Tay. Join us for a relaxed celebration
+            full of Scottish charm — think views, bonfires, and togetherness.
           </Paragraph>
-        </Section>
+          </AnimatedSection>
 
-        <FillerText>✉️ RSVP Time!</FillerText>
+          <AnimatedSection >
+            <SectionHeading>Friday Night</SectionHeading>
+            <Snapshot src="/cowshed.webp" alt="Friday Night" width={700} height={400} layout="responsive" />
+            <Paragraph>
+              We’re hosting a laid-back BBQ to welcome everyone to Borelands. Food is on us, but it’s BYOB — bring your favourites!
+              Expect fires, good music, and cosy chats before the big day.
+            </Paragraph>
+          </AnimatedSection>
 
-<Section id="rsvp">
-  <SectionTitle>RSVP Reminder</SectionTitle>
-  <Paragraph>
-    Please refer to your invitation for your personal RSVP link.
-    That’s where you’ll let us know if you’re joining in the fun,
-    share any dietary requirements, and confirm your accommodation details.
-    We can’t wait to celebrate with you!
-  </Paragraph>
-</Section>
+          <AnimatedSection >
+            <SectionHeading>Order of the Day</SectionHeading>
+            <IntroImage src="/indoor-wedding.jpeg" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
+            <Paragraph>
+              Heres how our Saturday unfolds: 💍 12:30 Ceremony, 🥂 13:00 Drinks & Photos, 🍽️ 15:30 Wedding Breakfast, 💃 19:00 Party Begins!
+            </Paragraph>
+          </AnimatedSection>
+
+          <AnimatedSection >
+            <SectionHeading>Bar Details</SectionHeading>
+            <Snapshot src="/bar.jpeg" alt="Bar" width={700} height={400} layout="responsive"
+            />
+            <Paragraph>
+              Friday is BYOB. On Saturday, there’ll be a fully stocked bar. No need to bring anything — just bring your best dance moves!
+            </Paragraph>
+          </AnimatedSection>
+
+          <AnimatedSection >
+            <SectionHeading>RSVP</SectionHeading>
+            <Paragraph>
+              Head to the RSVP page and enter your code to confirm your attendance, dietary needs, and accommodation preferences.
+              We can’t wait to celebrate with you!
+            </Paragraph>
+            <RSVPButton href="/invite">Go to RSVP Page →</RSVPButton>
+          </AnimatedSection>
 
 
-        <FillerText>💌 Feeling generous?</FillerText>
-
-        <Section id="gifts">
-          <SectionTitle>Gifts</SectionTitle>
-          <SectionImage src="/cruise.webp" alt="Gifts" width={1000} height={600} />
-          <Paragraph>
-            Your presence is truly the greatest gift — especially as we know this weekend is a bit of a mini holiday for many of you. But if you feel moved to give something, we’d love you to explore our honeymoon experience catalogue. From cocktails on the beach, to zipline adventures, to spa days and dinner dates — every little moment will help us create memories to start our married life in style. 💛
-          </Paragraph>
-        </Section>
-      </>
-    </ThemeProvider>
+          <AnimatedSection >
+            <SectionHeading>Gifts</SectionHeading>
+            <Snapshot src="/cruise.webp" alt="Gifts" width={700} height={400} layout="responsive"
+            />
+            <Paragraph>
+              Your presence is the best gift. But if youd like to contribute, we’ve set up a honeymoon experience catalogue full of
+              cocktails, adventures, spa days, and dinner dates.
+            </Paragraph>
+          </AnimatedSection>
+        </Page>
+      </Layout>
+    </>
   );
 }

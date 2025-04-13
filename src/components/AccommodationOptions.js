@@ -1,78 +1,42 @@
-// components/AccommodationOptions.js
 import styled from 'styled-components';
-
-const Section = styled.div`
-  margin-bottom: 1.5rem;
-`;
+import ToggleRadioGroup from "./ToggleRadioGroup";
+import {Section, SectionHeading} from "./Section";
 
 const Label = styled.p`
+  font-family: ${props => props.theme.fonts.heading};
   font-weight: bold;
-  margin-bottom: 0.5rem;
-`;
-
-const Checkbox = styled.input`
-  margin-left: 0.5rem;
-`;
-
-const Radio = styled.input`
-  margin-right: 0.5rem;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
 `;
 
 export default function AccommodationOptions({
   guestType,
   accommodationOption,
   setAccommodationOption,
-  needsBus,
-  setNeedsBus
+  fullWidth
 }) {
   if (guestType === 'OnSite') {
     return (
       <Section>
-        <Label>Please confirm your accommodation preference:</Label>
-        <label>
-          <Radio
-            type="radio"
-            name="accommodation"
-            value="onsite"
-            checked={accommodationOption === 'onsite'}
-            onChange={() => setAccommodationOption('onsite')}
-          />
-          Yes, we will stay on-site and pay for accommodation
-        </label>
-        <br />
-        <label>
-          <Radio
-            type="radio"
-            name="accommodation"
-            value="other"
-            checked={accommodationOption === 'other'}
-            onChange={() => setAccommodationOption('other')}
-          />
-          We will stay in Aberfeldy or Kenmore and arrange accommodation ourselves
-        </label>
-        {accommodationOption === 'other' && (
-          <div style={{ marginTop: '0.5rem' }}>
-            <label>
-              <Checkbox
-                type="checkbox"
-                checked={needsBus}
-                onChange={e => setNeedsBus(e.target.checked)}
-              />{' '}
-              We would like a bus to Aberfeldy or Kenmore after the wedding
-            </label>
-          </div>
-        )}
-        <br />
-        <label>
-          <Radio
-            type="radio"
-            name="accommodation"
-            value="none"
-            checked={accommodationOption === 'none'}
-            onChange={() => setAccommodationOption('none')}
-          />
-          We do not require accommodation or a bus
-        </label>
+            <SectionHeading>Accommodation</SectionHeading>
+        <Label>You’ve got the VIP treatment — we’ve reserved a cozy on-site room just for you.</Label>
+        <Label>Will you be staying with us at the venue?</Label>
+<ToggleRadioGroup
+  name="accommodation"
+  value={accommodationOption}
+          onChange={setAccommodationOption}
+          fullWidth={fullWidth}
+  options={[
+    {
+      value: 'onsite',
+      label: "Yes please — we'd love to stay on-site and are happy to cover the cost."
+    },
+    {
+      value: 'other',
+      label: "No thanks — we'll sort our own accommodation."
+    }
+  ]}
+/>
       </Section>
     );
   }
@@ -80,17 +44,10 @@ export default function AccommodationOptions({
   if (guestType === 'OtherAccommodation') {
     return (
       <Section>
+        <SectionHeading>Accommodation</SectionHeading>
         <Label>
           The venue is currently fully booked, but we will let you know if any spaces become available.
         </Label>
-        <label>
-          <Checkbox
-            type="checkbox"
-            checked={needsBus}
-            onChange={e => setNeedsBus(e.target.checked)}
-          />{' '}
-          Do you need a bus to Aberfeldy or Kenmore on the Saturday after the wedding?
-        </label>
       </Section>
     );
   }

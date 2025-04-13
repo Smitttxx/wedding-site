@@ -6,7 +6,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { partyId, guests, fridayParty, needsBus } = req.body;
+  const { partyId, guests, fridayParty, needsBus, accommodationOption, dietary } = req.body;
+  const everyoneSaidNo = guests.every(g => g.rsvp === 'No');
 
   if (!partyId || !Array.isArray(guests)) {
     return res.status(400).json({ error: 'Missing or invalid data' });
@@ -18,7 +19,10 @@ export default async function handler(req, res) {
       where: { id: partyId },
       data: {
         fridayParty,
-        needsBus
+        needsBus,
+        accommodationOption,
+        dietary,
+        rsvpLocked: everyoneSaidNo
       }
     });
 
@@ -27,7 +31,6 @@ export default async function handler(req, res) {
       return prisma.individualGuest.update({
         where: { id: guest.id },
         data: {
-          dietary: guest.dietary || null,
           rsvp: guest.rsvp || null
         }
       });
