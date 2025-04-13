@@ -11,14 +11,20 @@ import Link from 'next/link';
 import {Section, SectionHeading} from '@/components/Section';
 import {Page} from "@/components/Page";
 import {TartanInfoBox} from "@/components/TartanInfoBox";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
   faBed,
   faUsers,
   faUserFriends,
   faSuitcase,
-  faBaby
+  faBaby,
+  faChild,
+  faCalendarCheck,
+  faCalendarXmark,
+  faClock,
+  faCircleExclamation
 } from '@fortawesome/free-solid-svg-icons';
+import {GoldInfoBox} from "@/components/GoldInfoBox";
 
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
@@ -47,6 +53,19 @@ const StyledButtonLink = styled.a`
   }
 `;
 
+const Divider = styled.div`
+  border-top: 1px dashed ${props => props.theme.colors.accent};
+  margin: 0.6rem 0;
+`;
+
+const GuestBox = styled.div`
+  background-color: ${props => props.theme.colors.lightAccent};
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(191, 161, 78, 0.1);
+  color: ${props => props.theme.colors.primary};
+  margin: 10px -16px;
+`;
+
 const List = styled.ul`
   padding: 0;
   list-style: none;
@@ -64,10 +83,22 @@ const List = styled.ul`
     max-width: 300px;
     text-align: center;
   }
+
+  span {
+    color: ${props => props.theme.colors.accent};
+    font-style: italic;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
 `;
 
 const Text = styled.div`
   color: ${props => props.theme.colors.text};
+`;
+
+const StayText = styled.div`
+color: ${props => props.theme.colors.text};
+line-height: 25px;
 `;
 
 export default function PaymentPage() {
@@ -139,15 +170,30 @@ export default function PaymentPage() {
     <Layout>
       <Page>
         <PartyHeader party={party} />
+        <Section>
+          <SectionHeading>Accommodation Summary</SectionHeading>
 
-        {!party.paid && (
-          <Section>
-            <SectionHeading>Accommodation Summary</SectionHeading>
-            <Text>
-              You’re almost done! Please check your accommodation details below and proceed to payment or change your selection.
-            </Text>
-          </Section>
-        )}
+          <StayText>
+            Your stay includes <br />
+            <strong>2 nights only</strong><br />
+            from <FontAwesomeIcon icon={faCalendarCheck} /> <strong>Fri 12 Sept</strong><br />
+            (check-in from <strong>4pm</strong>) <br />
+            to <FontAwesomeIcon icon={faCalendarXmark} /> <strong>Sun 14 Sept</strong><br />
+            (check-out by <strong>10am</strong>)<br />
+            <strong>Free onsite parking</strong>
+          </StayText>
+
+          <Text style={{marginTop: '1rem'}}>
+            All cabins are self-catering, the Bride and Groom will pop a small welcome hamper in for your cabin — with milk, tea, and coffee to get you started. Feel free to bring snacks, drinks, or anything you’d like for the weekend.
+          </Text>
+
+          <Text style={{marginTop: '1rem'}}>
+            Staying on-site means you can enjoy the Friday festivities, have a relaxed space to get ready, and be just a <strong>minute’s walk</strong> from the venue on the big day.
+          </Text>
+
+        </Section>
+
+
 
         {party.cabin && (
           <Section>
@@ -157,63 +203,83 @@ export default function PaymentPage() {
         )}
 
         <div>
-        {party.cabin?.rooms
-  ?.filter(room => room.guests.some(g => partyGuestIds.has(g.id)))
-  ?.sort((a, b) => a.name.localeCompare(b.name))
-  .map(room => {
-    const partyGuestsInRoom = room.guests.filter(g => partyGuestIds.has(g.id));
-    const otherGuestsInRoom = room.guests.filter(g => !partyGuestIds.has(g.id));
-    const hasBaby = partyGuestsInRoom.some(g => g.isBaby);
+          {party.cabin?.rooms
+            ?.filter(room => room.guests.some(g => partyGuestIds.has(g.id)))
+            ?.sort((a, b) => a.name.localeCompare(b.name))
+            .map(room => {
+              const partyGuestsInRoom = room.guests.filter(g => partyGuestIds.has(g.id));
+              const otherGuestsInRoom = room.guests.filter(g => !partyGuestIds.has(g.id));
+              const hasBaby = partyGuestsInRoom.some(g => g.isBaby);
+              return (
+                <Section key={room.id}>
+                  {/* Room Name */}
+                  <SectionHeading>{room.name}</SectionHeading>
+                  <Divider />
 
-    return (
-      <Section key={room.id}>
-        <SectionHeading>{room.name}</SectionHeading>
+                  {/* Room Info */}
+                  <Text style={{marginBottom: '1rem'}}>
+                    <FontAwesomeIcon icon={faBed} /> <strong>Type:</strong> {room.roomType} &nbsp; | &nbsp;
+                    <FontAwesomeIcon icon={faUsers} /> <strong>Capacity:</strong> {room.capacity}
+                  </Text>
 
-        {/* Room Info */}
-        <Text style={{ marginBottom: '0.5rem' }}>
-          <FontAwesomeIcon icon={faBed} /> <strong>Type:</strong> {room.roomType} &nbsp; | &nbsp;
-          <FontAwesomeIcon icon={faUsers} /> <strong>Capacity:</strong> {room.capacity}
-        </Text>
+                  {/* Your Guests */}
+                  {partyGuestsInRoom.length > 0 && (
+                    <>
+                      <GuestBox>
+                        <FontAwesomeIcon icon={faUserFriends} /> <strong>Guests on your booking:</strong>
+                      </GuestBox>
+                      <List>
+                        {partyGuestsInRoom.map(g => (
+                          <li key={g.id}>
+                            {g.firstName} {g.lastName}
+                            {g.isBaby && (
+                              <FontAwesomeIcon
+                                icon={faBaby}
+                                style={{marginLeft: '0.5rem'}}
+                                title="Baby"
+                              />
+                            )}
+                            {g.isChild && !g.isBaby && (
+                              <FontAwesomeIcon
+                                icon={faChild}
+                                style={{marginLeft: '0.5rem'}}
+                                title="Child"
+                              />
+                            )}
+                          </li>
+                        ))}
+                      </List>
+                    </>
+                  )}
 
-        {/* Baby note */}
-        {hasBaby && (
-          <TartanInfoBox style={{ marginTop: '0.5rem' }}>
-            <FontAwesomeIcon icon={faBaby} style={{ marginRight: '0.5rem' }} />
-            We see you’ve got a little one joining you! Unfortunately, we aren’t able to supply travel cots —
-            please bring your own if needed.
-          </TartanInfoBox>
-        )}
+                  {/* Baby Note */}
+                  {hasBaby && (
+                    <GoldInfoBox icon={faBaby}>
+                      We’re excited to welcome your little one! Please note, travel cots aren’t provided — feel free to bring your own.
+                    </GoldInfoBox>
+                  )}
 
-        {/* Party guests */}
-        {partyGuestsInRoom.length > 0 && (
-          <>
-            <Text><FontAwesomeIcon icon={faUserFriends} /> <strong>Guests on your booking:</strong></Text>
-            <List>
-              {partyGuestsInRoom.map(g => (
-                <li key={g.id}>
-                  {g.firstName} {g.lastName} {g.isBaby && <FontAwesomeIcon icon={faBaby} style={{ marginLeft: '0.5rem' }} />}
-                </li>
-              ))}
-            </List>
-          </>
-        )}
 
-        {/* Other guests */}
-        {otherGuestsInRoom.length > 0 ? (
-          <>
-            <Text><FontAwesomeIcon icon={faSuitcase} /> <strong>Other guests sharing this room:</strong></Text>
-            <List>
-              {otherGuestsInRoom.map(g => (
-                <li key={g.id}>{g.firstName} {g.lastName}</li>
-              ))}
-            </List>
-          </>
-        ) : (
-          <Text><em>This room is private — only your group is staying here.</em></Text>
-        )}
-      </Section>
-    );
-  })}
+
+                  {/* Other Guests */}
+                  {otherGuestsInRoom.length > 0 && (
+                    <>
+                      <GuestBox>
+                        <FontAwesomeIcon icon={faSuitcase} /> <strong>Other guests sharing this room:</strong>
+                      </GuestBox>
+                      <List>
+                        {otherGuestsInRoom.map(g => (
+                          <li key={g.id}>
+                            {g.firstName} {g.lastName} {g.relation && `(${g.relation})`}
+                          </li>
+                        ))}
+                      </List>
+                    </>
+                  )}
+                </Section>
+              );
+
+            })}
 
         </div>
 
@@ -222,7 +288,7 @@ export default function PaymentPage() {
             <SectionHeading>Other Guests in Your Cabin</SectionHeading>
             <List>
               {othersInCabin.map(g => (
-                <li key={g.id}>{g.firstName} {g.lastName}</li>
+                <li key={g.id}>{g.firstName} {g.lastName} <span>{g.relation && `(${g.relation})`}</span></li>
               ))}
             </List>
           </Section>
@@ -230,6 +296,10 @@ export default function PaymentPage() {
 
         {!party.paid && (
           <Section>
+            <SectionHeading>Not happy with your room selection?</SectionHeading>
+            <Text>
+              There’s absolutely no pressure to book the room reserved for you — we just wanted everyone close to us to have somewhere safe onsite to rest their head. If you’d prefer to head home after the big day or stay somewhere else, we’ll have a bus running after the wedding to take guests to Kenmore or Aberfeldy.
+            </Text>
             <Link href={`/invite/${inviteCode}`} passHref legacyBehavior>
               <StyledButtonLink>← I want to change my accommodation selection</StyledButtonLink>
             </Link>
@@ -250,9 +320,21 @@ export default function PaymentPage() {
           <>
             <Section>
               <SectionHeading>Payment Failed</SectionHeading>
-              <Message style={{color: 'red'}}>
+              <Text>
+                The total cost for your stay is <strong>£{(party.accommodationCost / 100).toFixed(2)}</strong> for 2 nights.
+              </Text>
+              <Text style={{marginTop: '0.5rem'}}>
+                That’s <strong>£{((party.accommodationCost / 100) / 2).toFixed(2)}</strong> per night for
+                <strong> {party.guests.filter(g => !g.isChild && !g.isBaby).length}</strong> adult{party.guests.filter(g => !g.isChild && !g.isBaby).length !== 1 && 's'}.
+              </Text>
+              <Text style={{marginTop: '0.5rem'}}>
+                <strong>Children and babies stay free</strong> — your cost is based on adults only.
+              </Text>
+              <GoldInfoBox>
                 Oops, something went wrong. Would you like to try again?
-              </Message>
+              </GoldInfoBox>
+              <br />
+              <br />
             </Section>
             <Elements stripe={stripePromise} options={{clientSecret}}>
               <CheckoutForm
@@ -266,6 +348,22 @@ export default function PaymentPage() {
         ) : clientSecret ? (
           <Section>
             <SectionHeading>Payment</SectionHeading>
+            <Text>
+              The total cost for your stay is <strong>£{(party.accommodationCost / 100).toFixed(2)}</strong> for 2 nights.
+            </Text>
+            <Text style={{marginTop: '0.5rem'}}>
+              That’s <strong>£{((party.accommodationCost / 100) / 2).toFixed(2)}</strong> per night for
+              <strong> {party.guests.filter(g => !g.isChild && !g.isBaby).length}</strong> adult{party.guests.filter(g => !g.isChild && !g.isBaby).length !== 1 && 's'}.
+            </Text>
+            <Text style={{marginTop: '0.5rem'}}>
+              <strong>Children and babies stay free</strong> — your cost is based on adults only.
+            </Text>
+    
+                <GoldInfoBox icon={faCircleExclamation}>
+                  <span>
+                  Please note if we don’t receive payment by <strong>June 1st 2025</strong>, we may need to offer your room to another guest.
+                  </span>
+      </GoldInfoBox>
             <Elements stripe={stripePromise} options={{clientSecret}}>
               <CheckoutForm
                 partyId={party.id}

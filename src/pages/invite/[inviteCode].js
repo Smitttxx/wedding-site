@@ -19,6 +19,11 @@ import LoadingIndicator from '@/components/LoadingOverlay';
 import {TartanInfoBox} from '@/components/TartanInfoBox';
 import NavBar from "@/components/NavBar";
 import { motion, AnimatePresence } from 'framer-motion';
+import {GoldInfoBox} from "@/components/GoldInfoBox";
+import {
+  faChild,
+  faCircleExclamation
+} from '@fortawesome/free-solid-svg-icons';
 
 const Page = styled.div`
   padding: 1rem;
@@ -233,7 +238,7 @@ export default function GuestPage() {
       setIsLoading(false); // Stop loading on error
     }
   };
-
+ 
   if (isLoading || !party) {
     return (
       <Fragment>
@@ -275,6 +280,8 @@ export default function GuestPage() {
     );
   }
 
+  const hasChildrenInParty = party.guests.some(g => g.isChild || g.isBaby);
+
   return (
     <Fragment>
                   <NavBar/>
@@ -297,6 +304,12 @@ export default function GuestPage() {
                 rsvpDisabled={party.rsvpLocked}
               />
             ))}
+                            {/* Childcare Note */}
+                            {hasChildrenInParty && (
+                <GoldInfoBox icon={faChild}>
+                Kids are invited — yay! Wedding nannies will be on hand with fun activities on the big day (ball pits, crafts, games) to keep them entertained while you celebrate.
+              </GoldInfoBox>              
+              )}
           </RSVPWrapper>
         </Section>
 
@@ -337,9 +350,11 @@ export default function GuestPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <TartanInfoBox>
-        Please continue to the next page once RSVPd to pay for your accommodation. If we don’t receive payment by <span>June 1st 2025</span>, we may need to offer your room to another guest.
-      </TartanInfoBox>
+      <GoldInfoBox icon={faCircleExclamation}>
+                        <span>
+                        Please continue to the next page once RSVPd to view and pay for your accommodation. If we don’t receive payment by <strong>June 1st 2025</strong>, we may need to offer your room to another guest.
+                        </span>
+      </GoldInfoBox>
     </motion.div>
   )}
 </AnimatePresence>
