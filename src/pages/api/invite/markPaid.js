@@ -3,11 +3,11 @@ import prisma from '../../../lib/prisma';
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end('Method Not Allowed');
 
-  const { guestId } = req.body;
+  const { partyId } = req.body;
 
   try {
     const party = await prisma.guestParty.update({
-      where: { id: guestId },
+      where: { id: partyId },
       data: { paid: true },
     });
 

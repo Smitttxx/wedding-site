@@ -1,24 +1,27 @@
 const theme = {
 	colors: {
-	  primary: '#4a6c3f',           // A deep forest green
-	  primaryDark: '#38532f',       // Darker shade for hover
-	  accent: '#f9c74f',            // Warm gold accent
-	  background: '#000000',        // Light parchment-like background
-	  text: '#FFFFFF',              // Neutral readable text
-	  success: '#2f9e44',           // Confirmation green
-	  error: '#d9534f',             // Soft red for errors
-	  warning: '#f08c00'            // Warm orange for alerts
+	  primary: '#0b3d2e',        // Deep forest green (buttons/headers)
+	  primaryDark: '#062d21',    // Darker green for hover states
+		accent: '#bfa14e',         // Gold accent for contrast and detail
+	  tertiary: "#0d1f33",
+	  background: '#f8f5f0',     // Rich navy blue for page backgrounds
+	  text: '#1e1e1e',           // Soft white for body text
+	  success: '#4caf50',        // Soft green for confirmations
+	  error: '#f44336',          // Red for errors
+	  warning: '#ff9800'         // Orange for alerts
 	},
 	fonts: {
-	  base: "'Georgia', serif",
-	  heading: "'Playfair Display', serif"
+	  heading: "'Cormorant Garamond', serif", // Elegant headers
+	  base: "'Lora', serif",                  // Readable body
+	  ui: "'Raleway', sans-serif"             // Clean UI labels/buttons
 	},
 	spacing: {
 	  small: '0.5rem',
 	  medium: '1rem',
 	  large: '2rem'
 	},
-	borderRadius: '6px'
+	borderRadius: '8px'
   };
   
   export default theme;
+  

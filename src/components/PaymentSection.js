@@ -6,12 +6,9 @@ import styled from 'styled-components';
 import PartyHeader from '../../../components/PartyHeader';
 import PaymentSection from '../../../components/PaymentSection';
 import Link from 'next/link';
+import {Page} from "./Page";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-
-const Page = styled.div`
-  padding: 2rem;
-`;
 
 const Message = styled.p`
   margin-top: 1rem;

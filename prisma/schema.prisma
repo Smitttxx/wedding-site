@@ -19,13 +19,16 @@ model GuestParty {
   token             String            @unique
   guestType         String
   inviteCode        String            @unique
+  dietary           String?
   fridayParty       Boolean?
   paid              Boolean?
   needsBus          Boolean?
-  accommodationCost Int?
+  accommodationCost  Int?
+  accommodationOption  String?
   cabinId           Int?
   cabin             Cabin?            @relation(fields: [cabinId], references: [id])
   guests            IndividualGuest[] // ✅ FIXED
+  rsvpLocked        Boolean? @default(false)
 }
 
 model IndividualGuest {
@@ -33,11 +36,12 @@ model IndividualGuest {
   partyId   Int
   firstName String
   lastName  String
-  dietary   String?
   rsvp      RSVPStatus? @default(Pending)
   isChild   Boolean?
+  isBaby    Boolean?
   age       Int?
   note      String?
+  relation  String?
 
   party  GuestParty @relation(fields: [partyId], references: [id])
   roomId Int?

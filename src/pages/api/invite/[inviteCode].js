@@ -1,3 +1,5 @@
+// /api/invite/[inviteCode].js
+
 import prisma from '../../../lib/prisma';
 
 export default async function handler(req, res) {
@@ -5,9 +7,22 @@ export default async function handler(req, res) {
 
   try {
     const party = await prisma.guestParty.findUnique({
-      where: { inviteCode: inviteCode },
+      where: { inviteCode },
       include: {
-        guests: true
+        guests: {
+          include: {
+            room: true, // get each guest's room
+          }
+        },
+        cabin: {
+          include: {
+            rooms: {
+              include: {
+                guests: true // get guests in each room of the cabin
+              }
+            }
+          }
+        }
       }
     });
 

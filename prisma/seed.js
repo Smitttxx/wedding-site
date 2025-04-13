@@ -128,12 +128,14 @@ async function main() {
           {
             firstName: 'Joe',
             lastName: 'Austin',
-            room: { connect: { id: farmhouse.rooms[0].id } }
+            room: {connect: {id: farmhouse.rooms[0].id}},
+            relation: 'Groom'
           },
           {
             firstName: 'Laura',
             lastName: 'Smith',
-            room: { connect: { id: farmhouse.rooms[0].id } }
+            room: { connect: { id: farmhouse.rooms[0].id } }.connect.id,
+            relation: 'Bride'
           }
         ]
       }
@@ -214,6 +216,12 @@ async function main() {
           {
             firstName: 'Toni',
             lastName: 'Abblitt',
+            room: { connect: { id: farmhouse.rooms[3].id } }
+          },
+          {
+            firstName: 'Renly',
+            lastName: 'Speakman',
+            isBaby: true,
             room: { connect: { id: farmhouse.rooms[3].id } }
           }
         ]
@@ -833,6 +841,12 @@ async function main() {
           {
             firstName: 'Vicky',
             lastName: '',
+            room: { connect: { id: benlawyers.rooms[0].id } }
+          },
+          {
+            firstName: 'Mimi-Rose',
+            lastName: '',
+            isBaby: true,
             room: { connect: { id: benlawyers.rooms[0].id } }
           },
           {

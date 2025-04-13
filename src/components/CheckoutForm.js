@@ -1,9 +1,9 @@
 // File: components/CheckoutForm.js
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
-import { useState } from 'react';
+import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
+import {useState} from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 
 const Form = styled.form`
   padding: 1rem;
@@ -11,6 +11,8 @@ const Form = styled.form`
   border: 1px solid #ccc;
   border-radius: 8px;
   max-width: 400px;
+  color: black;
+  margin: auto;
 `;
 
 const Button = styled.button`
@@ -29,9 +31,10 @@ const StyledCardElement = styled(CardElement)`
   border-radius: 4px;
   background-color: #f8f9fa;
   margin-top: 0.5rem;
+  color: black;  
 `;
 
-export default function CheckoutForm({ guestId, clientSecret }) {
+export default function CheckoutForm({partyId, clientSecret, amount, inviteCode}) {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
@@ -50,10 +53,10 @@ export default function CheckoutForm({ guestId, clientSecret }) {
     });
 
     if (result.error) {
-      alert(result.error.message);
+      router.replace(`/invite/payment?inviteCode=${inviteCode}&error=true`);
     } else if (result.paymentIntent.status === 'succeeded') {
-      await axios.post('/api/invite/markPaid', { guestId });
-      router.replace(`${router.asPath.split('?')[0]}?success=true`);
+      await axios.post('/api/invite/markPaid', {partyId});
+      router.replace(`/invite/payment?inviteCode=${inviteCode}&success=true`);
     }
 
     setLoading(false);
@@ -64,7 +67,7 @@ export default function CheckoutForm({ guestId, clientSecret }) {
       <label htmlFor="card-element">Card Details:</label>
       <StyledCardElement id="card-element" />
       <Button type="submit" disabled={!stripe || loading}>
-        {loading ? 'Processing...' : 'Pay £100'}
+        {loading ? 'Processing...' : `Pay £${(amount / 100).toFixed(2)}`}
       </Button>
     </Form>
   );
