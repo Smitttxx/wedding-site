@@ -18,7 +18,7 @@ import BusInfoOption from "@/components/BusInfoOption";
 import LoadingIndicator from '@/components/LoadingOverlay';
 import {TartanInfoBox} from '@/components/TartanInfoBox';
 import NavBar from "@/components/NavBar";
-import { motion, AnimatePresence } from 'framer-motion';
+import {motion, AnimatePresence} from 'framer-motion';
 import {GoldInfoBox} from "@/components/GoldInfoBox";
 import {
   faChild,
@@ -126,10 +126,13 @@ export default function GuestPage() {
   const [fridayParty, setFridayParty] = useState(null);
   const [needsBus, setNeedsBus] = useState(null);
   const [accommodationOption, setAccommodationOption] = useState(null);
-  const [hasSelectedOnsite, setHasSelectedOnsite] = useState(false);
   const [dietary, setDietary] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [rsvpLocked, setIsRsvpLocked] = useState(false);
+  const [allSaidNo, setAllSaidNo] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const [apiError, setApiError] = useState('');
+  const hasSelectedOnsite = accommodationOption === 'onsite';
 
   const [errors, setErrors] = useState({
     rsvp: [],
@@ -175,30 +178,50 @@ export default function GuestPage() {
   };
 
   const fetchParty = async () => {
-    const res = await axios.get(`/api/invite/${inviteCode}`);
-    const data = res.data;
+    setIsFetching(true);
+    try {
+      const res = await axios.get(`/api/invite/${inviteCode}`);
+      const data = res.data;
+  
+      const allSaidYes = data.guests.every(g => g.rsvp === 'Yes');
+      const allSaidNo = data.guests.every(g => g.rsvp === 'No');
+  
+      if (data.paid || allSaidYes) {
+        router.push(`/accommodationDetails/${inviteCode}`);
+      } else {
+        // Either at least one RSVP is pending, or all said no
+        router.push(`/invite/${inviteCode}`);
+      }      
+  
+      setAllSaidNo(allSaidNo);
+      setParty(data);
+      setFormData(data.guests.map(g => ({ ...g, rsvp: g.rsvp ?? null })));
+      setFridayParty(typeof data.fridayParty === 'boolean' ? data.fridayParty : null);
+      setNeedsBus(typeof data.needsBus === 'boolean' ? data.needsBus : null);
+      setAccommodationOption(data.accommodationOption ?? null);
+      setDietary(data.dietary ?? '');
+      setIsRsvpLocked(data.rsvpLocked);
+      console.log(data)
+    } catch (error) {
+      console.error('Error fetching party:', error);
+      setApiError('Something went wrong while loading your invite. Please try again shortly or contact us!');
+    } finally {
+      setIsFetching(false);
+    }
+  };  
 
-    if (data.paid) {
-      router.replace(`/invite/payment?inviteCode=${inviteCode}&success=true`);
+  useEffect(() => {
+    if (!router.isReady) return;
+    if (!sessionStorage.getItem('hasAccess')) {
+      router.replace('/invite');
       return;
     }
-    
-    setParty(data);
-    setFormData(data.guests.map(g => ({...g, rsvp: g.rsvp ?? null})));
-    setFridayParty(typeof data.fridayParty === 'boolean' ? data.fridayParty : null);
-    setNeedsBus(typeof data.needsBus === 'boolean' ? data.needsBus : null);
-    setAccommodationOption(data.accommodationOption ?? null);
-    setDietary(data.dietary ?? '');
-    setIsRsvpLocked(data.rsvpLocked);
-  };
-
-  useEffect(() => {if (inviteCode) fetchParty();}, [inviteCode]);
-  useEffect(() => {
-    if (!sessionStorage.getItem('hasAccess')) router.replace('/invite');
-    else if (inviteCode) fetchParty();
-  }, [inviteCode]);
-  useEffect(() => setHasSelectedOnsite(accommodationOption === 'onsite'), [accommodationOption]);
-
+  
+    if (router.query.inviteCode) {
+      fetchParty();
+    }
+  }, [router.isReady, router.query.inviteCode]);
+  
   const handleChange = (index, key, value) => {
     const updated = [...formData];
     updated[index][key] = value;
@@ -206,62 +229,104 @@ export default function GuestPage() {
   };
 
   const handleSave = async () => {
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
     const everyoneSaidNo = formData.every(g => g.rsvp === 'No');
     const attending = formData.some(g => g.rsvp === 'Yes');
-
-    const payload = {
+  
+    const updatedPartyPayload = {
       partyId: party.id,
       guests: formData,
       dietary,
-      rsvpLocked: everyoneSaidNo
+      rsvpLocked: everyoneSaidNo,
+      accommodationOption,
+      fridayParty,
+      needsBus
     };
-
-    if (attending) {
-      payload.accommodationOption = accommodationOption;
-      payload.fridayParty = fridayParty;
-      if (accommodationOption === 'other') {
-        payload.needsBus = needsBus;
-      }
+  
+    // Adjust guestType if they said "no" to on-site
+    if (party.guestType === 'OnSite' && accommodationOption === 'other') {
+      updatedPartyPayload.guestType = 'OtherAccommodation';
     }
-
+  
     try {
-      await axios.post('/api/invite/update', payload);
+      await axios.post('/api/invite/update', updatedPartyPayload);
+  
       router.push(
         attending && accommodationOption === 'onsite'
-          ? `/invite/payment?inviteCode=${inviteCode}`
-          : `/invite/confirmed?attending=${attending}&inviteCode=${inviteCode}&locked=${everyoneSaidNo}`
+          ? `/accommodationDetails/${inviteCode}`
+          : `/confirmed/${inviteCode}`
       );
     } catch (err) {
       console.error('Error saving RSVP:', err);
       setMessage('Something went wrong while saving. Please try again.');
-      setIsLoading(false); // Stop loading on error
+      setIsLoading(false);
     }
-  };
- 
-  if (isLoading || !party) {
+  };  
+
+  if (isFetching || isLoading) {
     return (
       <Fragment>
-      <NavBar />
-      <Layout>
-        <Page>
-          <LoadingIndicator title="Saving your RSVP..." subtitle="Hold tight, we’re just wrapping it up." />
-        </Page>
+        <NavBar />
+        <Layout>
+          <Page>
+            <LoadingIndicator
+              title={isLoading ? 'Saving your RSVP...' : 'Loading your invite...'}
+              subtitle={isLoading ? 'Hold tight, we’re just wrapping it up.' : 'Please wait while we load your details.'}
+            />
+            {apiError && (
+              <TartanInfoBox error style={{ marginTop: '2rem' }}>
+                {apiError}
+              </TartanInfoBox>
+            )}
+          </Page>
         </Layout>
-        </Fragment>
+      </Fragment>
     );
   }
-
+  
   if (rsvpLocked) {
     return (
       <Fragment>
+        <NavBar />
+        <Layout>
+          <Page>
+            <PartyHeader party={party} />
+            <Section ref={rsvpRef}>
+              <SectionHeading>RSVP</SectionHeading>
+              <RSVPWrapper>
+                {formData.map((guest, index) => (
+                  <RSVP
+                    key={guest.id}
+                    guest={guest}
+                    index={index}
+                    handleChange={handleChange}
+                    rsvpDisabled={party.rsvpLocked}
+                  />
+                ))}
+              </RSVPWrapper>
+              <Message>Sorry you can’t make it – we’ll miss you! Let us know if your plans change and you are able to make it!</Message>
+            </Section>
+          </Page>
+        </Layout>
+      </Fragment>
+    );
+  }
+
+  const hasChildrenInParty = party?.guests?.some(g => g.isChild || g.isBaby) || false;
+
+  return (
+    <Fragment>
       <NavBar />
+
       <Layout>
         <Page>
-        <PartyHeader party={party} />
+          {showConfetti && <Confetti recycle={false} numberOfPieces={300} />}
+          <PartyHeader party={party} />
+
           <Section ref={rsvpRef}>
             <SectionHeading>RSVP</SectionHeading>
             <RSVPWrapper>
+              {errors.rsvp.length > 0 && <WarningText>Please RSVP for all guests.</WarningText>}
               {formData.map((guest, index) => (
                 <RSVP
                   key={guest.id}
@@ -271,133 +336,100 @@ export default function GuestPage() {
                   rsvpDisabled={party.rsvpLocked}
                 />
               ))}
-            </RSVPWrapper>
-            <Message>Sorry you can’t make it – we’ll miss you! Let us know if your plans change and you are able to make it!</Message>
-          </Section>
-        </Page>
-        </Layout>
-        </Fragment>
-    );
-  }
-
-  const hasChildrenInParty = party.guests.some(g => g.isChild || g.isBaby);
-
-  return (
-    <Fragment>
-                  <NavBar/>
-
-    <Layout>
-      <Page>
-        {showConfetti && <Confetti recycle={false} numberOfPieces={300} />}
-        <PartyHeader party={party} />
-
-        <Section ref={rsvpRef}>
-          <SectionHeading>RSVP</SectionHeading>
-          <RSVPWrapper>
-            {errors.rsvp.length > 0 && <WarningText>Please RSVP for all guests.</WarningText>}
-            {formData.map((guest, index) => (
-              <RSVP
-                key={guest.id}
-                guest={guest}
-                index={index}
-                handleChange={handleChange}
-                rsvpDisabled={party.rsvpLocked}
-              />
-            ))}
-                            {/* Childcare Note */}
-                            {hasChildrenInParty && (
+              {/* Childcare Note */}
+              {hasChildrenInParty && (
                 <GoldInfoBox icon={faChild}>
-                Kids are invited — yay! Wedding nannies will be on hand with fun activities on the big day (ball pits, crafts, games) to keep them entertained while you celebrate.
-              </GoldInfoBox>              
+                  Kids are invited — yay! Wedding nannies will be on hand with fun activities on the big day (ball pits, crafts, games) to keep them entertained while you celebrate.
+                </GoldInfoBox>
               )}
-          </RSVPWrapper>
-        </Section>
+            </RSVPWrapper>
+          </Section>
 
-        {formData.length > 0 && formData.every(g => g.rsvp === 'No') ? (
+          {formData.length > 0 && formData.every(g => g.rsvp === 'No') ? (
             <AnimatePresence>
-                  <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-            <Message>Sorry you can’t make it – we’ll miss you! Let us know if your plans change and you are able to make it!</Message>
-            <Button onClick={handleSave}>
-              💾 Save RSVP
+              <motion.div
+                initial={{opacity: 0}}
+                animate={{opacity: 1}}
+                exit={{opacity: 0}}
+                transition={{duration: 0.4}}
+              >
+                <Message>Sorry you can’t make it – we’ll miss you! Let us know if your plans change and you are able to make it!</Message>
+                <Button onClick={handleSave}>
+                  💾 Save RSVP
                 </Button>
-                </motion.div>
+              </motion.div>
             </AnimatePresence>
 
-        ) : (
-          <>
-            <RefContainer ref={accommodationRef}>
-              <AccommodationOptions
-                guestType={party.guestType}
-                accommodationOption={accommodationOption}
-                setAccommodationOption={setAccommodationOption}
-                needsBus={needsBus}
-                setNeedsBus={setNeedsBus}
-                fullWidth
-              />
-              {errors.accommodation && <WarningText>Please choose your accommodation preference.</WarningText>}
-            </RefContainer>
+          ) : (
+            <>
+              <RefContainer ref={accommodationRef}>
+                <AccommodationOptions
+                    guestType={party.guestType}
+                  accommodationOption={accommodationOption}
+                  setAccommodationOption={setAccommodationOption}
+                  needsBus={needsBus}
+                  setNeedsBus={setNeedsBus}
+                  fullWidth
+                />
+                {errors.accommodation && <WarningText>Please choose your accommodation preference.</WarningText>}
+              </RefContainer>
 
-            <AnimatePresence>
-  {hasSelectedOnsite && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <GoldInfoBox icon={faCircleExclamation}>
-                        <span>
+              <AnimatePresence>
+                {hasSelectedOnsite && (
+                  <motion.div
+                    initial={{opacity: 0}}
+                    animate={{opacity: 1}}
+                    exit={{opacity: 0}}
+                    transition={{duration: 0.4}}
+                  >
+                    <GoldInfoBox icon={faCircleExclamation}>
+                      <span>
                         Please continue to the next page once RSVPd to view and pay for your accommodation. If we don’t receive payment by <strong>June 1st 2025</strong>, we may need to offer your room to another guest.
-                        </span>
-      </GoldInfoBox>
-    </motion.div>
-  )}
-</AnimatePresence>
+                      </span>
+                    </GoldInfoBox>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-            <RefContainer ref={busRef}>
-              {accommodationOption === "other"
-                ? <BusOption needsBus={needsBus} setNeedsBus={setNeedsBus} />
-                : <BusInfoOption />
-              }
-              {errors.needsBus && <WarningText>Please let us know if you need a bus.</WarningText>}
-            </RefContainer>
+              <RefContainer ref={busRef}>
+                {accommodationOption === "other"
+                  ? <BusOption needsBus={needsBus} setNeedsBus={setNeedsBus} />
+                  : <BusInfoOption />
+                }
+                {errors.needsBus && <WarningText>Please let us know if you need a bus.</WarningText>}
+              </RefContainer>
 
-            <RefContainer ref={fridayRef}>
-              <FridayPartySection
-                fridayParty={fridayParty}
-                setFridayParty={setFridayParty}
-              />
-              {errors.fridayParty && <WarningText>Let us know about the welcome party.</WarningText>}
-            </RefContainer>
+              <RefContainer ref={fridayRef}>
+                <FridayPartySection
+                  fridayParty={fridayParty}
+                  setFridayParty={setFridayParty}
+                />
+                {errors.fridayParty && <WarningText>Let us know about the welcome party.</WarningText>}
+              </RefContainer>
 
-            <DietaryNotes dietary={dietary} setDietary={setDietary} />
-            <Section>
-              <SectionHeading>All sounds good?</SectionHeading>
-              {hasSelectedOnsite ? (
-                <>Save your RSVP below and continue to the next page to confirm your accommodation and secure your on-site room.</>
-              ) : (
-                <>Save your RSVP below — we’ll keep you posted about the big day!</>
-              )}
-            </Section>
-            {errors.rsvp.length > 0 && <TartanInfoBox error>Please RSVP for all guests.</TartanInfoBox>}
-            {errors.accommodation && <TartanInfoBox error>Please choose your accommodation preference.</TartanInfoBox>}
-            {errors.needsBus && <TartanInfoBox error>Please let us know if you need a bus.</TartanInfoBox>}
-            {errors.fridayParty && <TartanInfoBox error>Let us know about the welcome party.</TartanInfoBox>}
-            {message && <TartanInfoBox error>{message}</TartanInfoBox>}
+              <DietaryNotes dietary={dietary} setDietary={setDietary} />
+              <Section>
+                <SectionHeading>All sounds good?</SectionHeading>
+                {hasSelectedOnsite ? (
+                  <>Save your RSVP below and continue to the next page to confirm your accommodation and secure your on-site room.</>
+                ) : (
+                  <>Save your RSVP below — we’ll keep you posted about the big day!</>
+                )}
+              </Section>
+              {errors.rsvp.length > 0 && <TartanInfoBox error>Please RSVP for all guests.</TartanInfoBox>}
+              {errors.accommodation && <TartanInfoBox error>Please choose your accommodation preference.</TartanInfoBox>}
+              {errors.needsBus && <TartanInfoBox error>Please let us know if you need a bus.</TartanInfoBox>}
+              {errors.fridayParty && <TartanInfoBox error>Let us know about the welcome party.</TartanInfoBox>}
+              {message && <TartanInfoBox error>{message}</TartanInfoBox>}
 
-            <Button onClick={handleSave}>
-              {hasSelectedOnsite ? 'Proceed to Payment' : '💾 Save RSVP'}
-            </Button>
-            {message && <Message>{message}</Message>}
-          </>
-        )}
-      </Page>
+              <Button onClick={handleSave}>
+                {hasSelectedOnsite ? 'Save RSVP & Go to Accommodation Details' : 'Save RSVP'}
+              </Button>
+              {message && <Message>{message}</Message>}
+            </>
+          )}
+        </Page>
       </Layout>
-      </Fragment>
+    </Fragment>
   );
 }

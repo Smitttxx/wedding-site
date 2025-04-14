@@ -8,16 +8,18 @@ async function main() {
   const farmhouse = await prisma.Cabin.create({
     data: {
       name: 'Farmhouse',
-      videoUrl: 'https://m.youtube.com/watch?v=kFmoTPF2UEQ&pp=ygUbQm9yZWxhbmQgbG9jaCB0YXkgZmFybWhvdXNl',
+      videoUrl: 'https://youtube.com/embed/kFmoTPF2UEQ&pp=ygUbQm9yZWxhbmQgbG9jaCB0YXkgZmFybWhvdXNl',
       imageFileName: 'farmhouse.jpg',
+      capacity: 18, 
+      roomCount: 6, 
       rooms: {
         create: [
-          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
-          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: true },
-          { name: 'Room 3', roomType: 'Double', capacity: 2, enSuite: true },
-          { name: 'Room 4', roomType: 'Double and Bunk', capacity: 4, enSuite: false },
-          { name: 'Room 5', roomType: 'Double and Bunk', capacity: 4, enSuite: false },
-          { name: 'Room 6', roomType: 'Double and Bunk', capacity: 4, enSuite: false }
+          { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
+          { name: 'Room 2', roomType: 'Double/Twin', capacity: 2, enSuite: true },
+          { name: 'Room 3', roomType: 'Double/Twin', capacity: 2, enSuite: true },
+          { name: 'Room 4', roomType: 'Double/Twin and Bunk', capacity: 4, enSuite: false },
+          { name: 'Room 5', roomType: 'Double/Twin and Bunk', capacity: 4, enSuite: false },
+          { name: 'Room 6', roomType: 'Double/Twin and Bunk', capacity: 4, enSuite: false }
         ]
       }
     },
@@ -27,14 +29,16 @@ async function main() {
   const longhouse = await prisma.Cabin.create({
     data: {
       name: 'Longhouse',
-      videoUrl: "https://m.youtube.com/watch?v=AGobMia64XM&pp=ygUbQm9yZWxhbmQgbG9jaCB0YXkgbG9uZ2hvdXNl",
+      videoUrl: "https://youtube.com/embed/AGobMia64XM&pp=ygUbQm9yZWxhbmQgbG9jaCB0YXkgbG9uZ2hvdXNl",
       imageFileName: 'longhouse.jpg',
+      capacity: 8,
+      roomCount: 4,
       rooms: {
         create: [
-          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 3', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 4', roomType: 'Double', capacity: 2, enSuite: false }
+          { name: 'Room 1', roomType: 'Double/twin', capacity: 2, enSuite: false },
+          { name: 'Room 2', roomType: 'Double/twin', capacity: 2, enSuite: false },
+          { name: 'Room 3', roomType: 'Double/twin', capacity: 2, enSuite: false },
+          { name: 'Room 4', roomType: 'Double/twin', capacity: 2, enSuite: false }
         ]
       }
     },
@@ -44,14 +48,16 @@ async function main() {
   const benCruachan = await prisma.Cabin.create({
     data: {
       name: 'Ben Cruachan',
-      videoUrl: "https://m.youtube.com/watch?v=5v5DUIyRBNk&pp=ygUeYm9yZWxhbmQgbG9jaCB0YXkgc2NoaWVoYWxsaW9u",
+      videoUrl: "https://youtube.com/embed/5v5DUIyRBNk&pp=ygUeYm9yZWxhbmQgbG9jaCB0YXkgc2NoaWVoYWxsaW9u",
       imageFileName: 'benCruachan.jpg',
+      capacity: 10,
+      roomCount: 4,
       rooms: {
         create: [
-          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
-          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: true },
-          { name: 'Room 3', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 4', roomType: 'Double And Bunk', capacity: 4, enSuite: false }
+          { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
+          { name: 'Room 2', roomType: 'Double/Twin', capacity: 2, enSuite: true },
+          { name: 'Room 3', roomType: 'Double/Twin', capacity: 2, enSuite: false },
+          { name: 'Room 4', roomType: 'Double/Twin And Bunk', capacity: 4, enSuite: false }
         ]
       }
     },
@@ -61,14 +67,16 @@ async function main() {
   const schiehallion = await prisma.Cabin.create({
     data: {
       name: 'Schiehallion',
-      videoUrl: "https://m.youtube.com/watch?v=5v5DUIyRBNk&pp=ygUeQm9yZWxhbmQgbG9jaCB0YXkgc2NoaWVoYWxsaW9u",
+      videoUrl: "https://youtube.com/embed/5v5DUIyRBNk&pp=ygUeQm9yZWxhbmQgbG9jaCB0YXkgc2NoaWVoYWxsaW9u",
       imageFileName: 'schiehallion.jpg',
+      capacity: 10, 
+      roomCount: 4,
       rooms: {
         create: [
-          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 3', roomType: 'Double And Bunk', capacity: 4, enSuite: false },
-          { name: 'Room 4', roomType: 'Double', capacity: 2, enSuite: false }
+          { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: false },
+          { name: 'Room 2', roomType: 'Double/Twin', capacity: 2, enSuite: false },
+          { name: 'Room 3', roomType: 'Double/Twin And Bunk', capacity: 4, enSuite: false },
+          { name: 'Room 4', roomType: 'Double/Twin', capacity: 2, enSuite: false }
         ]
       }
     },
@@ -78,13 +86,15 @@ async function main() {
   const benDrummond = await prisma.Cabin.create({
     data: {
       name: 'Ben Drummond',
-      videoUrl: "https://m.youtube.com/watch?v=ti_-jLmQrII&pp=ygUaQm9yZWxhbmQgbG9jaCB0YXkgZHJ1bW1vbmQ%3D",
+      videoUrl: "https://youtube.com/embed/ti_-jLmQrII&pp=ygUaQm9yZWxhbmQgbG9jaCB0YXkgZHJ1bW1vbmQ%3D",
       imageFileName: 'benDrummond.jpeg',
+      capacity: 8,
+      roomCount: 3,
       rooms: {
         create: [
-          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
-          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 3', roomType: 'Double Bunk', capacity: 4, enSuite: false }
+          { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
+          { name: 'Room 2', roomType: 'Double/Twin', capacity: 2, enSuite: false },
+          { name: 'Room 3', roomType: 'Double/Twin Bunk', capacity: 4, enSuite: false }
 
         ]
       }
@@ -95,12 +105,14 @@ async function main() {
   const benLawers = await prisma.Cabin.create({
     data: {
       name: 'Ben Lawers',
-      videoUrl: "https://m.youtube.com/watch?v=ti_-jLmQrII&pp=ygUaQm9yZWxhbmQgbG9jaCB0YXkgZHJ1bW1vbmQ%3D",
+      videoUrl: "https://youtube.com/embed/ti_-jLmQrII&pp=ygUaQm9yZWxhbmQgbG9jaCB0YXkgZHJ1bW1vbmQ%3D",
       imageFileName: 'benLawers.jpg',
+      capacity: 8,
+      roomCount: 3,
       rooms: {
         create: [
-          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
-          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
+          { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
+          { name: 'Room 2', roomType: 'Double/Twin', capacity: 2, enSuite: false },
           { name: 'Room 3', roomType: 'Double Bunk', capacity: 4, enSuite: false }
 
         ]
@@ -112,13 +124,15 @@ async function main() {
   const cottage = await prisma.Cabin.create({
     data: {
       name: 'Cottage',
-      videoUrl: "https://m.youtube.com/watch?v=zxve8-GkZRU&pp=ygUZQm9yZWxhbmQgbG9jaCB0YXkgY290dGFnZQ%3D%3D",
+      videoUrl: "https://youtube.com/embed/zxve8-GkZRU&pp=ygUZQm9yZWxhbmQgbG9jaCB0YXkgY290dGFnZQ%3D%3D",
       imageFileName: 'cottage.jpg',
+      capacity: 8,
+      roomCount: 3,
       rooms: {
         create: [
-          { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
-          { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 3', roomType: 'Bunk', capacity: 4, enSuite: false }
+          { name: 'Room 1', roomType: 'Double + Daybed', capacity: 3, enSuite: true },
+          { name: 'Room 2', roomType: 'Double + Daybed', capacity: 3, enSuite: false },
+          { name: 'Room 3', roomType: 'Bunk', capacity: 2, enSuite: false }
         ]
       }
     },
@@ -512,20 +526,20 @@ async function main() {
       inviteCode: 'k56p',
       accommodationCost: 30000,
       cabin: {
-        connect: { id: bencurchan.id }
+        connect: { id: benCruachan.id }
       },
       guests: {
         create: [
           {
             firstName: 'Nigel',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[0].id } },
+            room: { connect: { id: benCruachan.rooms[0].id } },
              relation: 'Farther Of The Groom'
           },
           {
             firstName: 'Ruth',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[0].id } },
+            room: { connect: { id: benCruachan.rooms[0].id } },
              relation: 'Mother Of The Groom'
           }
         ]
@@ -541,20 +555,20 @@ async function main() {
       inviteCode: '4gf5',
       accommodationCost: 30000,
       cabin: {
-        connect: { id: bencurchan.id }
+        connect: { id: benCruachan.id }
       },
       guests: {
         create: [
           {
             firstName: 'Mike',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[1].id } },
+            room: { connect: { id: benCruachan.rooms[1].id } },
              relation: 'Grand Farther Of The Groom'
           },
           {
             firstName: 'Anne',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[1].id } },
+            room: { connect: { id: benCruachan.rooms[1].id } },
              relation: 'Grand Mother Of The Groom'
           }
         ]
@@ -570,20 +584,20 @@ async function main() {
       inviteCode: '7cvt',
       accommodationCost: 26000,
       cabin: {
-        connect: { id: bencurchan.id }
+        connect: { id: benCruachan.id }
       },
       guests: {
         create: [
           {
             firstName: 'Mike',
             lastName: 'Downey',
-            room: { connect: { id: bencurchan.rooms[2].id } },
+            room: { connect: { id: benCruachan.rooms[2].id } },
              relation: 'Friend Of The Couple'
           },
           {
             firstName: 'Ellen',
             lastName: 'Downey',
-            room: { connect: { id: bencurchan.rooms[2].id } },
+            room: { connect: { id: benCruachan.rooms[2].id } },
             relation: 'Friend Of The Couple'
           }
         ]
@@ -599,14 +613,14 @@ async function main() {
       inviteCode: 'drg4',
       accommodationCost: 11000,
       cabin: {
-        connect: { id: bencurchan.id }
+        connect: { id: benCruachan.id }
       },
       guests: {
         create: [
           {
             firstName: 'David',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[3].id } },
+            room: { connect: { id: benCruachan.rooms[3].id } },
             relation: 'Family Of The Groom'
           },
         ]
@@ -622,14 +636,14 @@ async function main() {
       inviteCode: '76gj',
       accommodationCost: 11000,
       cabin: {
-        connect: { id: bencurchan.id }
+        connect: { id: benCruachan.id }
       },
       guests: {
         create: [
           {
             firstName: 'Steven',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[3].id } },
+            room: { connect: { id: benCruachan.rooms[3].id } },
             relation: 'Family Of The Groom'
           },
         ]
@@ -645,14 +659,14 @@ async function main() {
       inviteCode: 'c90l',
       accommodationCost: 11000,
       cabin: {
-        connect: { id: bencurchan.id }
+        connect: { id: benCruachan.id }
       },
       guests: {
         create: [
           {
             firstName: 'Tom',
             lastName: 'Downey',
-            room: { connect: { id: bencurchan.rooms[3].id } },
+            room: { connect: { id: benCruachan.rooms[3].id } },
             relation: 'Friend Of The Couple'
           },
         ]
@@ -668,20 +682,20 @@ async function main() {
       inviteCode: '46vy',
       accommodationCost: 30000,
       cabin: {
-        connect: { id: schehallion.id }
+        connect: { id: schiehallion.id }
       },
       guests: {
         create: [
           {
             firstName: 'George',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[0].id } },
+            room: { connect: { id: schiehallion.rooms[0].id } },
             relation: 'God Farther Of The Bride'
           },
           {
             firstName: 'Rebecca',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[0].id } },
+            room: { connect: { id: schiehallion.rooms[0].id } },
             relation: 'God Mother Of The Bride'
           }
         ]
@@ -697,20 +711,20 @@ async function main() {
       inviteCode: 'zv60',
       accommodationCost: 30000,
       cabin: {
-        connect: { id: schehallion.id }
+        connect: { id: schiehallion.id }
       },
       guests: {
         create: [
           {
             firstName: 'Eddie',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[1].id } },
+            room: { connect: { id: schiehallion.rooms[1].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Maureen',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[1].id } },
+            room: { connect: { id: schiehallion.rooms[1].id } },
            relation: 'Family Of The Bride'
           }
         ]
@@ -726,20 +740,20 @@ async function main() {
       inviteCode: '0ba3',
       accommodationCost: 22000,
       cabin: {
-        connect: { id: schehallion.id }
+        connect: { id: schiehallion.id }
       },
       guests: {
         create: [
           {
             firstName: 'Kevin',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[2].id } },
+            room: { connect: { id: schiehallion.rooms[2].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Lynn',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[2].id } },
+            room: { connect: { id: schiehallion.rooms[2].id } },
             relation: 'Family Of The Bride'
           }
         ]
@@ -755,20 +769,20 @@ async function main() {
       inviteCode: 'j8s4',
       accommodationCost: 22000,
       cabin: {
-        connect: { id: schehallion.id }
+        connect: { id: schiehallion.id }
       },
       guests: {
         create: [
           {
             firstName: 'Cieran',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[2].id } },
+            room: { connect: { id: schiehallion.rooms[2].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Chloe',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[2].id } },
+            room: { connect: { id: schiehallion.rooms[2].id } },
             relation: 'Family Of The Bride'
           }
         ]
@@ -784,20 +798,20 @@ async function main() {
       inviteCode: 'k8z3',
       accommodationCost: 30000,
       cabin: {
-        connect: { id: schehallion.id }
+        connect: { id: schiehallion.id }
       },
       guests: {
         create: [
           {
             firstName: 'John',
             lastName: 'Scott',
-            room: { connect: { id: schehallion.rooms[3].id } },
+            room: { connect: { id: schiehallion.rooms[3].id } },
             relation: 'Family Of The Groom'
           },
           {
             firstName: 'Andrea',
             lastName: 'Scott',
-            room: { connect: { id: schehallion.rooms[3].id } },
+            room: { connect: { id: schiehallion.rooms[3].id } },
             relation: 'Family Of The Groom'
           }
         ]
@@ -813,20 +827,20 @@ async function main() {
       inviteCode: 'f57n',
       accommodationCost: 30000,
       cabin: {
-        connect: { id: bendrummod.id }
+        connect: { id: benDrummond.id }
       },
       guests: {
         create: [
           {
             firstName: 'Dougie',
             lastName: 'Smith',
-            room: { connect: { id: bendrummod.rooms[0].id } },
+            room: { connect: { id: benDrummond.rooms[0].id } },
             relation: 'Farther Of The Bride'
           },
           {
             firstName: 'Maria',
             lastName: 'Smith',
-            room: { connect: { id: bendrummod.rooms[0].id } },
+            room: { connect: { id: benDrummond.rooms[0].id } },
             relation: 'Mother Of The Bride'
           }
         ]
@@ -842,41 +856,41 @@ async function main() {
       inviteCode: 'b0pl',
       accommodationCost: 30000,
       cabin: {
-        connect: { id: bendrummod.id }
+        connect: { id: benDrummond.id }
       },
       guests: {
         create: [
           {
             firstName: 'Ross',
             lastName: 'Mitchall',
-            room: { connect: { id: bendrummod.rooms[1].id } },
+            room: { connect: { id: benDrummond.rooms[1].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Nicci',
             lastName: 'Mitchall',
-            room: { connect: { id: bendrummod.rooms[1].id } },
+            room: { connect: { id: benDrummond.rooms[1].id } },
             relation: 'Sister Of The Bride'
           },
           {
             firstName: 'Jaxson',
             lastName: 'Mitchall',
             isChild: true,
-            room: { connect: { id: bendrummod.rooms[2].id } },
+            room: { connect: { id: benDrummond.rooms[2].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Jenson',
             lastName: 'Mitchall',
             isChild: true,
-            room: { connect: { id: bendrummod.rooms[2].id } },
+            room: { connect: { id: benDrummond.rooms[2].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Skye',
             lastName: 'Mitchall',
             isChild: true,
-            room: { connect: { id: bendrummod.rooms[2].id } },
+            room: { connect: { id: benDrummond.rooms[2].id } },
             relation: 'Family Of The Bride'
           }
         ]
@@ -892,41 +906,41 @@ async function main() {
       inviteCode: 'z16f',
       accommodationCost: 30000,
       cabin: {
-        connect: { id: benlawyers.id }
+        connect: { id: benLawers.id }
       },
       guests: {
         create: [
           {
             firstName: 'Ryan',
             lastName: '',
-            room: { connect: { id: benlawyers.rooms[0].id } },
+            room: { connect: { id: benLawers.rooms[0].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Vicky',
             lastName: '',
-            room: { connect: { id: benlawyers.rooms[0].id } },
+            room: { connect: { id: benLawers.rooms[0].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Mimi-Rose',
             lastName: '',
             isBaby: true,
-            room: { connect: { id: benlawyers.rooms[0].id } },
+            room: { connect: { id: benLawers.rooms[0].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Milo',
             lastName: '',
             isChild: true,
-            room: { connect: { id: benlawyers.rooms[2].id } },
+            room: { connect: { id: benLawers.rooms[2].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Macie',
             lastName: '',
             isChild: true,
-            room: { connect: { id: benlawyers.rooms[2].id } },
+            room: { connect: { id: benLawers.rooms[2].id } },
             relation: 'Family Of The Bride'
           }
         ]
@@ -942,20 +956,20 @@ async function main() {
       inviteCode: '0pag',
       accommodationCost: 30000,
       cabin: {
-        connect: { id: benlawyers.id }
+        connect: { id: benLawers.id }
       },
       guests: {
         create: [
           {
             firstName: 'William',
             lastName: '',
-            room: { connect: { id: benlawyers.rooms[1].id } },
+            room: { connect: { id: benLawers.rooms[1].id } },
             relation: 'Family Of The Bride'
           },
           {
             firstName: 'Shona',
             lastName: '',
-            room: { connect: { id: benlawyers.rooms[1].id } },
+            room: { connect: { id: benLawers.rooms[1].id } },
             relation: 'Family Of The Bride'
           },
           {
@@ -963,14 +977,14 @@ async function main() {
             lastName: '',
             isChild: true,
             relation: 'Family Of The Bride',
-            room: { connect: { id: benlawyers.rooms[2].id } }
+            room: { connect: { id: benLawers.rooms[2].id } }
           },
           {
             firstName: 'Holly',
             lastName: '',
             isChild: true,
             relation: 'Family Of The Bride',
-            room: { connect: { id: benlawyers.rooms[2].id } }
+            room: { connect: { id: benLawers.rooms[2].id } }
           }
         ]
       }

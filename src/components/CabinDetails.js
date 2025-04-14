@@ -1,14 +1,19 @@
 // components/CabinDetails.js
 import styled from 'styled-components';
 import { Section, SectionHeading } from './Section';
-
+import Image from 'next/image';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {
+	faHome, faBed, faUsers
+} from '@fortawesome/free-solid-svg-icons';
+import {InfoBlock} from "./InfoBlock";
 const MediaWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-top: 1rem;
 
-  iframe, img {
+  iframe {
     width: 100%;
     border-radius: 12px;
     max-height: 360px;
@@ -16,34 +21,65 @@ const MediaWrapper = styled.div`
   }
 `;
 
-const Details = styled.div`
-  margin-top: 1rem;
-  font-size: 1rem;
-  color: ${props => props.theme.colors.text};
-  line-height: 1.6;
+const Snapshot = styled(Image)`
+  border-radius: 12px;
+`;
 
-  strong {
-    display: inline-block;
-    width: 130px;
+const Details = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  font-family: ${props => props.theme.fonts.base};
+  font-size: 1.1rem;
+  color: ${props => props.theme.colors.text};
+
+  div {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    svg {
+      color: ${props => props.theme.colors.accent};
+    }
+
+    strong {
+      font-weight: 600;
+      color: ${props => props.theme.colors.primary};
+    }
   }
 `;
+
 
 export default function CabinDetails({ cabin }) {
 	if (!cabin) return null;
   
-	const imageSrc = cabin.imageFileName ? `/images/${cabin.imageFileName}` : null;
-  
-	// ✅ Calculate total bedrooms and capacity
-	const totalBedrooms = cabin.rooms?.length || 0;
-	const totalCapacity = cabin.rooms?.reduce((sum, room) => sum + room.capacity, 0) || 0;
-  
+	const imageSrc = cabin.imageFileName ? `/${cabin.imageFileName}` : null;
+
 	return (
 	  <Section>
-		<SectionHeading>Your Cabin</SectionHeading>
-		<h3 style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>{cabin.name}</h3>
-  
-		<MediaWrapper>
-		  {imageSrc && <img src={imageSrc} alt={`${cabin.name} photo`} />}
+			<SectionHeading>Your Cabin</SectionHeading>  
+			<InfoBlock>
+  <div>
+    <FontAwesomeIcon icon={faHome} />
+    <strong>Cabin:</strong> {cabin.name}
+  </div>
+  <div>
+    <FontAwesomeIcon icon={faBed} />
+    <strong>Bedrooms:</strong> {cabin.roomCount}
+  </div>
+  <div>
+    <FontAwesomeIcon icon={faUsers} />
+    <strong>Capacity:</strong> {cabin.capacity} guests
+  </div>
+</InfoBlock>
+
+			<MediaWrapper>
+			<Snapshot src={imageSrc} alt={`${cabin.name} photo`} width={700} height={400} layout="responsive" />
 		  {cabin.videoUrl && (
 			<iframe
 			  src={cabin.videoUrl}
@@ -54,11 +90,6 @@ export default function CabinDetails({ cabin }) {
 			/>
 		  )}
 		</MediaWrapper>
-  
-		<Details>
-		  <div><strong>Bedrooms:</strong> {totalBedrooms}</div>
-		  <div><strong>Full Capacity:</strong> {totalCapacity} guests</div>
-		</Details>
 	  </Section>
 	);
   }

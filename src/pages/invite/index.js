@@ -111,22 +111,26 @@ export default function InvitePage() {
     try {
       const res = await fetch(`/api/invite/${code}`);
       if (!res.ok) throw new Error();
-  
+    
       const data = await res.json();
-  
+    
       sessionStorage.setItem('hasAccess', 'true');
-  
-      if (data.paid) {
-        // ✅ Redirect directly to the payment success page
-        router.push(`/invite/payment?inviteCode=${code}&success=true`);
+    
+      if (data.rsvpLocked) {
+        if (data.accommodationOption === 'onsite') {
+          router.push(`/accommodationDetails/${code}`);
+        } else {
+          router.push(`/confirmed/${code}`);
+        }
       } else {
-        // Proceed to RSVP form
         router.push(`/invite/${code}`);
       }
+      
     } catch {
       setError('That code doesn’t seem to work. Double check your invite and try again!');
       setIsLoading(false);
     }
+    
   };  
 
 
