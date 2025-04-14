@@ -24,7 +24,6 @@ model GuestParty {
   paid              Boolean?
   needsBus          Boolean?
   accommodationCost  Int?
-  accommodationOption  String?
   cabinId           Int?
   cabin             Cabin?            @relation(fields: [cabinId], references: [id])
   guests            IndividualGuest[]
@@ -51,7 +50,7 @@ model IndividualGuest {
 enum GuestType {
   OnSite
   OtherAccommodation
-  DayEveningOnly
+  AccommodationNotOffered
 }
 
 enum RSVPStatus {

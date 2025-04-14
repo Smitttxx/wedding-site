@@ -132,19 +132,13 @@ export default function AccommodationDetailsPage() {
   }, [inviteCode]);
 
   const handleOffsite = async () => {
-    await axios.post(`/api/invite/update`, {
+    await axios.post(`/api/accommodation/update`, {
       partyId: party.id,
-      accommodationOption: 'other',
-      guests: party.guests.map(g => ({
-        id: g.id,
-        rsvp: g.rsvp || 'No'
-      })),
-      rsvpLocked: true,
-      guestType: "OtherAccommodation",
-    });
+      guestType: 'OtherAccommodation',
+    });    
   
     // Redirect to confirmation page
-    router.push(`/confirmed/${inviteCode}?attending=true&locked=true`);
+    router.push(`/confirmed/${inviteCode}`);
   };  
 
   const handleContinue = () => {

@@ -7,6 +7,7 @@ const Label = styled.label`
   font-size: 1.1rem;
   display: block;
   margin-bottom: 0.5rem;
+  color: ${props => props.theme.colors.primaryDark};
 `;
 
 const Description = styled.p`
@@ -15,6 +16,7 @@ const Description = styled.p`
   margin-bottom: 1rem;
   color: #333;
   text-align: center;
+  color: ${props => props.theme.colors.primaryDark};
 `;
 
 const Textarea = styled.textarea`

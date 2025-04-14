@@ -7,6 +7,7 @@ const Label = styled.p`
   font-weight: bold;
   font-size: 1.3rem;
   margin-bottom: 1rem;
+  color: ${props => props.theme.colors.primaryDark};
 `;
 
 export default function AccommodationOptions({
@@ -41,7 +42,7 @@ export default function AccommodationOptions({
     );
   }
 
-  if (guestType === 'OtherAccommodation') {
+  if (guestType === 'AccommodationNotOffered') {
     return (
       <Section>
         <SectionHeading>Accommodation</SectionHeading>

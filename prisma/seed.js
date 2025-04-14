@@ -1122,7 +1122,7 @@ async function main() {
     data: {
       partyName: 'Baz & Mary',
       token: 'bazAndMary',
-      guestType: 'OtherAccommodation',
+      guestType: 'AccommodationNotOffered',
       inviteCode: 'm93h',
       guests: {
         create: [
@@ -1143,7 +1143,7 @@ async function main() {
     data: {
       partyName: 'Sarah',
       token: 'sarah',
-      guestType: 'OtherAccommodation',
+      guestType: 'AccommodationNotOffered',
       inviteCode: 'e5u8',
       guests: {
         create: [
@@ -1160,7 +1160,7 @@ async function main() {
     data: {
       partyName: 'Jamie & Tabitha',
       token: 'jamieAndTabitha',
-      guestType: 'OtherAccommodation',
+      guestType: 'AccommodationNotOffered',
       inviteCode: 'rtv4',
       guests: {
         create: [
@@ -1181,7 +1181,7 @@ async function main() {
     data: {
       partyName: 'Ian & Sylvia',
       token: 'ianAndSylvia',
-      guestType: 'OtherAccommodation',
+      guestType: 'AccommodationNotOffered',
       inviteCode: 'wvt5',
       guests: {
         create: [
@@ -1202,7 +1202,7 @@ async function main() {
     data: {
       partyName: 'Partner & Maxine',
       token: 'partnerAndMaxine',
-      guestType: 'OtherAccommodation',
+      guestType: 'AccommodationNotOffered',
       inviteCode: 'lsy7',
       guests: {
         create: [
@@ -1223,7 +1223,7 @@ async function main() {
     data: {
       partyName: 'Paul & Anne',
       token: 'paulAndAnne',
-      guestType: 'OtherAccommodation',
+      guestType: 'AccommodationNotOffered',
       inviteCode: '5xt8',
       guests: {
         create: [
@@ -1244,7 +1244,7 @@ async function main() {
     data: {
       partyName: 'Nigel & Debra',
       token: 'nigelAndDebra',
-      guestType: 'OtherAccommodation',
+      guestType: 'AccommodationNotOffered',
       inviteCode: 'q492',
       guests: {
         create: [
@@ -1265,7 +1265,7 @@ async function main() {
     data: {
       partyName: 'Stuart & Debbie',
       token: 'stuartAndDebbie',
-      guestType: 'OtherAccommodation',
+      guestType: 'AccommodationNotOffered',
       inviteCode: 'qzx5',
       guests: {
         create: [
