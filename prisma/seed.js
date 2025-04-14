@@ -962,12 +962,14 @@ async function main() {
             firstName: 'Luca',
             lastName: '',
             isChild: true,
+            relation: 'Family Of The Bride',
             room: { connect: { id: benlawyers.rooms[2].id } }
           },
           {
             firstName: 'Holly',
             lastName: '',
             isChild: true,
+            relation: 'Family Of The Bride',
             room: { connect: { id: benlawyers.rooms[2].id } }
           }
         ]
