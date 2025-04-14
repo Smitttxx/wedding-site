@@ -3,18 +3,20 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import Layout from '../../components/Layout';
 import { SectionHeading } from '../../components/Section';
-import {Page} from "@/components/Page";
+import { Page } from "@/components/Page";
 
 const Message = styled.p`
-  font-size: 1.2rem;
-  margin: 1rem 0 2rem;
+  font-size: 1.25rem;
+  margin: 1rem 0 1.5rem;
   color: ${props => props.theme.colors.text};
+  line-height: 1.6;
 `;
 
 const Note = styled.p`
   margin-top: 1rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: ${props => props.theme.colors.text};
+  line-height: 1.5;
 `;
 
 const StyledButton = styled.a`
@@ -51,22 +53,28 @@ export default function ConfirmedPage() {
           {isAttending ? 'Thanks for RSVPing 🎉' : "We'll Miss You 😢"}
         </SectionHeading>
 
-        <Message>
-          {isAttending
-            ? 'We can’t wait to celebrate with you! You can return to update your dietary or travel info.'
-            : 'We’re sorry you can’t make it — thank you for letting us know.'}
-        </Message>
-
-        {isLocked ? (
+        {isAttending ? (
           <>
+            <Message>
+              We’re so glad you’ll be joining us to celebrate our big day in the Scottish Highlands! 💛
+              <br /><br />
+              You’ve let us know you’ll be arranging your own accommodation — thank you! We’ll keep you posted with travel tips and party updates.
+            </Message>
+
             <Note>
-              If anything changes just let us know, we’d love to see you!
+              If your plans change and you’d like to stay on-site (if space opens up), just let us know. We’d love to have you nearby!
             </Note>
           </>
         ) : (
-          <Link href={returnPath} passHref legacyBehavior>
-            <StyledButton>← Update your details</StyledButton>
-          </Link>
+          <>
+            <Message>
+              We’re really sorry you won’t be able to join us — but thank you so much for letting us know.
+            </Message>
+
+            <Note>
+              If your plans change, please don’t hesitate to get in touch. We’d love to celebrate with you if you’re able to make it!
+            </Note>
+          </>
         )}
       </Page>
     </Layout>

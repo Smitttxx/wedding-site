@@ -27,7 +27,7 @@ model GuestParty {
   accommodationOption  String?
   cabinId           Int?
   cabin             Cabin?            @relation(fields: [cabinId], references: [id])
-  guests            IndividualGuest[] // ✅ FIXED
+  guests            IndividualGuest[]
   rsvpLocked        Boolean? @default(false)
 }
 
@@ -61,10 +61,14 @@ enum RSVPStatus {
 }
 
 model Cabin {
-  id          Int          @id @default(autoincrement())
-  name        String
-  rooms       Room[]
-  parties     GuestParty[] // 👈 NEW: back relation (optional)
+  id                 Int          @id @default(autoincrement())
+  name               String
+  rooms              Room[]
+  imageFileName      String?       // Optional image filename stored in /public/images/
+  videoUrl           String?       // Optional embedded YouTube URL
+  capacity           Int? 
+  roomCount          Int? 
+  parties            GuestParty[]
 }
 
 model Room {
@@ -75,5 +79,5 @@ model Room {
   enSuite  Boolean
   cabinId  Int
   cabin    Cabin             @relation(fields: [cabinId], references: [id])
-  guests   IndividualGuest[] // 👈 Back relation
+  guests   IndividualGuest[]
 }

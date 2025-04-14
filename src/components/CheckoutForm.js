@@ -53,10 +53,10 @@ export default function CheckoutForm({partyId, clientSecret, amount, inviteCode}
     });
 
     if (result.error) {
-      router.replace(`/invite/payment?inviteCode=${inviteCode}&error=true`);
+      router.replace(`/payment/${inviteCode}&error=true`);
     } else if (result.paymentIntent.status === 'succeeded') {
       await axios.post('/api/invite/markPaid', {partyId});
-      router.replace(`/invite/payment?inviteCode=${inviteCode}&success=true`);
+      router.replace(`/payment/${inviteCode}?success=true`);
     }
 
     setLoading(false);

@@ -7,8 +7,11 @@ export default async function handler(req, res) {
   }
 
   const { partyId, guests, fridayParty, needsBus, accommodationOption, dietary } = req.body;
-  const everyoneSaidNo = guests.every(g => g.rsvp === 'No');
 
+  const allResponded = guests.every(g => g.rsvp === 'Yes' || g.rsvp === 'No');
+  const lockRsvp = allResponded;
+  
+  
   if (!partyId || !Array.isArray(guests)) {
     return res.status(400).json({ error: 'Missing or invalid data' });
   }
@@ -22,7 +25,7 @@ export default async function handler(req, res) {
         needsBus,
         accommodationOption,
         dietary,
-        rsvpLocked: everyoneSaidNo
+        rsvpLocked: lockRsvp
       }
     });
 

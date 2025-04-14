@@ -1,0 +1,338 @@
+// pages/invite/accommodationDetails.js
+
+import {useRouter} from 'next/router';
+import {useEffect, useState, Fragment} from 'react';
+import axios from 'axios';
+import styled from 'styled-components';
+import Layout from '@/components/Layout';
+import NavBar from '@/components/NavBar';
+import PartyHeader from '@/components/PartyHeader';
+import {Page} from '@/components/Page';
+import {Section, SectionHeading} from '@/components/Section';
+import {InfoBlock} from '@/components/InfoBlock';
+import {GoldInfoBox} from '@/components/GoldInfoBox';
+import CabinDetails from '@/components/CabinDetails';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {
+  faCalendarCheck,
+  faCalendarXmark,
+  faChild,
+  faUserFriends,
+  faSuitcase,
+  faBed,
+  faUsers,
+  faBaby,
+  faCheckCircle,
+  faMoneyBillWave,
+  faHotel,
+  faBus,
+  faXmark
+} from '@fortawesome/free-solid-svg-icons';
+import AccommodationConfirmationToggle from "@/components/AccommodationConfirmationToggle";
+import Warning from "@/components/Warning";
+
+const Button = styled.button`
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  border-radius: ${props => props.theme.borderRadius};
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  &:hover {
+    background: ${props => props.theme.colors.primaryDark};
+  }
+`;
+
+const DownloadLink = styled.a`
+  display: inline-block;
+  margin: 2rem auto 0;
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: background 0.3s ease;
+  &:hover {
+    background: ${props => props.theme.colors.primaryDark};
+  }
+`;
+
+const Divider = styled.div`
+  border-top: 1px dashed ${props => props.theme.colors.accent};
+  margin: 0.6rem 0;
+`;
+
+const List = styled.ul`
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+
+  li {
+    font-size: 1rem;
+    color: ${props => props.theme.colors.text};
+    border-bottom: 1px dashed ${props => props.theme.colors.primary};
+    padding: 0.25rem 0;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+  }
+
+  span {
+    color: ${props => props.theme.colors.accent};
+    font-style: italic;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+`;
+
+const Text = styled.p`
+  color: ${props => props.theme.colors.text};
+  margin-top: 1rem;
+`;
+
+const SectionButtons = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+`;
+
+const GuestBox = styled.div`
+  background-color: ${props => props.theme.colors.lightAccent};
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(191, 161, 78, 0.1);
+  color: ${props => props.theme.colors.primary};
+  margin: 10px -16px;
+`;
+
+export default function AccommodationDetailsPage() {
+  const router = useRouter();
+  const {inviteCode} = router.query;
+  const [party, setParty] = useState(null);
+  const [confirmed, setConfirmed] = useState(null);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get(`/api/invite/${inviteCode}`);
+      setParty(res.data);
+    };
+
+    if (inviteCode) fetchData();
+  }, [inviteCode]);
+
+  const handleOffsite = async () => {
+    await axios.post(`/api/invite/update`, {
+      partyId: party.id,
+      accommodationOption: 'other',
+      guests: party.guests.map(g => ({
+        id: g.id,
+        rsvp: g.rsvp || 'No'
+      })),
+      rsvpLocked: true,
+      guestType: "OtherAccommodation",
+    });
+  
+    // Redirect to confirmation page
+    router.push(`/confirmed/${inviteCode}?attending=true&locked=true`);
+  };  
+
+  const handleContinue = () => {
+    router.push(`/payment/${inviteCode}`);
+  };
+
+  if (!party) return null;
+
+  const yourRooms = Array.from(new Set(
+    party.guests.map(g => g.room?.name).filter(Boolean)
+  ));
+
+  const partyGuestIds = new Set(party.guests.map(g => g.id));
+
+  const othersInCabin = party.cabin?.rooms
+    ?.flatMap(room => room.guests)
+    ?.filter(g => !partyGuestIds.has(g.id));
+
+  const yourRoomIds = party.guests.map(g => g.room?.id).filter(Boolean);
+
+  const otherGuestsInYourRooms = party.cabin?.rooms?.reduce((acc, room) => {
+    if (!yourRoomIds.includes(room.id)) return acc;
+
+    const others = room.guests.filter(g => !partyGuestIds.has(g.id));
+    if (others.length) acc[room.name] = others;
+    return acc;
+  }, {});
+
+
+  return (
+    <Fragment>
+      <NavBar />
+      <Layout>
+        <Page>
+          <PartyHeader party={party} />
+
+          <Section>
+            <SectionHeading>Accommodation Summary</SectionHeading>
+            <Text><strong>Thanks for RSVPing!</strong><br />
+              We’re so glad you can make it and can’t wait to celebrate with you.
+            </Text>
+            <InfoBlock>
+              Your stay includes <br />
+              <strong>2 nights only</strong><br />
+              from <FontAwesomeIcon icon={faCalendarCheck} /> <strong>Fri 12 Sept</strong><br />
+              (check-in from <strong>4pm</strong>) <br />
+              to <FontAwesomeIcon icon={faCalendarXmark} /> <strong>Sun 14 Sept</strong><br />
+              (check-out by <strong>10am</strong>)<br />
+              <strong>Free onsite parking</strong>
+            </InfoBlock>
+
+            <Text>
+              All cabins are self-catering. Laura & Joe will pop a small welcome hamper in your cabin — with milk, tea, and coffee to get you started.
+            </Text>
+
+            <Text>
+              Staying on-site means you can enjoy the Friday festivities, get ready with ease, and be just a <strong>minute’s walk</strong> from the venue on the big day.
+            </Text>
+
+            <DownloadLink href="/site-map.jpg" download>
+              🗺️ Download the Site Map
+            </DownloadLink>
+
+            {party.cabin && <CabinDetails cabin={party.cabin} />}
+
+            <div>
+              {party.cabin?.rooms
+                ?.filter(room => room.guests.some(g => partyGuestIds.has(g.id)))
+                ?.sort((a, b) => a.name.localeCompare(b.name))
+                .map(room => {
+                  const partyGuestsInRoom = room.guests.filter(g => partyGuestIds.has(g.id));
+                  const otherGuestsInRoom = room.guests.filter(g => !partyGuestIds.has(g.id));
+                  const hasBaby = partyGuestsInRoom.some(g => g.isBaby);
+                  return (
+                    <Section key={room.id}>
+                      {/* Room Name */}
+                      <SectionHeading>{room.name}</SectionHeading>
+                      <Divider />
+
+                      {/* Room Info */}
+                      <Text style={{marginBottom: '1rem'}}>
+                        <FontAwesomeIcon icon={faBed} /> <strong>Type:</strong> {room.roomType} &nbsp; | &nbsp;
+                        <FontAwesomeIcon icon={faUsers} /> <strong>Capacity:</strong> {room.capacity}
+                      </Text>
+
+                      {/* Your Guests */}
+                      {partyGuestsInRoom.length > 0 && (
+                        <>
+                          <GuestBox>
+                            <FontAwesomeIcon icon={faUserFriends} /> <strong>Guests on your booking:</strong>
+                          </GuestBox>
+                          <List>
+                            {partyGuestsInRoom.map(g => (
+                              <li key={g.id}>
+                                {g.firstName} {g.lastName}
+                                {g.isBaby && (
+                                  <FontAwesomeIcon
+                                    icon={faBaby}
+                                    style={{marginLeft: '0.5rem'}}
+                                    title="Baby"
+                                  />
+                                )}
+                                {g.isChild && !g.isBaby && (
+                                  <FontAwesomeIcon
+                                    icon={faChild}
+                                    style={{marginLeft: '0.5rem'}}
+                                    title="Child"
+                                  />
+                                )}
+                              </li>
+                            ))}
+                          </List>
+                        </>
+                      )}
+
+                      {/* Baby Note */}
+                      {hasBaby && (
+                        <GoldInfoBox icon={faBaby}>
+                          We’re excited to welcome your little one! Please note, travel cots aren’t provided — feel free to bring your own.
+                        </GoldInfoBox>
+                      )}
+
+
+
+                      {/* Other Guests */}
+                      {otherGuestsInRoom.length > 0 && (
+                        <>
+                          <GuestBox>
+                            <FontAwesomeIcon icon={faSuitcase} /> <strong>Other guests sharing this room:</strong>
+                          </GuestBox>
+                          <List>
+                            {otherGuestsInRoom.map(g => (
+                              <li key={g.id}>
+                                {g.firstName} {g.lastName} {g.relation && `(${g.relation})`}
+                              </li>
+                            ))}
+                          </List>
+                        </>
+                      )}
+                    </Section>
+                  );
+
+                })}
+
+            </div>
+
+            {othersInCabin?.length > 0 && (
+              <Section>
+                <SectionHeading>Other Guests in Your Cabin</SectionHeading>
+                <List>
+                  {othersInCabin.map(g => (
+                    <li key={g.id}>{g.firstName} {g.lastName} <span>{g.relation && `(${g.relation})`}</span></li>
+                  ))}
+                </List>
+              </Section>
+            )}
+
+            {!party.paid &&
+              <AccommodationConfirmationToggle
+                confirmed={confirmed}
+                setConfirmed={setConfirmed}
+                error={error}
+              />
+            }
+            {confirmed !== null && (
+              <Button
+                onClick={() => {
+                  if (confirmed) handleContinue();
+                  else handleOffsite();
+                }}
+              >
+                {confirmed ? (
+                  <>
+                    <FontAwesomeIcon icon={faMoneyBillWave} style={{marginRight: '0.5rem'}} />
+                    Confirm & Proceed to Payment
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faBus} style={{marginRight: '0.5rem'}} />
+                    Confirm You’re Staying Offsite
+                  </>
+                )}
+              </Button>
+            )}
+
+          </Section>
+        </Page>
+      </Layout>
+    </Fragment>
+  );
+}
