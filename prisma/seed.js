@@ -51,7 +51,7 @@ async function main() {
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
           { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: true },
           { name: 'Room 3', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 4', roomType: 'Double And Bunk', capacity: 3, enSuite: false }
+          { name: 'Room 4', roomType: 'Double And Bunk', capacity: 4, enSuite: false }
         ]
       }
     },
@@ -84,7 +84,7 @@ async function main() {
         create: [
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
           { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 3', roomType: 'Bunk', capacity: 3, enSuite: false }
+          { name: 'Room 3', roomType: 'Double Bunk', capacity: 4, enSuite: false }
 
         ]
       }
@@ -101,7 +101,7 @@ async function main() {
         create: [
           { name: 'Room 1', roomType: 'Double', capacity: 2, enSuite: true },
           { name: 'Room 2', roomType: 'Double', capacity: 2, enSuite: false },
-          { name: 'Room 3', roomType: 'Bunk', capacity: 4, enSuite: false }
+          { name: 'Room 3', roomType: 'Double Bunk', capacity: 4, enSuite: false }
 
         ]
       }
@@ -147,7 +147,7 @@ async function main() {
           {
             firstName: 'Laura',
             lastName: 'Smith',
-            room: { connect: { id: farmhouse.rooms[0].id } }.connect.id,
+            room: { connect: { id: farmhouse.rooms[0].id } },
             relation: 'Bride'
           }
         ]
@@ -170,12 +170,14 @@ async function main() {
           {
             firstName: 'Sonny',
             lastName: 'Cannon',
-            room: { connect: { id: farmhouse.rooms[1].id } }
+            room: { connect: { id: farmhouse.rooms[1].id } },
+            relation: 'Best Man'
           },
           {
             firstName: 'Becca',
             lastName: 'Roberts',
-            room: { connect: { id: farmhouse.rooms[1].id } }
+            room: { connect: { id: farmhouse.rooms[1].id } },
+            relation: 'Maid Of Honour'
           }
         ]
       }
@@ -197,12 +199,14 @@ async function main() {
           {
             firstName: 'Jay',
             lastName: '',
-            room: { connect: { id: farmhouse.rooms[2].id } }
+            room: { connect: { id: farmhouse.rooms[2].id } },
+            relation: 'Friend Of The Couple'
           },
           {
             firstName: 'Becky',
             lastName: '',
-            room: { connect: { id: farmhouse.rooms[2].id } }
+            room: { connect: { id: farmhouse.rooms[2].id } },
+            relation: 'Bridesmade'
           }
         ]
       }
@@ -224,18 +228,21 @@ async function main() {
           {
             firstName: 'Tom',
             lastName: 'Speakman',
-            room: { connect: { id: farmhouse.rooms[3].id } }
+            room: { connect: { id: farmhouse.rooms[3].id } },
+             relation: 'Friend Of The Couple'
           },
           {
             firstName: 'Toni',
             lastName: 'Abblitt',
-            room: { connect: { id: farmhouse.rooms[3].id } }
+            room: { connect: { id: farmhouse.rooms[3].id } },
+             relation: 'Friend Of The Couple'
           },
           {
             firstName: 'Renly',
             lastName: 'Speakman',
             isBaby: true,
-            room: { connect: { id: farmhouse.rooms[3].id } }
+            room: { connect: { id: farmhouse.rooms[3].id } },
+             relation: 'Friend Of The Couples Baby'
           }
         ]
       }
@@ -257,12 +264,14 @@ async function main() {
           {
             firstName: 'Connor',
             lastName: 'Costello',
-            room: { connect: { id: farmhouse.rooms[3].id } }
+            room: { connect: { id: farmhouse.rooms[3].id } },
+             relation: 'Friend Of The Couple'
           },
           {
             firstName: 'Ellie',
             lastName: 'Van',
-            room: { connect: { id: farmhouse.rooms[3].id } }
+            room: { connect: { id: farmhouse.rooms[3].id } },
+             relation: 'Bridesmaid'
           }
         ]
       }
@@ -284,12 +293,14 @@ async function main() {
           {
             firstName: 'Graham',
             lastName: 'Frain',
-            room: { connect: { id: farmhouse.rooms[4].id } }
+            room: { connect: { id: farmhouse.rooms[4].id } },
+             relation: 'Friend Of The Couple'
           },
           {
             firstName: 'Puja',
             lastName: 'Biswas',
-            room: { connect: { id: farmhouse.rooms[4].id } }
+            room: { connect: { id: farmhouse.rooms[4].id } },
+             relation: 'Friend Of The Couples Partner'
           }
         ]
       }
@@ -311,12 +322,14 @@ async function main() {
           {
             firstName: 'Sean',
             lastName: 'Boardman',
-            room: { connect: { id: farmhouse.rooms[4].id } }
+            room: { connect: { id: farmhouse.rooms[4].id } },
+             relation: 'Groomsmen'
           },
           {
             firstName: 'Kim',
             lastName: '',
-            room: { connect: { id: farmhouse.rooms[4].id } }
+            room: { connect: { id: farmhouse.rooms[4].id } },
+             relation: 'Friend Of The Couple'
           }
         ]
       }
@@ -338,12 +351,14 @@ async function main() {
           {
             firstName: 'Madeline',
             lastName: 'Austin',
-            room: { connect: { id: farmhouse.rooms[5].id } }
+            room: { connect: { id: farmhouse.rooms[5].id } },
+             relation: 'Sister Of The Groom'
           },
           {
             firstName: 'Natasha',
             lastName: '',
-            room: { connect: { id: farmhouse.rooms[5].id } }
+            room: { connect: { id: farmhouse.rooms[5].id } },
+             relation: 'Friend Of The Couple'
           }
         ]
       }
@@ -365,7 +380,8 @@ async function main() {
           {
             firstName: 'Barry',
             lastName: '',
-            room: { connect: { id: farmhouse.rooms[5].id } }
+            room: { connect: { id: farmhouse.rooms[5].id } },
+             relation: 'Friend Of The Couple'
           },
         ]
       }
@@ -387,12 +403,14 @@ async function main() {
           {
             firstName: 'Mark',
             lastName: 'Walters',
-            room: { connect: { id: longhouse.rooms[0].id } }
+            room: { connect: { id: longhouse.rooms[0].id } },
+             relation: 'Friend Of The Couple'
           },
           {
             firstName: 'Helen',
             lastName: 'Walters',
-            room: { connect: { id: longhouse.rooms[0].id } }
+            room: { connect: { id: longhouse.rooms[0].id } },
+             relation: 'Friend Of The Couple'
           }
         ]
       }
@@ -414,12 +432,14 @@ async function main() {
           {
             firstName: 'Jake',
             lastName: 'Wright',
-            room: { connect: { id: longhouse.rooms[1].id } }
+            room: { connect: { id: longhouse.rooms[1].id } },
+             relation: 'Colleague'
           },
           {
             firstName: 'Anthia',
             lastName: '',
-            room: { connect: { id: longhouse.rooms[1].id } }
+            room: { connect: { id: longhouse.rooms[1].id } },
+              relation: 'Colleagues Partner'
           }
         ]
       }
@@ -440,13 +460,15 @@ async function main() {
         create: [
           {
             firstName: 'Lee',
-            lastName: '',
-            room: { connect: { id: longhouse.rooms[2].id } }
+            lastName: 'Hancock',
+            room: { connect: { id: longhouse.rooms[2].id } },
+             relation: 'Friend Of The Couple'
           },
           {
             firstName: 'Ally',
-            lastName: '',
-            room: { connect: { id: longhouse.rooms[2].id } }
+            lastName: 'Hancock',
+            room: { connect: { id: longhouse.rooms[2].id } },
+             relation: 'Friend Of The Couple'
           }
         ]
       }
@@ -468,12 +490,14 @@ async function main() {
           {
             firstName: 'Pete',
             lastName: '',
-            room: { connect: { id: longhouse.rooms[3].id } }
+            room: { connect: { id: longhouse.rooms[3].id } },
+             relation: 'Family Of The Groom'
           },
           {
             firstName: 'Cynthia',
             lastName: '',
-            room: { connect: { id: longhouse.rooms[3].id } }
+            room: { connect: { id: longhouse.rooms[3].id } },
+             relation: 'Family Of The Groom'
           }
         ]
       }
@@ -495,12 +519,14 @@ async function main() {
           {
             firstName: 'Nigel',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[0].id } }
+            room: { connect: { id: bencurchan.rooms[0].id } },
+             relation: 'Farther Of The Groom'
           },
           {
             firstName: 'Ruth',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[0].id } }
+            room: { connect: { id: bencurchan.rooms[0].id } },
+             relation: 'Mother Of The Groom'
           }
         ]
       }
@@ -522,12 +548,14 @@ async function main() {
           {
             firstName: 'Mike',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[1].id } }
+            room: { connect: { id: bencurchan.rooms[1].id } },
+             relation: 'Grand Farther Of The Groom'
           },
           {
             firstName: 'Anne',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[1].id } }
+            room: { connect: { id: bencurchan.rooms[1].id } },
+             relation: 'Grand Mother Of The Groom'
           }
         ]
       }
@@ -549,12 +577,14 @@ async function main() {
           {
             firstName: 'Mike',
             lastName: 'Downey',
-            room: { connect: { id: bencurchan.rooms[2].id } }
+            room: { connect: { id: bencurchan.rooms[2].id } },
+             relation: 'Friend Of The Couple'
           },
           {
             firstName: 'Ellen',
             lastName: 'Downey',
-            room: { connect: { id: bencurchan.rooms[2].id } }
+            room: { connect: { id: bencurchan.rooms[2].id } },
+            relation: 'Friend Of The Couple'
           }
         ]
       }
@@ -576,7 +606,8 @@ async function main() {
           {
             firstName: 'David',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[3].id } }
+            room: { connect: { id: bencurchan.rooms[3].id } },
+            relation: 'Family Of The Groom'
           },
         ]
       }
@@ -598,7 +629,8 @@ async function main() {
           {
             firstName: 'Steven',
             lastName: 'Austin',
-            room: { connect: { id: bencurchan.rooms[3].id } }
+            room: { connect: { id: bencurchan.rooms[3].id } },
+            relation: 'Family Of The Groom'
           },
         ]
       }
@@ -620,7 +652,8 @@ async function main() {
           {
             firstName: 'Tom',
             lastName: 'Downey',
-            room: { connect: { id: bencurchan.rooms[3].id } }
+            room: { connect: { id: bencurchan.rooms[3].id } },
+            relation: 'Friend Of The Couple'
           },
         ]
       }
@@ -642,12 +675,14 @@ async function main() {
           {
             firstName: 'George',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[0].id } }
+            room: { connect: { id: schehallion.rooms[0].id } },
+            relation: 'God Farther Of The Bride'
           },
           {
             firstName: 'Rebecca',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[0].id } }
+            room: { connect: { id: schehallion.rooms[0].id } },
+            relation: 'God Mother Of The Bride'
           }
         ]
       }
@@ -669,12 +704,14 @@ async function main() {
           {
             firstName: 'Eddie',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[1].id } }
+            room: { connect: { id: schehallion.rooms[1].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Maureen',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[1].id } }
+            room: { connect: { id: schehallion.rooms[1].id } },
+           relation: 'Family Of The Bride'
           }
         ]
       }
@@ -696,12 +733,14 @@ async function main() {
           {
             firstName: 'Kevin',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[2].id } }
+            room: { connect: { id: schehallion.rooms[2].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Lynn',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[2].id } }
+            room: { connect: { id: schehallion.rooms[2].id } },
+            relation: 'Family Of The Bride'
           }
         ]
       }
@@ -723,12 +762,14 @@ async function main() {
           {
             firstName: 'Cieran',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[2].id } }
+            room: { connect: { id: schehallion.rooms[2].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Chloe',
             lastName: '',
-            room: { connect: { id: schehallion.rooms[2].id } }
+            room: { connect: { id: schehallion.rooms[2].id } },
+            relation: 'Family Of The Bride'
           }
         ]
       }
@@ -749,13 +790,15 @@ async function main() {
         create: [
           {
             firstName: 'John',
-            lastName: '',
-            room: { connect: { id: schehallion.rooms[3].id } }
+            lastName: 'Scott',
+            room: { connect: { id: schehallion.rooms[3].id } },
+            relation: 'Family Of The Groom'
           },
           {
             firstName: 'Andrea',
-            lastName: '',
-            room: { connect: { id: schehallion.rooms[3].id } }
+            lastName: 'Scott',
+            room: { connect: { id: schehallion.rooms[3].id } },
+            relation: 'Family Of The Groom'
           }
         ]
       }
@@ -777,12 +820,14 @@ async function main() {
           {
             firstName: 'Dougie',
             lastName: 'Smith',
-            room: { connect: { id: bendrummod.rooms[0].id } }
+            room: { connect: { id: bendrummod.rooms[0].id } },
+            relation: 'Farther Of The Bride'
           },
           {
             firstName: 'Maria',
             lastName: 'Smith',
-            room: { connect: { id: bendrummod.rooms[0].id } }
+            room: { connect: { id: bendrummod.rooms[0].id } },
+            relation: 'Mother Of The Bride'
           }
         ]
       }
@@ -804,30 +849,35 @@ async function main() {
           {
             firstName: 'Ross',
             lastName: 'Mitchall',
-            room: { connect: { id: bendrummod.rooms[1].id } }
+            room: { connect: { id: bendrummod.rooms[1].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Nicci',
             lastName: 'Mitchall',
-            room: { connect: { id: bendrummod.rooms[1].id } }
+            room: { connect: { id: bendrummod.rooms[1].id } },
+            relation: 'Sister Of The Bride'
           },
           {
             firstName: 'Jaxson',
             lastName: 'Mitchall',
             isChild: true,
-            room: { connect: { id: bendrummod.rooms[2].id } }
+            room: { connect: { id: bendrummod.rooms[2].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Jenson',
             lastName: 'Mitchall',
             isChild: true,
-            room: { connect: { id: bendrummod.rooms[2].id } }
+            room: { connect: { id: bendrummod.rooms[2].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Skye',
             lastName: 'Mitchall',
             isChild: true,
-            room: { connect: { id: bendrummod.rooms[2].id } }
+            room: { connect: { id: bendrummod.rooms[2].id } },
+            relation: 'Family Of The Bride'
           }
         ]
       }
@@ -849,30 +899,35 @@ async function main() {
           {
             firstName: 'Ryan',
             lastName: '',
-            room: { connect: { id: benlawyers.rooms[0].id } }
+            room: { connect: { id: benlawyers.rooms[0].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Vicky',
             lastName: '',
-            room: { connect: { id: benlawyers.rooms[0].id } }
+            room: { connect: { id: benlawyers.rooms[0].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Mimi-Rose',
             lastName: '',
             isBaby: true,
-            room: { connect: { id: benlawyers.rooms[0].id } }
+            room: { connect: { id: benlawyers.rooms[0].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Milo',
             lastName: '',
             isChild: true,
-            room: { connect: { id: benlawyers.rooms[2].id } }
+            room: { connect: { id: benlawyers.rooms[2].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Macie',
             lastName: '',
             isChild: true,
-            room: { connect: { id: benlawyers.rooms[2].id } }
+            room: { connect: { id: benlawyers.rooms[2].id } },
+            relation: 'Family Of The Bride'
           }
         ]
       }
@@ -894,12 +949,14 @@ async function main() {
           {
             firstName: 'William',
             lastName: '',
-            room: { connect: { id: benlawyers.rooms[1].id } }
+            room: { connect: { id: benlawyers.rooms[1].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Shona',
             lastName: '',
-            room: { connect: { id: benlawyers.rooms[1].id } }
+            room: { connect: { id: benlawyers.rooms[1].id } },
+            relation: 'Family Of The Bride'
           },
           {
             firstName: 'Luca',
@@ -933,12 +990,14 @@ async function main() {
           {
             firstName: 'Kenny',
             lastName: '',
-            room: { connect: { id: cottage.rooms[0].id } }
+            room: { connect: { id: cottage.rooms[0].id } },
+            relation: 'Friend Of The Couple'
           },
           {
             firstName: 'Una',
             lastName: '',
-            room: { connect: { id: cottage.rooms[0].id } }
+            room: { connect: { id: cottage.rooms[0].id } },
+            relation: 'Friend Of The Couple'
           }
         ]
       }
@@ -960,7 +1019,8 @@ async function main() {
           {
             firstName: 'Una',
             lastName: '',
-            room: { connect: { id: cottage.rooms[0].id } }
+            room: { connect: { id: cottage.rooms[0].id } },
+            relation: 'Friend Of The Couple'
           },
         ]
       }
@@ -981,13 +1041,15 @@ async function main() {
         create: [
           {
             firstName: 'Steve',
-            lastName: '',
-            room: { connect: { id: cottage.rooms[1].id } }
+            lastName: 'Morgan',
+            room: { connect: { id: cottage.rooms[1].id } },
+            relation: 'Family Of The Groom'
           },
           {
             firstName: 'Linda',
-            lastName: '',
-            room: { connect: { id: cottage.rooms[1].id } }
+            lastName: 'Morgan',
+            room: { connect: { id: cottage.rooms[1].id } },
+            relation: 'Family Of The Groom'
           }
         ]
       }
@@ -1009,7 +1071,8 @@ async function main() {
           {
             firstName: 'Kevin',
             lastName: '',
-            room: { connect: { id: cottage.rooms[2].id } }
+            room: { connect: { id: cottage.rooms[2].id } },
+             relation: 'Friend Of The Couple'
           },
         ]
       }
@@ -1031,7 +1094,8 @@ async function main() {
           {
             firstName: 'Rhys',
             lastName: '',
-            room: { connect: { id: cottage.rooms[2].id } }
+            room: { connect: { id: cottage.rooms[2].id } },
+             relation: 'Friend Of The Couple'
           },
         ]
       }
@@ -1170,11 +1234,11 @@ async function main() {
         create: [
           {
             firstName: 'Nigel',
-            lastName: '',
+            lastName: 'Ledward',
           },
           {
             firstName: 'Debra',
-            lastName: '',
+            lastName: 'Ledward-Fox',
           },
         ]
       }
@@ -1191,11 +1255,11 @@ async function main() {
         create: [
           {
             firstName: 'Stuart',
-            lastName: '',
+            lastName: 'Rankin',
           },
           {
             firstName: 'Debbie',
-            lastName: '',
+            lastName: 'Rankin',
           },
         ]
       }
