@@ -11,10 +11,11 @@ const Label = styled.p`
 `;
 
 const Note = styled.p`
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.4;
   color: ${props => props.theme.colors.text};
   margin-bottom: 1rem;
+  color: ${props => props.theme.colors.primaryDark};
 
   @media (max-width: 480px) {
     font-size: 0.85rem;

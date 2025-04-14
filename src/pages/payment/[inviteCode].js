@@ -1,21 +1,23 @@
 // pages/invite/payment.js
 
-import { useRouter } from 'next/router';
-import { useEffect, useState, Fragment } from 'react';
+import {useRouter} from 'next/router';
+import {useEffect, useState, Fragment} from 'react';
 import axios from 'axios';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+import {Elements} from '@stripe/react-stripe-js';
 import styled from 'styled-components';
 import Layout from '@/components/Layout';
 import NavBar from '@/components/NavBar';
 import CheckoutForm from '@/components/CheckoutForm';
 import PartyHeader from '@/components/PartyHeader';
-import { Page } from '@/components/Page';
-import { Section, SectionHeading } from '@/components/Section';
-import { TartanInfoBox } from '@/components/TartanInfoBox';
-import { GoldInfoBox } from '@/components/GoldInfoBox';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import {Page} from '@/components/Page';
+import {Section, SectionHeading} from '@/components/Section';
+import {TartanInfoBox} from '@/components/TartanInfoBox';
+import {GoldInfoBox} from '@/components/GoldInfoBox';
+import {faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
+import {faReceipt, faSterlingSign, faUsers, faBaby} from '@fortawesome/free-solid-svg-icons';
+import {InfoBlock} from '@/components/InfoBlock';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
@@ -44,8 +46,8 @@ const Button = styled.button`
 
 export default function PaymentPage() {
   const router = useRouter();
-  const { inviteCode } = router.query;
-console.log(inviteCode)
+  const {inviteCode} = router.query;
+  console.log(inviteCode);
   const [party, setParty] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
   const [paymentError, setPaymentError] = useState(false);
@@ -57,20 +59,34 @@ console.log(inviteCode)
 
   useEffect(() => {
     const fetchParty = async () => {
-      const res = await axios.get(`/api/invite/${inviteCode}`);
-      const data = res.data;
-      setParty(data);
+      try {
+        const res = await axios.get(`/api/invite/${inviteCode}`);
+        const data = res.data;
+        setParty(data);
 
-      if (data.accommodationCost && !data.paid) {
-        const intentRes = await axios.post('/api/create-payment-intent', {
-          guestId: data.id,
-        });
-        setClientSecret(intentRes.data.clientSecret);
+        if (data.accommodationCost && !data.paid) {
+          const intentRes = await axios.post('/api/create-payment-intent', {
+            guestId: data.id,
+          });
+          setClientSecret(intentRes.data.clientSecret);
+        }
+      } catch (err) {
+        console.error('Failed to fetch party:', err);
       }
     };
 
-    if (inviteCode) fetchParty();
-  }, [inviteCode]);
+    if (inviteCode) {
+      fetchParty();
+
+      // 👇 Watch for ?success=true to refetch and update payment state
+      const shouldRefetch = router.query.success === 'true';
+      if (shouldRefetch) {
+        // Brief delay to ensure Stripe redirect finishes before refetch
+        setTimeout(fetchParty, 500);
+      }
+    }
+  }, [inviteCode, router.query.success]);
+
 
   if (!party) return null;
 
@@ -88,13 +104,40 @@ console.log(inviteCode)
           {party.paid ? (
             <Section>
               <SectionHeading>Payment Successful</SectionHeading>
+
+              <InfoBlock>
+                <div>
+                  <FontAwesomeIcon icon={faReceipt} />{' '}
+                  <strong>You’ve paid:</strong> £{cost} total for 2 nights
+                </div>
+                <div>
+                  <FontAwesomeIcon icon={faSterlingSign} />{' '}
+                  <strong>Rate:</strong> £{perNight} per night
+                </div>
+                <div>
+                  <FontAwesomeIcon icon={faUsers} />{' '}
+                  <strong>Adults:</strong> {adultCount} {adultCount === 1 ? 'adult' : 'adults'}
+                </div>
+                <div>
+                  <FontAwesomeIcon icon={faBaby} />{' '}
+                  <em>Children and babies stay free</em>
+                </div>
+              </InfoBlock>
+
               <TartanInfoBox>
-                Your room is secured — thanks for paying!
-                We’re so excited to have you staying on-site with us — it means the world.
-                Borelands is such a special place, and we’re sure you’re going to fall in love with the views, the vibe, and the weekend ahead.
-                Keep an eye out — you’ll receive your booking confirmation soon!
+                <p style={{marginBottom: '1rem'}}>
+                  Your room is secured — thanks for paying!
+                </p>
+                <p>
+                  We’re so excited to have you staying on-site with us — it means the world.
+                  Borelands is such a special place, and we’re sure you’re going to fall in love with the views, the vibe, and the weekend ahead.
+                </p>
               </TartanInfoBox>
+              <Button onClick={() => router.push(`/accommodationDetails/${inviteCode}`)} style={{marginTop: '1.5rem'}}>
+                View Your Accommodation Details
+              </Button>
             </Section>
+
           ) : paymentError ? (
             <Section>
               <SectionHeading>Payment Failed</SectionHeading>
@@ -103,7 +146,7 @@ console.log(inviteCode)
               <Text><strong>Children and babies stay free</strong>.</Text>
               <GoldInfoBox>Oops, something went wrong. Would you like to try again?</GoldInfoBox>
 
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <Elements stripe={stripePromise} options={{clientSecret}}>
                 <CheckoutForm
                   partyId={party.id}
                   clientSecret={clientSecret}
@@ -111,6 +154,12 @@ console.log(inviteCode)
                   inviteCode={inviteCode}
                 />
               </Elements>
+              <Button
+                style={{marginTop: '2rem'}}
+                onClick={() => router.push(`/accommodationDetails/${inviteCode}`)}
+              >
+                ← Back to Accommodation Details
+              </Button>
             </Section>
           ) : clientSecret ? (
             <Section>
@@ -123,7 +172,7 @@ console.log(inviteCode)
                 <span>Please make payment by <strong>June 1st 2025</strong> to secure your room.</span>
               </GoldInfoBox>
 
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <Elements stripe={stripePromise} options={{clientSecret}}>
                 <CheckoutForm
                   partyId={party.id}
                   clientSecret={clientSecret}
@@ -131,16 +180,14 @@ console.log(inviteCode)
                   inviteCode={inviteCode}
                 />
               </Elements>
+              <Button
+                style={{marginTop: '2rem'}}
+                onClick={() => router.push(`/accommodationDetails/${inviteCode}`)}
+              >
+                ← Back to Accommodation Details
+              </Button>
             </Section>
           ) : null}
-
-<Button
-  style={{ marginTop: '2rem' }}
-  onClick={() => router.push(`/accommodationDetails/${inviteCode}`)}
->
-  ← Back to Accommodation Details
-</Button>
-
         </Page>
       </Layout>
     </Fragment>

@@ -6,14 +6,15 @@ import Warning from './Warning'; // ✅ shared warning component
 const Label = styled.p`
   font-family: ${props => props.theme.fonts.heading};
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   margin-bottom: 0.5rem;
+  color: ${props => props.theme.colors.primaryDark};
 `;
 
 const Note = styled.p`
   font-size: 0.95rem;
   margin-bottom: 1rem;
-  color: ${props => props.theme.colors.text};
+  color: ${props => props.theme.colors.primaryDark};
   font-family: ${props => props.theme.fonts.base};
 `;
 

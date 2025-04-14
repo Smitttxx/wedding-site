@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { partyId, guests, fridayParty, needsBus, accommodationOption, dietary } = req.body;
+  const { partyId, guests, fridayParty, needsBus, guestType, dietary } = req.body;
 
   const allResponded = guests.every(g => g.rsvp === 'Yes' || g.rsvp === 'No');
   const lockRsvp = allResponded;
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
       data: {
         fridayParty,
         needsBus,
-        accommodationOption,
+        guestType,
         dietary,
         rsvpLocked: lockRsvp
       }

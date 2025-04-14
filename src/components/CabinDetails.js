@@ -1,10 +1,10 @@
 // components/CabinDetails.js
 import styled from 'styled-components';
-import { Section, SectionHeading } from './Section';
+import {Section, SectionHeading} from './Section';
 import Image from 'next/image';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
-	faHome, faBed, faUsers
+  faHome, faBed, faUsers
 } from '@fortawesome/free-solid-svg-icons';
 import {InfoBlock} from "./InfoBlock";
 const MediaWrapper = styled.div`
@@ -55,42 +55,42 @@ const Details = styled.div`
 `;
 
 
-export default function CabinDetails({ cabin }) {
-	if (!cabin) return null;
-  
-	const imageSrc = cabin.imageFileName ? `/${cabin.imageFileName}` : null;
+export default function CabinDetails({cabin}) {
+  if (!cabin) return null;
 
-	return (
-	  <Section>
-			<SectionHeading>Your Cabin</SectionHeading>  
-			<InfoBlock>
-  <div>
-    <FontAwesomeIcon icon={faHome} />
-    <strong>Cabin:</strong> {cabin.name}
-  </div>
-  <div>
-    <FontAwesomeIcon icon={faBed} />
-    <strong>Bedrooms:</strong> {cabin.roomCount}
-  </div>
-  <div>
-    <FontAwesomeIcon icon={faUsers} />
-    <strong>Capacity:</strong> {cabin.capacity} guests
-  </div>
-</InfoBlock>
+  const imageSrc = cabin.imageFileName ? `/${cabin.imageFileName}` : null;
 
-			<MediaWrapper>
-			<Snapshot src={imageSrc} alt={`${cabin.name} photo`} width={700} height={400} layout="responsive" />
-		  {cabin.videoUrl && (
-			<iframe
-			  src={cabin.videoUrl}
-			  title="Cabin video tour"
-			  frameBorder="0"
-			  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-			  allowFullScreen
-			/>
-		  )}
-		</MediaWrapper>
-	  </Section>
-	);
-  }
-  
+  return (
+    <Section>
+      <SectionHeading>Your Cabin</SectionHeading>
+      <InfoBlock>
+        <div>
+          <FontAwesomeIcon icon={faHome} />
+          <strong>Cabin:</strong> {cabin.name}
+        </div>
+        <div>
+          <FontAwesomeIcon icon={faBed} />
+          <strong>Bedrooms:</strong> {cabin.roomCount}
+        </div>
+        <div>
+          <FontAwesomeIcon icon={faUsers} />
+          <strong>Capacity:</strong> {cabin.capacity} guests
+        </div>
+      </InfoBlock>
+
+      <MediaWrapper>
+        <Snapshot src={imageSrc} alt={`${cabin.name} photo`} width={700} height={400} layout="responsive" />
+        {cabin.videoUrl && (
+          <iframe
+            src={cabin.videoUrl}
+            title="Cabin video tour"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        )}
+      </MediaWrapper>
+    </Section>
+  );
+}
+

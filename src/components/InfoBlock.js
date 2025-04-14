@@ -12,7 +12,8 @@ export const InfoBlock = styled.div`
   font-family: ${props => props.theme.fonts.base};
   margin: 1.5rem 0;
   text-align: left;
-
+  margin: 10px auto;
+  width: fit-content;
   svg {
     margin-right: 0.4rem;
     color: ${props => props.theme.colors.accent};
