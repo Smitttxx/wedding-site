@@ -37,7 +37,7 @@ export default function DietaryNotes({ dietary, setDietary }) {
     <Section>
 		  <SectionHeading>{"What's for tea on the big day?"}</SectionHeading>
       <Description>
-        {"It'll be a laid-back, family-style spread — think proper flavour from the Texas smoker, maybe some lamb, aberdeen angushanger steak, smoked salmon... that kind of vibe. If you’ve got any dietary needs or allergies, just let us know below."}
+        {"It'll be a laid-back, family-style spread — think proper flavour from the Texas smoker, maybe some lamb, aberdeen angus hanger steak, smoked salmon... that kind of vibe. If you’ve got any dietary needs or allergies, just let us know below."}
       </Description>
       <Label>Dietary requirements or allergies:</Label>
       <Textarea

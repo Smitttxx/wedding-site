@@ -14,10 +14,10 @@ import {Page} from '@/components/Page';
 import {Section, SectionHeading} from '@/components/Section';
 import {TartanInfoBox} from '@/components/TartanInfoBox';
 import {GoldInfoBox} from '@/components/GoldInfoBox';
-import {faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
-import {faReceipt, faSterlingSign, faUsers, faBaby} from '@fortawesome/free-solid-svg-icons';
+import {faReceipt, faSterlingSign, faUsers, faBaby, faCircleExclamation, faTimesCircle} from '@fortawesome/free-solid-svg-icons';
 import {InfoBlock} from '@/components/InfoBlock';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import { useTheme } from 'styled-components';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
@@ -45,6 +45,7 @@ const Button = styled.button`
 `;
 
 export default function PaymentPage() {
+  const theme = useTheme();
   const router = useRouter();
   const {inviteCode} = router.query;
   console.log(inviteCode);
@@ -91,7 +92,6 @@ export default function PaymentPage() {
   if (!party) return null;
 
   const cost = (party.accommodationCost / 100).toFixed(2);
-  const perNight = ((party.accommodationCost / 100) / 2).toFixed(2);
   const adultCount = party.guests.filter(g => !g.isChild && !g.isBaby).length;
 
   return (
@@ -108,20 +108,20 @@ export default function PaymentPage() {
               <InfoBlock>
                 <div>
                   <FontAwesomeIcon icon={faReceipt} />{' '}
-                  <strong>You’ve paid:</strong> £{cost} total for 2 nights
-                </div>
-                <div>
-                  <FontAwesomeIcon icon={faSterlingSign} />{' '}
-                  <strong>Rate:</strong> £{perNight} per night
+                  <strong>You’ve paid:</strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} total for 2 nights
                 </div>
                 <div>
                   <FontAwesomeIcon icon={faUsers} />{' '}
                   <strong>Adults:</strong> {adultCount} {adultCount === 1 ? 'adult' : 'adults'}
                 </div>
-                <div>
-                  <FontAwesomeIcon icon={faBaby} />{' '}
-                  <em>Children and babies stay free</em>
-                </div>
+
+                {party.guests.some(g => g.isChild || g.isBaby) && (
+                  <div>
+                    <FontAwesomeIcon icon={faBaby} />{' '}
+                    <em>Children and babies stay free</em>
+                  </div>
+                )}
+
               </InfoBlock>
 
               <TartanInfoBox>
@@ -141,10 +141,14 @@ export default function PaymentPage() {
           ) : paymentError ? (
             <Section>
               <SectionHeading>Payment Failed</SectionHeading>
-              <Text>The total cost is <strong>£{cost}</strong> for 2 nights.</Text>
-              <Text>That’s <strong>£{perNight}</strong> per night for <strong>{adultCount}</strong> adult{adultCount !== 1 ? 's' : ''}.</Text>
-              <Text><strong>Children and babies stay free</strong>.</Text>
-              <GoldInfoBox>Oops, something went wrong. Would you like to try again?</GoldInfoBox>
+              <Text>The total cost is 
+                <div style={{color: theme.colors.accent, marginLeft: '0.25rem', marginRight: '0.15rem'}}>£ </div>
+                  <strong>{cost}</strong>
+                  {" "}for 2 nights.</Text>
+              {party.guests.some(g => g.isChild || g.isBaby) && (
+                <Text><strong>Children and babies stay free</strong>.</Text>
+              )}
+              <GoldInfoBox icon={faTimesCircle}>Oops, something went wrong. Would you like to try again?</GoldInfoBox>
 
               <Elements stripe={stripePromise} options={{clientSecret}}>
                 <CheckoutForm
@@ -164,12 +168,16 @@ export default function PaymentPage() {
           ) : clientSecret ? (
             <Section>
               <SectionHeading>Payment</SectionHeading>
-              <Text>The total cost is <strong>£{cost}</strong> for 2 nights.</Text>
-              <Text>That’s <strong>£{perNight}</strong> per night for <strong>{adultCount}</strong> adult{adultCount !== 1 ? 's' : ''}.</Text>
-              <Text><strong>Children and babies stay free</strong>.</Text>
+              <Text>The total cost is <strong>                <div style={{color: theme.colors.accent, marginLeft: '0.25rem', marginRight: '0.15rem'}}>£ </div>
+              {cost}</strong> for 2 nights.</Text>
+              {party.guests.some(g => g.isChild || g.isBaby) && (
+                <Text><strong>Children and babies stay free</strong>.</Text>
+              )}
 
               <GoldInfoBox icon={faCircleExclamation}>
+                Your room is reserved from <strong>Friday to Sunday</strong> {"While you're welcome to arrive on Saturday if preferred, the rate covers the full weekend."} <br /><br />
                 <span>Please make payment by <strong>June 1st 2025</strong> to secure your room.</span>
+                <span><strong>Please note all payments are non refundable.</strong></span>
               </GoldInfoBox>
 
               <Elements stripe={stripePromise} options={{clientSecret}}>

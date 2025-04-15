@@ -8,10 +8,11 @@ async function main() {
   const farmhouse = await prisma.Cabin.create({
     data: {
       name: 'Farmhouse',
-      videoUrl: 'https://youtube.com/embed/kFmoTPF2UEQ&pp=ygUbQm9yZWxhbmQgbG9jaCB0YXkgZmFybWhvdXNl',
+      videoUrl: 'https://youtube.com/embed/kFmoTPF2UEQ',
       imageFileName: 'farmhouse.jpg',
       capacity: 18, 
       roomCount: 6, 
+      hotTub: "Yes",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
@@ -29,10 +30,11 @@ async function main() {
   const longhouse = await prisma.Cabin.create({
     data: {
       name: 'Longhouse',
-      videoUrl: "https://youtube.com/embed/AGobMia64XM&pp=ygUbQm9yZWxhbmQgbG9jaCB0YXkgbG9uZ2hvdXNl",
+      videoUrl: "https://youtube.com/embed/AGobMia64XM",
       imageFileName: 'longhouse.jpg',
       capacity: 8,
       roomCount: 4,
+      hotTub: "Heated on request — advance notice required",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/twin', capacity: 2, enSuite: false },
@@ -48,10 +50,11 @@ async function main() {
   const benCruachan = await prisma.Cabin.create({
     data: {
       name: 'Ben Cruachan',
-      videoUrl: "https://youtube.com/embed/5v5DUIyRBNk&pp=ygUeYm9yZWxhbmQgbG9jaCB0YXkgc2NoaWVoYWxsaW9u",
+      videoUrl: "https://youtube.com/embed/5v5DUIyRBNk",
       imageFileName: 'benCruachan.jpg',
       capacity: 10,
       roomCount: 4,
+      hotTub: "Heated on request — advance notice required",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
@@ -67,10 +70,11 @@ async function main() {
   const schiehallion = await prisma.Cabin.create({
     data: {
       name: 'Schiehallion',
-      videoUrl: "https://youtube.com/embed/5v5DUIyRBNk&pp=ygUeQm9yZWxhbmQgbG9jaCB0YXkgc2NoaWVoYWxsaW9u",
+      videoUrl: "https://youtube.com/embed/5v5DUIyRBNk",
       imageFileName: 'schiehallion.jpg',
       capacity: 10, 
       roomCount: 4,
+      hotTub: "Heated on request — advance notice required",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: false },
@@ -86,16 +90,16 @@ async function main() {
   const benDrummond = await prisma.Cabin.create({
     data: {
       name: 'Ben Drummond',
-      videoUrl: "https://youtube.com/embed/ti_-jLmQrII&pp=ygUaQm9yZWxhbmQgbG9jaCB0YXkgZHJ1bW1vbmQ%3D",
+      videoUrl: "https://youtube.com/embed/ti_-jLmQrII",
       imageFileName: 'benDrummond.jpeg',
       capacity: 8,
       roomCount: 3,
+      hotTub: "Yes",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
           { name: 'Room 2', roomType: 'Double/Twin', capacity: 2, enSuite: false },
           { name: 'Room 3', roomType: 'Double/Twin Bunk', capacity: 4, enSuite: false }
-
         ]
       }
     },
@@ -105,10 +109,11 @@ async function main() {
   const benLawers = await prisma.Cabin.create({
     data: {
       name: 'Ben Lawers',
-      videoUrl: "https://youtube.com/embed/ti_-jLmQrII&pp=ygUaQm9yZWxhbmQgbG9jaCB0YXkgZHJ1bW1vbmQ%3D",
+      videoUrl: "https://youtube.com/embed/ti_-jLmQrII",
       imageFileName: 'benLawers.jpg',
       capacity: 8,
       roomCount: 3,
+      hotTub: "Heated on request — advance notice required",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
@@ -124,10 +129,11 @@ async function main() {
   const cottage = await prisma.Cabin.create({
     data: {
       name: 'Cottage',
-      videoUrl: "https://youtube.com/embed/zxve8-GkZRU&pp=ygUZQm9yZWxhbmQgbG9jaCB0YXkgY290dGFnZQ%3D%3D",
+      videoUrl: "https://youtube.com/embed/zxve8-GkZRU",
       imageFileName: 'cottage.jpg',
       capacity: 8,
       roomCount: 3,
+      hotTub: "Heated on request — advance notice required",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double + Daybed', capacity: 3, enSuite: true },
