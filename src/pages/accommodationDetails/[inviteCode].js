@@ -2,6 +2,7 @@
 
 import {useRouter} from 'next/router';
 import {useEffect, useState, Fragment} from 'react';
+import { useTheme } from 'styled-components';
 import axios from 'axios';
 import styled from 'styled-components';
 import Layout from '@/components/Layout';
@@ -121,6 +122,7 @@ export default function AccommodationDetailsPage() {
   const [party, setParty] = useState(null);
   const [confirmed, setConfirmed] = useState(null);
   const [error, setError] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,11 +137,11 @@ export default function AccommodationDetailsPage() {
     await axios.post(`/api/accommodation/update`, {
       partyId: party.id,
       guestType: 'OtherAccommodation',
-    });    
-  
+    });
+
     // Redirect to confirmation page
     router.push(`/confirmed/${inviteCode}`);
-  };  
+  };
 
   const handleContinue = () => {
     router.push(`/payment/${inviteCode}`);
@@ -157,15 +159,7 @@ export default function AccommodationDetailsPage() {
     ?.flatMap(room => room.guests)
     ?.filter(g => !partyGuestIds.has(g.id));
 
-  const yourRoomIds = party.guests.map(g => g.room?.id).filter(Boolean);
-
-  const otherGuestsInYourRooms = party.cabin?.rooms?.reduce((acc, room) => {
-    if (!yourRoomIds.includes(room.id)) return acc;
-
-    const others = room.guests.filter(g => !partyGuestIds.has(g.id));
-    if (others.length) acc[room.name] = others;
-    return acc;
-  }, {});
+  const cost = (party.accommodationCost / 100).toFixed(2);
 
 
   return (
@@ -177,12 +171,13 @@ export default function AccommodationDetailsPage() {
 
           <Section>
             <SectionHeading>Accommodation Summary</SectionHeading>
-            <Text><strong>Thanks for RSVPing!</strong><br />
+            <Text><strong>Thanks for RSVPing{party.paid && " and paying for your accommodation!"}</strong><br />
               We’re so glad you can make it and can’t wait to celebrate with you.
             </Text>
             <InfoBlock>
-              Your stay includes <br />
-              <strong>2 nights only</strong><br />
+              {party.paid && <Fragment><strong>Payment of <span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} received, thanks!</strong><br /></Fragment>}
+              Total Cost of booking: <strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost}</strong><br />
+              Your stay includes: <strong>2 nights</strong><br />
               from <FontAwesomeIcon icon={faCalendarCheck} /> <strong>Fri 12 Sept</strong><br />
               (check-in from <strong>4pm</strong>) <br />
               to <FontAwesomeIcon icon={faCalendarXmark} /> <strong>Sun 14 Sept</strong><br />
@@ -211,7 +206,14 @@ export default function AccommodationDetailsPage() {
                 .map(room => {
                   const partyGuestsInRoom = room.guests.filter(g => partyGuestIds.has(g.id));
                   const otherGuestsInRoom = room.guests.filter(g => !partyGuestIds.has(g.id));
+
+                  const allSaidNo = partyGuestsInRoom.length > 0 && partyGuestsInRoom.every(g => g.rsvp?.toLowerCase() === 'no');
+
                   const hasBaby = partyGuestsInRoom.some(g => g.isBaby);
+                  const bookingHaveChild = partyGuestsInRoom.some(g => g.isChild || g.isBaby);
+
+                  if (allSaidNo) return null;
+
                   return (
                     <Section key={room.id}>
                       {/* Room Name */}
@@ -225,44 +227,39 @@ export default function AccommodationDetailsPage() {
                       </Text>
 
                       {/* Your Guests */}
-                      {partyGuestsInRoom.length > 0 && (
                         <>
                           <GuestBox>
                             <FontAwesomeIcon icon={faUserFriends} /> <strong>Guests on your booking:</strong>
                           </GuestBox>
                           <List>
                             {partyGuestsInRoom.map(g => (
-                              <li key={g.id}>
-                                {g.firstName} {g.lastName}
-                                {g.isBaby && (
-                                  <FontAwesomeIcon
-                                    icon={faBaby}
-                                    style={{marginLeft: '0.5rem'}}
-                                    title="Baby"
-                                  />
-                                )}
-                                {g.isChild && !g.isBaby && (
-                                  <FontAwesomeIcon
-                                    icon={faChild}
-                                    style={{marginLeft: '0.5rem'}}
-                                    title="Child"
-                                  />
-                                )}
-                              </li>
+                              g.rsvp !== "No" &&
+                                  <li key={g.id}>
+                                    <span> {g.firstName} {g.lastName}</span>
+                                    {g.isBaby && (
+                                      <FontAwesomeIcon
+                                        icon={faBaby}
+                                        style={{marginLeft: '0.5rem'}}
+                                        title="Baby"
+                                      />
+                                    )}
+                                    {g.isChild && !g.isBaby && (
+                                      <FontAwesomeIcon
+                                        icon={faChild}
+                                        style={{marginLeft: '0.5rem'}}
+                                        title="Child"
+                                      />
+                                    )}
+                                  </li>
                             ))}
                           </List>
-                        </>
-                      )}
-
-                      {/* Baby Note */}
+                           {/* Baby Note */}
                       {hasBaby && (
                         <GoldInfoBox icon={faBaby}>
                           We’re excited to welcome your little one! Please note, travel cots aren’t provided — feel free to bring your own.
                         </GoldInfoBox>
                       )}
-
-
-
+                        </>
                       {/* Other Guests */}
                       {otherGuestsInRoom.length > 0 && (
                         <>
@@ -276,6 +273,7 @@ export default function AccommodationDetailsPage() {
                               </li>
                             ))}
                           </List>
+                          {!bookingHaveChild && <Text>{"* Subject to change depending on RSVP responses"}</Text>}
                         </>
                       )}
                     </Section>
@@ -293,6 +291,7 @@ export default function AccommodationDetailsPage() {
                     <li key={g.id}>{g.firstName} {g.lastName} <span>{g.relation && `(${g.relation})`}</span></li>
                   ))}
                 </List>
+                <Text>{"* Subject to change depending on RSVP responses"}</Text>
               </Section>
             )}
 

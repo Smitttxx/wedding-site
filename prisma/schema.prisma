@@ -67,6 +67,7 @@ model Cabin {
   videoUrl           String?       // Optional embedded YouTube URL
   capacity           Int? 
   roomCount          Int? 
+  hotTub             String?
   parties            GuestParty[]
 }
 

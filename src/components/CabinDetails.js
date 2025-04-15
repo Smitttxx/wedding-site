@@ -4,8 +4,10 @@ import {Section, SectionHeading} from './Section';
 import Image from 'next/image';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
-  faHome, faBed, faUsers
+  faHome, faBed, faUsers, faHotTubPerson
 } from '@fortawesome/free-solid-svg-icons';
+
+faHotTubPerson
 import {InfoBlock} from "./InfoBlock";
 const MediaWrapper = styled.div`
   display: flex;
@@ -75,6 +77,10 @@ export default function CabinDetails({cabin}) {
         <div>
           <FontAwesomeIcon icon={faUsers} />
           <strong>Capacity:</strong> {cabin.capacity} guests
+        </div>
+        <div>
+          <FontAwesomeIcon icon={faHotTubPerson} />
+          <strong>Hot Tub:</strong> {cabin.hotTub}
         </div>
       </InfoBlock>
 

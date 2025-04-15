@@ -117,7 +117,7 @@ export default function InvitePage() {
       sessionStorage.setItem('hasAccess', 'true');
     
       if (data.rsvpLocked) {
-        if (data.accommodationOption === 'onsite') {
+        if (data.guestType === 'OnSite') {
           router.push(`/accommodationDetails/${code}`);
         } else {
           router.push(`/confirmed/${code}`);

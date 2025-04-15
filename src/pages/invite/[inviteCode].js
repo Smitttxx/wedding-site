@@ -198,11 +198,20 @@ export default function GuestPage() {
             ))}
             </RSVPWrapper>
             {party.guests.some(g => g.isChild || g.isBaby) && (
-              <GoldInfoBox icon={faChild}>
-              We see a little one is joining the RSVP — yay!  
-              Kids are warmly invited and will be looked after by lovely wedding nannies on the big day, with activities like ball pits, crafts, and games to keep them entertained while you celebrate.
+            <GoldInfoBox icon={faChild}>
+              {party.guests.filter(g => g.isChild || g.isBaby).length === 1 ? (
+                <>
+                  We see a little one is joining the RSVP — yay!  
+                  Kids are warmly invited and will be looked after by lovely wedding nannies on the big day, with activities like ball pits, crafts, and games to keep them entertained while you celebrate.
+                </>
+              ) : (
+                <>
+                  We see little ones are joining the RSVP — yay!  
+                  Children are warmly invited and will be looked after by lovely wedding nannies on the big day, with activities like ball pits, crafts, and games to keep them entertained while you celebrate.
+                </>
+              )}
             </GoldInfoBox>
-            )}
+          )}
         </Section>
 
         {formData.some(g => g.rsvp === 'Yes') && (
