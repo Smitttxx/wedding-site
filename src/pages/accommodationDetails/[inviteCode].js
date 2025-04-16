@@ -30,6 +30,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import AccommodationConfirmationToggle from "@/components/AccommodationConfirmationToggle";
 import LoadingIndicator from "@/components/LoadingOverlay";
+import BusOption from "@/components/BusOption";
 
 const Button = styled.button`
   margin-top: 1.5rem;
@@ -123,6 +124,7 @@ export default function AccommodationDetailsPage() {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false)
   const theme = useTheme();
+  const [needsBus, setNeedsBus] = useState(null)
 
   useEffect(() => {
     setIsLoading(true)
@@ -139,6 +141,7 @@ export default function AccommodationDetailsPage() {
     await axios.post(`/api/accommodation/update`, {
       partyId: party.id,
       guestType: 'OtherAccommodation',
+      needsBus: needsBus
     });
 
     // Redirect to confirmation page
@@ -155,6 +158,7 @@ export default function AccommodationDetailsPage() {
     party.guests.map(g => g.room?.name).filter(Boolean)
   ));
 
+  console.log(needsBus, "Needsbus")
   const partyGuestIds = new Set(party.guests.map(g => g.id));
 
   const othersInCabin = party.cabin?.rooms
@@ -324,6 +328,8 @@ export default function AccommodationDetailsPage() {
                 error={error}
               />
             }
+
+            {confirmed === false && <BusOption needsBus={needsBus} setNeedsBus={setNeedsBus} />}
             {confirmed !== null && (
               <Button
                 onClick={() => {
