@@ -44,6 +44,13 @@ const Button = styled.button`
   }
 `;
 
+const BookingRef = styled.strong`
+  text-transform: uppercase;
+  font-weight: bold;
+  color: ${props => props.theme.colors.accent};
+  font-family: ${props => props.theme.fonts.base};
+`;
+
 export default function PaymentPage() {
   const theme = useTheme();
   const router = useRouter();
@@ -128,6 +135,10 @@ export default function PaymentPage() {
                 <p style={{marginBottom: '1rem'}}>
                   Your room is secured — thanks for paying!
                 </p>
+                <p style={{marginBottom: '1rem'}}>
+                Your booking reference is <BookingRef>{party.bookingReference}</BookingRef>
+                </p>
+
                 <p>
                   We’re so excited to have you staying on-site with us — it means the world.
                   Borelands is such a special place, and we’re sure you’re going to fall in love with the views, the vibe, and the weekend ahead.

@@ -30,7 +30,7 @@ export default function AccommodationOptions({
           options={[
             {
               value: 'onsite',
-              label: "Yes please — show me my reserved room and details on the next page."
+              label: "Yes please — I'll look on the next page at reserved room details."
             },
             {
               value: 'other',

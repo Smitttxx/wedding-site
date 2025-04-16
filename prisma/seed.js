@@ -13,7 +13,7 @@ async function main() {
       capacity: 18, 
       roomCount: 6, 
       hotTub: "Yes",
-      checkIn: "3pm",
+      checkIn: "4pm",
       checkOut: "11am",
       rooms: {
         create: [
@@ -37,7 +37,7 @@ async function main() {
       capacity: 8,
       roomCount: 4,
       hotTub: "Heated on request — advance notice required",
-      checkIn: "3pm",
+      checkIn: "4pm",
       checkOut: "10:30am",
       rooms: {
         create: [
@@ -54,12 +54,12 @@ async function main() {
   const benCruachan = await prisma.Cabin.create({
     data: {
       name: 'Ben Cruachan',
-      videoUrl: "https://youtube.com/embed/5v5DUIyRBNk",
+      videoUrl: "https://www.youtube.com/embed/watch?v=QZ5_lcqw9ww",
       imageFileName: 'benCruachan.jpg',
       capacity: 10,
       roomCount: 4,
       hotTub: "Heated on request — advance notice required",
-      checkIn: "3pm",
+      checkIn: "4pm",
       checkOut: "10:30am",
       rooms: {
         create: [
@@ -81,7 +81,7 @@ async function main() {
       capacity: 10, 
       roomCount: 4,
       hotTub: "Heated on request — advance notice required",
-      checkIn: "3pm",
+      checkIn: "4pm",
       checkOut: "10:30am",
       rooms: {
         create: [
@@ -103,7 +103,7 @@ async function main() {
       capacity: 8,
       roomCount: 3,
       hotTub: "Yes",
-      checkIn: "3pm",
+      checkIn: "4pm",
       checkOut: "10:30am",
       rooms: {
         create: [
@@ -124,7 +124,7 @@ async function main() {
       capacity: 8,
       roomCount: 3,
       hotTub: "Heated on request — advance notice required",
-      checkIn: "3pm",
+      checkIn: "4pm",
       checkOut: "10:30am",
       rooms: {
         create: [
@@ -146,7 +146,7 @@ async function main() {
       capacity: 8,
       roomCount: 3,
       hotTub: "Heated on request — advance notice required",
-      checkIn: "3pm",
+      checkIn: "4pm",
       checkOut: "10:30am",
       rooms: {
         create: [

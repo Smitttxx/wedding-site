@@ -4,7 +4,7 @@ import { Section, SectionHeading } from "./Section";
 const Label = styled.label`
   font-family: ${props => props.theme.fonts.heading};
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1rem;
   display: block;
   margin-bottom: 0.5rem;
   color: ${props => props.theme.colors.primaryDark};

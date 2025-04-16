@@ -110,9 +110,9 @@ export default function HomePage() {
           </AnimatedSection>
 
           <AnimatedSection >
-            <SectionHeading>Our Story</SectionHeading>
+            <SectionHeading>Our Story so far</SectionHeading>
             <Paragraph>
-            We met at a gaming event in Liverpool and quickly became great friends. After years of laughs, late-night chats, and leveling up together, it wasn’t until one unforgettable night in Scotland that Joe finally got the courage to kiss me—and everything changed. A few years later, while on a cruise through Belgium, Joe proposed. Now we’re getting married — and best of all, we get to share it with our little one, Sully.
+              We met at a gaming event in Liverpool and quickly became great friends. After years of laughs, late-night chats, and leveling up together, it wasn’t until one unforgettable night in Scotland that Joe finally got the (Dutch) courage share his true feelings  — and everything changed. A few years later, while on a cruise through Belgium, Joe proposed. Now we’re getting married — and best of all, we get to share it with our little one, Sully.
             </Paragraph>
 
             <PhotoRow>
@@ -131,8 +131,8 @@ export default function HomePage() {
             />
             <Paragraph>
               The wedding weekend takes place at Borelands, perched above the stunning Loch Tay. Join us for a relaxed celebration
-              Full of Scottish charm — think views, bonfires, and a wee shindig under the stars.
-</Paragraph>
+              full of Scottish charm — think views, bonfires, and a wee shindig under the stars.
+            </Paragraph>
             <InfoBlock>
               <FontAwesomeIcon icon={faMapLocationDot} /> Address: Boreland Farm, Fearnan, Aberfeldy PH15 2PG
 
@@ -149,7 +149,7 @@ export default function HomePage() {
             <Paragraph>
               We’d love to welcome everyone to Borelands the night before the wedding with a relaxed BBQ.
               The food’s on us — and it’s extra special, cooked over an open flame by the father of the bride and the father of the groom.
-              If you’d like to bring a bottle of wine or something you love to drink, we’ll have glasses ready and waiting.
+              If you’d like to bring a bottle of wine or something else you love to drink, we’ll have glasses ready and waiting.
               Expect fires, good music, and a chance to catch up before the big day.
             </Paragraph>
             <InfoBlock>
@@ -173,10 +173,10 @@ export default function HomePage() {
             <Snapshot src="/bar.jpeg" alt="Bar" width={700} height={400} layout="responsive"
             />
             <Paragraph>
-            Friday’s a bring-your-own kind of night — whatever you fancy. On Saturday, there’ll be a bar to keep you going, but if you’ve got a favourite drink you can’t party without, you’re welcome to bring it along. Just a heads-up: there’s a £10 corkage fee per bottle.
+              Friday’s a bring-your-own kind of night — whatever you fancy. On Saturday, there’ll be a bar to keep you going, but if you’ve got a favourite drink you can’t party without, you’re welcome to bring it along. Just a heads-up: there’s a £10 corkage fee per bottle.
             </Paragraph>
           </AnimatedSection>
-          
+
           <AnimatedSection >
             <SectionHeading>RSVP</SectionHeading>
             <Paragraph>
@@ -192,7 +192,7 @@ export default function HomePage() {
             <Snapshot src="/cruise.webp" alt="Gifts" width={700} height={400} layout="responsive"
             />
             <Paragraph>
-              Your presence is the best gift. But if youd like to contribute, we’ve set up a page for you to view our wishes.
+              {"Your presence is the best gift. But if you'd like to contribute, we’ve set up a page for you to view our wishes."}
             </Paragraph>
             <RSVPButton href="/gifts">Go to Gifts Page →</RSVPButton>
           </AnimatedSection>

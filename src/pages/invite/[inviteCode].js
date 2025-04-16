@@ -87,12 +87,8 @@ export default function GuestPage() {
   };
 
   useEffect(() => {
-    if (router.isReady && sessionStorage.getItem('hasAccess')) {
-      fetchParty();
-    } else {
-      router.replace('/invite');
-    }
-  }, [router.isReady]);
+    fetchParty();
+}, [inviteCode]);
 
   const validateForm = () => {
     const messages = [];
@@ -229,12 +225,6 @@ export default function GuestPage() {
                   fullWidth
                 />
               </RefContainer>
-
-              {accommodationPreference === 'onsite' && (
-                <GoldInfoBox icon={faCircleExclamation}>
-                  <span>Please continue to the next page to pay for your accommodation. Payment is due by <strong>June 1st 2025</strong>.</span>
-                </GoldInfoBox>
-              )}
 
               <RefContainer ref={busRef}>
                 {accommodationPreference === 'other'
