@@ -25,8 +25,9 @@ import {
   faBaby,
   faMoneyBillWave,
   faBus,
-  faCroissant,
-  faMugHot
+  faToilet,
+  faMugHot,
+  faRestroom
 } from '@fortawesome/free-solid-svg-icons';
 import AccommodationConfirmationToggle from "@/components/AccommodationConfirmationToggle";
 import Warning from "@/components/Warning";
@@ -241,11 +242,15 @@ export default function AccommodationDetailsPage() {
                       <Divider />
 
                       {/* Room Info */}
-                      <Text style={{marginBottom: '1rem'}}>
-                        <FontAwesomeIcon icon={faBed} /> <strong>Type:</strong> {room.roomType} &nbsp; | &nbsp;
-                        <FontAwesomeIcon icon={faUsers} /> <strong>Capacity:</strong> {room.capacity}
-                      </Text>
-
+                      <InfoBlock>
+                        <FontAwesomeIcon icon={faBed} /> <strong>Type:</strong> {room.roomType} <br />
+                      <FontAwesomeIcon icon={faUsers} /> <strong>Capacity:</strong> {room.capacity} <br/>
+                        {room.enSuite
+                          ?   <><FontAwesomeIcon icon={faUsers} /> <strong>Ensuite:</strong> Yes <br /></>
+                          :   <><FontAwesomeIcon icon={faRestroom} /> <strong>Shared Bathroom</strong> <br /></>
+                         }
+                      </InfoBlock>
+                      
                       {/* Your Guests */}
                       <>
                         <GuestBox>
@@ -255,7 +260,7 @@ export default function AccommodationDetailsPage() {
                           {partyGuestsInRoom.map(g => (
                             g.rsvp !== "No" &&
                             <li key={g.id}>
-                              <span> {g.firstName} {g.lastName}</span>
+                              <div> <strong>{g.firstName} {g.lastName}</strong></div>
                               {g.isBaby && (
                                 <FontAwesomeIcon
                                   icon={faBaby}
