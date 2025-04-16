@@ -7,6 +7,8 @@ const OuterWrapper = styled.div`
   background-repeat: repeat;
   background-size: auto;
   padding: 1.5rem;
+  background-blend-mode: lighten;
+  background-color: rgba(255, 255, 255, 0.1);
   
   @media (min-width: 768px) {
     padding: 2rem;

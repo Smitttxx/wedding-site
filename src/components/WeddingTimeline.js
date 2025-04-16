@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faChampagneGlasses, faUtensils, faMusic, faCamera, faCakeCandles, faGlassCheers, faClock, faWhiskeyGlass, faCakeSlice } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faChampagneGlasses, faUtensils, faMusic, faCamera, faCakeCandles, faGlassCheers, faBus, faWhiskeyGlass, faIceCream, faHamburger } from '@fortawesome/free-solid-svg-icons';
 
 const TimelineWrapper = styled.div`
   background: rgba(255, 255, 255, 0.85);
@@ -101,7 +101,7 @@ export default function WeddingTimeline() {
           <Time>12:30</Time>
         </IconWrapper>
         <TextBlock>
-          <Label>Photos with Bride & Groom</Label>
+          <Label>Photos for Bride & Groom</Label>
         </TextBlock>
       </TimelineItem>
       <TimelineItem>
@@ -142,7 +142,7 @@ export default function WeddingTimeline() {
       </TimelineItem>
       <TimelineItem>
         <IconWrapper>
-          <FontAwesomeIcon icon={faCakeSlice} />
+          <FontAwesomeIcon icon={faIceCream} />
           <Time>16:45</Time>
         </IconWrapper>
         <TextBlock>
@@ -169,20 +169,20 @@ export default function WeddingTimeline() {
       </TimelineItem>
       <TimelineItem>
         <IconWrapper>
-          <FontAwesomeIcon icon={faClock} />
-          <Time>23:00</Time>
+          <FontAwesomeIcon icon={faHamburger} />
+          <Time>20:00</Time>
         </IconWrapper>
         <TextBlock>
-          <Label>Last Orders & Band Ends</Label>
+          <Label>Evening buffet</Label>
         </TextBlock>
       </TimelineItem>
       <TimelineItem>
         <IconWrapper>
-          <FontAwesomeIcon icon={faClock} />
+          <FontAwesomeIcon icon={faBus} />
           <Time>00:00</Time>
         </IconWrapper>
         <TextBlock>
-          <Label>Party Ends</Label>
+          <Label>Take the vibes with you — start your own after party!</Label>
         </TextBlock>
       </TimelineItem>
     </TimelineWrapper>
