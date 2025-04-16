@@ -1302,7 +1302,87 @@ async function main() {
     }
   });
 
-  console.log('🌱 Seeded GuestParties and IndividualGuests');
+  await prisma.gift.createMany({
+    data: [
+      // Sully's Garden
+      {
+        section: 'SullysGarden',
+        name: 'Decking Boards (Pack of 5)',
+        description: 'Perfect for Sully’s garden play area',
+        amount: 30,
+        quantity: 5,
+        imagePath: "/garden.jpeg"
+      },
+      {
+        section: 'SullysGarden',
+        name: '£50 B&Q Voucher',
+        description: 'To help us build something beautiful',
+        amount: 50,
+        quantity: 5,
+        imagePath: "/garden.jpeg"
+      },
+      {
+        section: 'SullysGarden',
+        name: 'Sandpit Set',
+        description: 'For messy afternoons in the sunshine',
+        amount: 40,
+        quantity: 1,
+        imagePath: "/garden.jpeg"
+      },
+      {
+        section: 'SullysGarden',
+        name: 'Garden Furniture',
+        description: 'A comfy place to watch Sully play',
+        amount: 120,
+        quantity: 3,
+        imagePath: "/garden.jpeg"
+      },
+
+      // Cruise
+      {
+        section: 'TheCruise',
+        name: 'Excursion: Bruges Canal Tour',
+        description: 'A scenic boat ride through Bruges',
+        amount: 35,
+        quantity: 1,
+        imagePath: "/cruise.webp"
+      },
+      {
+        section: 'TheCruise',
+        name: 'Onboard Couples Massage',
+        description: 'A relaxing treat at sea',
+        amount: 90,
+        quantity: 1,
+        imagePath: "/cruise.webp"
+      },
+      {
+        section: 'TheCruise',
+        name: 'Specialty Dining Night',
+        description: 'Dinner with ocean views',
+        amount: 60,
+        quantity: 3,
+        imagePath: "/cruise.webp"
+      },
+      {
+        section: 'GeneralGifts',
+        name: "Wendego",
+        description: "",
+        amount: 60000,
+        quantity: 1,
+        imagePath: "/house.jpeg"
+      },
+      {
+        section: 'GeneralGifts',
+        name: 'Hoover',
+        description: 'Cleaning',
+        amount: 200,
+        quantity: 1,
+        imagePath: "/house.jpeg"
+      }
+    ]
+  });
+
+  console.log('🌱 Seeded GuestParties and IndividualGuests and gifts');
 }
 
 main()

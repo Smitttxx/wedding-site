@@ -110,7 +110,7 @@ export default function HomePage() {
           <AnimatedSection >
             <SectionHeading>Our Story so far</SectionHeading>
             <Paragraph>
-              We met at a gaming event in Liverpool and quickly became great friends. After years of laughs, late-night chats, and leveling up together, it wasn’t until one unforgettable night in Scotland that Joe finally got the (Dutch) courage share his true feelings  — and everything changed. A few years later, while on a cruise through Belgium, Joe proposed. Now we’re getting married — and best of all, we get to share it with our little one, Sully.
+              We met at a gaming event in Liverpool and quickly became great friends. After years of laughs, late-night chats, and leveling up together, it wasn’t until one unforgettable night in Scotland that Joe finally got the (Dutch) courage to share his true feelings  — and everything changed. A few years later, while on a cruise through Belgian waters, Joe proposed. Now we’re getting married — and best of all, we get to share it with our little one, Sully.
             </Paragraph>
 
             <PhotoRow>

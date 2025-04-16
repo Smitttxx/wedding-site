@@ -138,7 +138,6 @@ export default function PaymentPage() {
                 <p style={{marginBottom: '1rem'}}>
                 Your booking reference is <BookingRef>{party.bookingReference}</BookingRef>
                 </p>
-
                 <p>
                   We’re so excited to have you staying on-site with us — it means the world.
                   Borelands is such a special place, and we’re sure you’re going to fall in love with the views, the vibe, and the weekend ahead.
@@ -153,8 +152,7 @@ export default function PaymentPage() {
             <Section>
               <SectionHeading>Payment Failed</SectionHeading>
               <Text>The total cost is 
-                <div style={{color: theme.colors.accent, marginLeft: '0.25rem', marginRight: '0.15rem'}}>£ </div>
-                  <strong>{cost}</strong>
+              <span style={{color: theme.colors.accent, marginLeft: '0.25rem'}}>£</span><strong>{cost}</strong>
                   {" "}for 2 nights.</Text>
               {party.guests.some(g => g.isChild || g.isBaby) && (
                 <Text><strong>Children and babies stay free</strong>.</Text>
@@ -179,7 +177,7 @@ export default function PaymentPage() {
           ) : clientSecret ? (
             <Section>
               <SectionHeading>Payment</SectionHeading>
-              <Text>The total cost is <strong>                <div style={{color: theme.colors.accent, marginLeft: '0.25rem', marginRight: '0.15rem'}}>£ </div>
+              <Text>The total cost is <strong>                <span style={{color: theme.colors.accent, marginLeft: '0.25rem'}}>£</span>
               {cost}</strong> for 2 nights.</Text>
               {party.guests.some(g => g.isChild || g.isBaby) && (
                 <Text><strong>Children and babies stay free</strong>.</Text>

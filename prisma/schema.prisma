@@ -84,3 +84,24 @@ model Room {
   cabin    Cabin             @relation(fields: [cabinId], references: [id])
   guests   IndividualGuest[]
 }
+
+model Gift {
+  id         Int      @id @default(autoincrement())
+  section    GiftSection
+  name       String
+  description String?
+  amount     Int?
+  quantity   Int?
+  claimed    Int      @default(0)
+  available  Boolean  @default(true)
+  from       String?
+  message    String?
+  imagePath    String?
+  createdAt  DateTime @default(now())
+}
+
+enum GiftSection {
+  SullysGarden
+  TheCruise
+  GeneralGifts
+}

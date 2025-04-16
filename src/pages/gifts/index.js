@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import Layout from '../../components/Layout';
 import NavBar from '../../components/NavBar';
-import { Page } from '@/components/Page';
-import { SectionHeading } from '@/components/Section';
+import {Page} from '@/components/Page';
+import {SectionHeading} from '@/components/Section';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Paragraph = styled.p`
   font-size: 1.1rem;
@@ -46,6 +47,28 @@ const GiftDescription = styled.p`
   color: ${props => props.theme.colors.text};
 `;
 
+
+const ButtonLink = styled(Link)`
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  border: none;
+  border-radius: ${props => props.theme.borderRadius};
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+
+  &:hover {
+    background: ${props => props.theme.colors.primaryDark};
+  }
+`;
+
+
 export default function GiftsPage() {
   return (
     <>
@@ -59,22 +82,31 @@ export default function GiftsPage() {
           <Paragraph>
             We’re lucky to already have a home (and our dream kitchen!), so instead of traditional gifts, we’d love for you to help us create memories. If you feel moved to gift something, we’ve created a few options below.
           </Paragraph>
-
           <GiftCardGrid>
             <GiftCard>
-              <GiftImage src="/cruise.webp" width={220} height={150} alt="Cruise ship" />
               <GiftTitle>Cruise Memories</GiftTitle>
+              <GiftImage src="/cruise.webp" width={220} height={150} alt="Cruise ship" />
               <GiftDescription>
                 Help us make waves on our honeymoon cruise — from cocktails at sunset to late-night dance floors.
               </GiftDescription>
+              <ButtonLink href="/gifts/cruise" passHref>Cruise Gifts</ButtonLink>
             </GiftCard>
 
             <GiftCard>
-              <GiftImage src="/garden.jpg" width={220} height={150} alt="Garden for Sully" />
               <GiftTitle>Sully’s Garden</GiftTitle>
+              <GiftImage src="/garden.jpg" width={220} height={150} alt="Garden for Sully" />
               <GiftDescription>
-                Our current garden needs a lot of work for it to be safe for Sully, so thats next on our list! If you would like to help us create a magical little garden for Sully — a space for running wild, growing veggies, and making mud pies.
+                Our current garden needs a lot of work for it to be safe for Sully. Help us create a magical little garden — a space for running wild, growing veggies, and making mud pies.
               </GiftDescription>
+              <ButtonLink href="/gifts/sullys-garden" passHref>Sully’s Garden Gifts</ButtonLink>
+            </GiftCard>
+
+            <GiftCard>
+              <GiftTitle>Other Gifts</GiftTitle>
+              <GiftImage src="/house.jpeg" width={220} height={150} alt="Other Gifts" />
+              <GiftDescription>
+                Other gifts              </GiftDescription>
+              <ButtonLink href="/gifts/general-gifts" passHref>Other Gifts</ButtonLink>
             </GiftCard>
           </GiftCardGrid>
         </Page>
