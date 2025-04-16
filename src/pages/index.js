@@ -131,8 +131,8 @@ export default function HomePage() {
             />
             <Paragraph>
               The wedding weekend takes place at Borelands, perched above the stunning Loch Tay. Join us for a relaxed celebration
-              full of Scottish charm — think views, bonfires, and togetherness.
-            </Paragraph>
+              Full of Scottish charm — think views, bonfires, and a wee shindig under the stars.
+</Paragraph>
             <InfoBlock>
               <FontAwesomeIcon icon={faMapLocationDot} /> Address: Boreland Farm, Fearnan, Aberfeldy PH15 2PG
 
@@ -173,10 +173,10 @@ export default function HomePage() {
             <Snapshot src="/bar.jpeg" alt="Bar" width={700} height={400} layout="responsive"
             />
             <Paragraph>
-              Friday is bring your own bottle. On Saturday, there’ll be a fully stocked bar. No need to bring anything — just bring your best dance moves!
+            Friday’s a bring-your-own kind of night — whatever you fancy. On Saturday, there’ll be a bar to keep you going, but if you’ve got a favourite drink you can’t party without, you’re welcome to bring it along. Just a heads-up: there’s a £10 corkage fee per bottle.
             </Paragraph>
           </AnimatedSection>
-
+          
           <AnimatedSection >
             <SectionHeading>RSVP</SectionHeading>
             <Paragraph>
