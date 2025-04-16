@@ -65,7 +65,7 @@ const HomeNavLink = styled.a`
   font-weight: 600;
   font-family: ${props => props.theme.fonts.ui};
   transition: color 0.2s ease-in-out;
-font-size: 1.8rem;
+font-size: 1.2rem;
 &:hover,
 &:focus {
   color: ${props => props.theme.colors.accent};
@@ -110,7 +110,7 @@ export default function NavBar() {
 
   return (
     <Nav>
-      <HomeNavLink href="/">The Austins</HomeNavLink>
+      <HomeNavLink href="/">Our Forever Starts Here</HomeNavLink>
       <NavLinks open={menuOpen}>
         <NavLink href="/"><FontAwesomeIcon icon={faHome} />Home</NavLink>
         <NavLink href="/invite"><FontAwesomeIcon icon={faEnvelopeOpenText} />RSVP</NavLink>
