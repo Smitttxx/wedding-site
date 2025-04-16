@@ -175,6 +175,7 @@ export default function AccommodationDetailsPage() {
             </Text>
             <InfoBlock>
               {party.paid && <Fragment><strong>Payment of <span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} received, thanks!</strong><br /></Fragment>}
+              {party.bookingReference && <Fragment>Your booking reference is:  <span style={{color: theme.colors.accent, fontSize: "1.3em", textTransform: "uppercase"}}> {party.bookingReference}</span><br /></Fragment>}
               Total Cost of booking: <strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost}</strong><br />
               Your stay includes: <strong>2 nights</strong><br />
               from <FontAwesomeIcon icon={faCalendarCheck} /> <strong>Fri 12 Sept</strong><br />
@@ -189,7 +190,7 @@ export default function AccommodationDetailsPage() {
             </InfoBlock>
 
             <Text>
-              All cabins are self-catering. Laura & Joe will pop a small welcome hamper in your cabin — with milk, tea, and coffee to get you started.
+              All cabins are self-catering. Laura & Joe will pop a small welcome hamper in your cabin — Grooms choice of cereal, Brides choice of cereal, milk, tea, and coffee to get you started.
             </Text>
 
             <Text>

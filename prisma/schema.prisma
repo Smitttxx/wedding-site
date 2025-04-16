@@ -28,6 +28,7 @@ model GuestParty {
   cabin             Cabin?            @relation(fields: [cabinId], references: [id])
   guests            IndividualGuest[]
   rsvpLocked        Boolean? @default(false)
+  bookingReference   String?         
 }
 
 model IndividualGuest {

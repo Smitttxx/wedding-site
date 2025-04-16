@@ -25,7 +25,7 @@ export default function BusInfoOption() {
 
       <Label>Not happy with your onsite accommodation?</Label>
       <Note>
-        We’ll have buses heading to <strong>Aberfeldy</strong> and <strong>Kenmore</strong> so you can relax and enjoy the evening.
+        We’ll have buses heading to <strong>Aberfeldy</strong> and <strong>Kenmore</strong> after the wedding so you can relax and enjoy the evening.
 		  </Note>
 		  <Note>
        Just head back to the previous section and change your selection.
