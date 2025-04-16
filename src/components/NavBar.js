@@ -66,6 +66,7 @@ const HomeNavLink = styled.a`
   font-family: ${props => props.theme.fonts.ui};
   transition: color 0.2s ease-in-out;
 font-size: 1.2rem;
+text-decoration: none;
 &:hover,
 &:focus {
   color: ${props => props.theme.colors.accent};
