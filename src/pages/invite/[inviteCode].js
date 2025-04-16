@@ -75,6 +75,16 @@ export default function GuestPage() {
       const res = await axios.get(`/api/invite/${inviteCode}`);
       const data = res.data;
 
+      if (data.rsvpLocked) {
+        if (data.guestType === 'OnSite') {
+          router.push(`/accommodationDetails/${code}`);
+        } else {
+          router.push(`/confirmed/${code}`);
+        }
+      } else {
+        router.push(`/invite/${code}`);
+      }
+
       setParty(data);
       setFormData(data.guests.map(g => ({ ...g, rsvp: g.rsvp ?? null })));
       setFridayParty(typeof data.fridayParty === 'boolean' ? data.fridayParty : null);
@@ -160,10 +170,14 @@ export default function GuestPage() {
     }
 
     try {
+      setIsLoading(true);
       await axios.post('/api/invite/update', payload);
-      router.push(attending && accommodationPreference === 'onsite'
+    
+      const target = attending && accommodationPreference === 'onsite'
         ? `/accommodationDetails/${inviteCode}`
-        : `/confirmed/${inviteCode}`);
+        : `/confirmed/${inviteCode}`;
+    
+      await router.push(target);
     } catch (err) {
       console.error('Error saving:', err);
     } finally {

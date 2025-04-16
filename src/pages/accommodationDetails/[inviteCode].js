@@ -30,6 +30,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import AccommodationConfirmationToggle from "@/components/AccommodationConfirmationToggle";
 import Warning from "@/components/Warning";
+import LoadingIndicator from "@/components/LoadingOverlay";
 
 const Button = styled.button`
   margin-top: 1.5rem;
@@ -121,12 +122,15 @@ export default function AccommodationDetailsPage() {
   const [party, setParty] = useState(null);
   const [confirmed, setConfirmed] = useState(null);
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const theme = useTheme();
 
   useEffect(() => {
+    setIsLoading(true)
     const fetchData = async () => {
       const res = await axios.get(`/api/invite/${inviteCode}`);
       setParty(res.data);
+      setIsLoading(false)
     };
 
     if (inviteCode) fetchData();
@@ -160,6 +164,18 @@ export default function AccommodationDetailsPage() {
 
   const cost = (party.accommodationCost / 100).toFixed(2);
 
+  if (!party || isLoading) {
+    return (
+      <Fragment>
+        <NavBar />
+        <Layout>
+          <Page>
+            <LoadingIndicator />
+          </Page>
+        </Layout>
+      </Fragment>
+    );
+  }
 
   return (
     <Fragment>

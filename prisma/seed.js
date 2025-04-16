@@ -54,7 +54,7 @@ async function main() {
   const benCruachan = await prisma.Cabin.create({
     data: {
       name: 'Ben Cruachan',
-      videoUrl: "https://www.youtube.com/embed/watch?v=QZ5_lcqw9ww",
+      videoUrl: "https://www.youtube.com/embed/QZ5_lcqw9ww",
       imageFileName: 'benCruachan.jpg',
       capacity: 10,
       roomCount: 4,
