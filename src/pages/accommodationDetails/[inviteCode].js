@@ -25,12 +25,10 @@ import {
   faBaby,
   faMoneyBillWave,
   faBus,
-  faToilet,
-  faMugHot,
-  faRestroom
+  faBath,
+  faMugHot
 } from '@fortawesome/free-solid-svg-icons';
 import AccommodationConfirmationToggle from "@/components/AccommodationConfirmationToggle";
-import Warning from "@/components/Warning";
 import LoadingIndicator from "@/components/LoadingOverlay";
 
 const Button = styled.button`
@@ -246,8 +244,7 @@ export default function AccommodationDetailsPage() {
                         <FontAwesomeIcon icon={faBed} /> <strong>Type:</strong> {room.roomType} <br />
                       <FontAwesomeIcon icon={faUsers} /> <strong>Capacity:</strong> {room.capacity} <br/>
                         {room.enSuite
-                          ?   <><FontAwesomeIcon icon={faToilet} /> <strong>Ensuite:</strong> Yes <br /></>
-                          :   <><FontAwesomeIcon icon={faRestroom} /> <strong>Shared Bathroom</strong> <br /></>
+                          &&   <><FontAwesomeIcon icon={faBath} /> <strong>Ensuite:</strong> Yes <br /></>
                          }
                       </InfoBlock>
                       
