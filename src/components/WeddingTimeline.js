@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faChampagneGlasses, faUtensils, faMusic, faCamera, faCakeCandles, faGlassCheers, faBus, faWhiskeyGlass, faIceCream, faHamburger } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faChampagneGlasses, faUtensils, faMusic, faCamera, faCakeCandles, faGlassCheers, faBus, faUsers, faWhiskeyGlass, faIceCream, faHamburger } from '@fortawesome/free-solid-svg-icons';
 
 const TimelineWrapper = styled.div`
   background: rgba(255, 255, 255, 0.85);
@@ -174,6 +174,15 @@ export default function WeddingTimeline() {
         </IconWrapper>
         <TextBlock>
           <Label>Evening buffet</Label>
+        </TextBlock>
+      </TimelineItem>
+      <TimelineItem>
+        <IconWrapper>
+          <FontAwesomeIcon icon={faUsers} />
+          <Time>22:00</Time>
+        </IconWrapper>
+        <TextBlock>
+          <Label>Cèilidh</Label>
         </TextBlock>
       </TimelineItem>
       <TimelineItem>
