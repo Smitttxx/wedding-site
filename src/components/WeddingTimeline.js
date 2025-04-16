@@ -116,7 +116,7 @@ export default function WeddingTimeline() {
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faWhiskeyGlass} />
-          <Time>15:00</Time>
+          <Time>14:45</Time>
         </IconWrapper>
         <TextBlock>
           <Label>Pipers Toast</Label>
@@ -125,7 +125,7 @@ export default function WeddingTimeline() {
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faUtensils} />
-          <Time>15:15</Time>
+          <Time>15:00</Time>
         </IconWrapper>
         <TextBlock>
           <Label>Wedding Breakfast</Label>
@@ -152,16 +152,25 @@ export default function WeddingTimeline() {
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faCakeCandles} />
-          <Time>17:30</Time>
+          <Time>18:00</Time>
         </IconWrapper>
         <TextBlock>
-        <Label>Cake Cutting & First Dance</Label>
+        <Label>Cake Cutting</Label>
+        </TextBlock>
+      </TimelineItem>
+      <TimelineItem>
+        <IconWrapper>
+          <FontAwesomeIcon icon={faCakeCandles} />
+          <Time>18:30</Time>
+        </IconWrapper>
+        <TextBlock>
+        <Label>First Dance</Label>
         </TextBlock>
       </TimelineItem>
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faMusic} />
-          <Time>18:00</Time>
+          <Time>18:45</Time>
         </IconWrapper>
         <TextBlock>
           <Label>Band Starts</Label>
@@ -169,8 +178,17 @@ export default function WeddingTimeline() {
       </TimelineItem>
       <TimelineItem>
         <IconWrapper>
-          <FontAwesomeIcon icon={faHamburger} />
+          <FontAwesomeIcon icon={faUsers} />
           <Time>20:00</Time>
+        </IconWrapper>
+        <TextBlock>
+          <Label>Cèilidh</Label>
+        </TextBlock>
+      </TimelineItem>
+      <TimelineItem>
+        <IconWrapper>
+          <FontAwesomeIcon icon={faHamburger} />
+          <Time>20:30</Time>
         </IconWrapper>
         <TextBlock>
           <Label>Evening buffet</Label>
@@ -178,11 +196,11 @@ export default function WeddingTimeline() {
       </TimelineItem>
       <TimelineItem>
         <IconWrapper>
-          <FontAwesomeIcon icon={faUsers} />
-          <Time>22:00</Time>
+          <FontAwesomeIcon icon={faMusic} />
+          <Time>21:15</Time>
         </IconWrapper>
         <TextBlock>
-          <Label>Cèilidh</Label>
+          <Label>Band Second Set Starts</Label>
         </TextBlock>
       </TimelineItem>
       <TimelineItem>
