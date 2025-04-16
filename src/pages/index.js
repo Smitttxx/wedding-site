@@ -87,10 +87,10 @@ export default function HomePage() {
       <Layout>
         <Page>
           <SectionHeading>Laura & Joe’s Wedding</SectionHeading>
-          <IntroImage src="/outdoor-wedding.avif" alt="View of Loch Tay" width={700} height={400} />
+          <IntroImage src="/outdoor-wedding.avif" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
           <ExcitedMessage>
             We’re so excited to welcome you to Borelands and share the beautiful views of Loch Tay with you!<br />
-            It’s going to be the best weekend of our lives — and we’re so happy you’ll be part of it. Let’s celebrate, laugh, cry, dance (a lot), and make some magic memories together. ✨
+            It’s going to be the best weekend of our lives — and we’re so happy you’ll be part of it. Let’s celebrate, laugh, cry, dance (a lot), and make some magical memories together. ✨
           </ExcitedMessage>
           <TartanInfoBox>
             Only <span><Countdown /></span> days until the big day!
@@ -112,7 +112,7 @@ export default function HomePage() {
           <AnimatedSection >
             <SectionHeading>Our Story</SectionHeading>
             <Paragraph>
-              We met at a gaming event in Liverpool and quickly became inseparable. A few years later, while on a cruise through Belgium (and very pregnant), Joe proposed. Now we’re getting married — and best of all, we get to share it with our little one, Sully.
+            We met at a gaming event in Liverpool and quickly became great friends. After years of laughs, late-night chats, and leveling up together, it wasn’t until one unforgettable night in Scotland that Joe finally got the courage to kiss me—and everything changed. A few years later, while on a cruise through Belgium, Joe proposed. Now we’re getting married — and best of all, we get to share it with our little one, Sully.
             </Paragraph>
 
             <PhotoRow>
