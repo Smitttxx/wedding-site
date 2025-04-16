@@ -6,7 +6,7 @@ import {AnimatedSection, Section, SectionHeading} from '../components/Section';
 import {Page} from "@/components/Page";
 import {differenceInDays} from 'date-fns';
 import {TartanInfoBox} from "@/components/TartanInfoBox";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faClock, faMapLocationDot} from '@fortawesome/free-solid-svg-icons';
 import {InfoBlock} from "@/components/InfoBlock";
 import WeddingTimeline from "@/components/WeddingTimeline";
@@ -112,7 +112,7 @@ export default function HomePage() {
           <AnimatedSection >
             <SectionHeading>Our Story</SectionHeading>
             <Paragraph>
-            We met at a gaming event in Liverpool and quickly became inseparable. A few years later, while on a cruise through Belgium (and very pregnant), Joe proposed. Now we’re getting married — and best of all, we get to share it with our little one, Sully.
+              We met at a gaming event in Liverpool and quickly became inseparable. A few years later, while on a cruise through Belgium (and very pregnant), Joe proposed. Now we’re getting married — and best of all, we get to share it with our little one, Sully.
             </Paragraph>
 
             <PhotoRow>
@@ -121,36 +121,36 @@ export default function HomePage() {
 
           </AnimatedSection>
           <AnimatedSection >
-          <SectionHeading>The Venue</SectionHeading>
-          <Snapshot
-            src="/loachtay.jpg"
-            alt="The Venue"
-            width={700}
-            height={400}
-            layout="responsive"
-          />
-          <Paragraph>
-            The wedding weekend takes place at Borelands, perched above the stunning Loch Tay. Join us for a relaxed celebration
-            full of Scottish charm — think views, bonfires, and togetherness.
+            <SectionHeading>The Venue</SectionHeading>
+            <Snapshot
+              src="/loachtay.jpg"
+              alt="The Venue"
+              width={700}
+              height={400}
+              layout="responsive"
+            />
+            <Paragraph>
+              The wedding weekend takes place at Borelands, perched above the stunning Loch Tay. Join us for a relaxed celebration
+              full of Scottish charm — think views, bonfires, and togetherness.
             </Paragraph>
             <InfoBlock>
-            <FontAwesomeIcon icon={faMapLocationDot} /> Address: Boreland Farm, Fearnan, Aberfeldy PH15 2PG
+              <FontAwesomeIcon icon={faMapLocationDot} /> Address: Boreland Farm, Fearnan, Aberfeldy PH15 2PG
 
             </InfoBlock>
 
           </AnimatedSection>
 
 
-          
+
 
           <AnimatedSection >
             <SectionHeading>Friday Night</SectionHeading>
             <Snapshot src="/cowshed.webp" alt="Friday Night" width={700} height={400} layout="responsive" />
             <Paragraph>
-          We’d love to welcome everyone to Borelands the night before the wedding with a relaxed BBQ.  
-  The food’s on us — and it’s extra special, cooked over an open flame by the father of the bride and the father of the groom.  
-  If you’d like to bring a bottle of wine or something you love to drink, we’ll have glasses ready and waiting.  
-  Expect fires, good music, and a chance to catch up before the big day.
+              We’d love to welcome everyone to Borelands the night before the wedding with a relaxed BBQ.
+              The food’s on us — and it’s extra special, cooked over an open flame by the father of the bride and the father of the groom.
+              If you’d like to bring a bottle of wine or something you love to drink, we’ll have glasses ready and waiting.
+              Expect fires, good music, and a chance to catch up before the big day.
             </Paragraph>
             <InfoBlock>
               <FontAwesomeIcon icon={faClock} />  Festivities kick off around 6pm on Friday evening
@@ -161,9 +161,9 @@ export default function HomePage() {
             <SectionHeading>The Big Day</SectionHeading>
             <IntroImage src="/indoor-wedding.jpeg" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
             <Paragraph>
-  {"We've planned the day to flow naturally, with plenty of time for celebration, laughter, and relaxed moments together. "}
- {" Here's what to expect from the big day — from welcome drinks to the final song."}
-</Paragraph>
+              {"We've planned the day to flow naturally, with plenty of time for celebration, laughter, and relaxed moments together. "}
+              {" Here's what to expect from the big day — from welcome drinks to the final song."}
+            </Paragraph>
             <SectionHeading>Order of the Day</SectionHeading>
             <WeddingTimeline />
           </AnimatedSection>

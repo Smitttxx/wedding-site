@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faChampagneGlasses, faUtensils, faMusic, faCamera, faCakeCandles, faGlassCheers, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faChampagneGlasses, faUtensils, faMusic, faCamera, faCakeCandles, faGlassCheers, faClock, faWhiskeyGlass, faCakeSlice } from '@fortawesome/free-solid-svg-icons';
 
 const TimelineWrapper = styled.div`
   background: rgba(255, 255, 255, 0.85);
@@ -80,10 +80,10 @@ export default function WeddingTimeline() {
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faChampagneGlasses} />
-          <Time>11:30</Time>
+          <Time>11:15</Time>
         </IconWrapper>
         <TextBlock>
-          <Label>Welcome Drinks</Label>
+          <Label>Welcome Drinks & Find Your Seat</Label>
         </TextBlock>
       </TimelineItem>
       <TimelineItem>
@@ -107,7 +107,7 @@ export default function WeddingTimeline() {
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faChampagneGlasses} />
-          <Time>12:30</Time>
+          <Time>12:45</Time>
         </IconWrapper>
         <TextBlock>
           <Label>Canapés & Drinks</Label>
@@ -115,8 +115,17 @@ export default function WeddingTimeline() {
       </TimelineItem>
       <TimelineItem>
         <IconWrapper>
+          <FontAwesomeIcon icon={faWhiskeyGlass} />
+          <Time>15:00</Time>
+        </IconWrapper>
+        <TextBlock>
+          <Label>Pipers Toast</Label>
+        </TextBlock>
+      </TimelineItem>
+      <TimelineItem>
+        <IconWrapper>
           <FontAwesomeIcon icon={faUtensils} />
-          <Time>14:30</Time>
+          <Time>15:15</Time>
         </IconWrapper>
         <TextBlock>
           <Label>Wedding Breakfast</Label>
@@ -125,7 +134,7 @@ export default function WeddingTimeline() {
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faGlassCheers} />
-          <Time>16:00</Time>
+          <Time>16:15</Time>
         </IconWrapper>
         <TextBlock>
           <Label>Speeches</Label>
@@ -133,20 +142,29 @@ export default function WeddingTimeline() {
       </TimelineItem>
       <TimelineItem>
         <IconWrapper>
-          <FontAwesomeIcon icon={faMusic} />
-          <Time>17:30</Time>
+          <FontAwesomeIcon icon={faCakeSlice} />
+          <Time>16:45</Time>
         </IconWrapper>
         <TextBlock>
-          <Label>Band Starts</Label>
+          <Label>Dessert</Label>
         </TextBlock>
       </TimelineItem>
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faCakeCandles} />
-          <Time>20:00</Time>
+          <Time>17:30</Time>
         </IconWrapper>
         <TextBlock>
-          <Label>Cake Cutting & First Dance</Label>
+        <Label>Cake Cutting & First Dance</Label>
+        </TextBlock>
+      </TimelineItem>
+      <TimelineItem>
+        <IconWrapper>
+          <FontAwesomeIcon icon={faMusic} />
+          <Time>18:00</Time>
+        </IconWrapper>
+        <TextBlock>
+          <Label>Band Starts</Label>
         </TextBlock>
       </TimelineItem>
       <TimelineItem>
