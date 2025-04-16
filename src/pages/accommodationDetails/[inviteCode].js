@@ -246,7 +246,7 @@ export default function AccommodationDetailsPage() {
                         <FontAwesomeIcon icon={faBed} /> <strong>Type:</strong> {room.roomType} <br />
                       <FontAwesomeIcon icon={faUsers} /> <strong>Capacity:</strong> {room.capacity} <br/>
                         {room.enSuite
-                          ?   <><FontAwesomeIcon icon={faUsers} /> <strong>Ensuite:</strong> Yes <br /></>
+                          ?   <><FontAwesomeIcon icon={faToilet} /> <strong>Ensuite:</strong> Yes <br /></>
                           :   <><FontAwesomeIcon icon={faRestroom} /> <strong>Shared Bathroom</strong> <br /></>
                          }
                       </InfoBlock>
