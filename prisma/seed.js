@@ -13,6 +13,8 @@ async function main() {
       capacity: 18, 
       roomCount: 6, 
       hotTub: "Yes",
+      checkIn: "3pm",
+      checkOut: "11am",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
@@ -35,6 +37,8 @@ async function main() {
       capacity: 8,
       roomCount: 4,
       hotTub: "Heated on request — advance notice required",
+      checkIn: "3pm",
+      checkOut: "10:30am",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/twin', capacity: 2, enSuite: false },
@@ -55,6 +59,8 @@ async function main() {
       capacity: 10,
       roomCount: 4,
       hotTub: "Heated on request — advance notice required",
+      checkIn: "3pm",
+      checkOut: "10:30am",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
@@ -75,6 +81,8 @@ async function main() {
       capacity: 10, 
       roomCount: 4,
       hotTub: "Heated on request — advance notice required",
+      checkIn: "3pm",
+      checkOut: "10:30am",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: false },
@@ -95,6 +103,8 @@ async function main() {
       capacity: 8,
       roomCount: 3,
       hotTub: "Yes",
+      checkIn: "3pm",
+      checkOut: "10:30am",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
@@ -114,6 +124,8 @@ async function main() {
       capacity: 8,
       roomCount: 3,
       hotTub: "Heated on request — advance notice required",
+      checkIn: "3pm",
+      checkOut: "10:30am",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
@@ -134,6 +146,8 @@ async function main() {
       capacity: 8,
       roomCount: 3,
       hotTub: "Heated on request — advance notice required",
+      checkIn: "3pm",
+      checkOut: "10:30am",
       rooms: {
         create: [
           { name: 'Room 1', roomType: 'Double + Daybed', capacity: 3, enSuite: true },

@@ -2,7 +2,7 @@
 
 import {useRouter} from 'next/router';
 import {useEffect, useState, Fragment} from 'react';
-import { useTheme } from 'styled-components';
+import {useTheme} from 'styled-components';
 import axios from 'axios';
 import styled from 'styled-components';
 import Layout from '@/components/Layout';
@@ -23,11 +23,10 @@ import {
   faBed,
   faUsers,
   faBaby,
-  faCheckCircle,
   faMoneyBillWave,
-  faHotel,
   faBus,
-  faXmark
+  faCroissant,
+  faMugHot
 } from '@fortawesome/free-solid-svg-icons';
 import AccommodationConfirmationToggle from "@/components/AccommodationConfirmationToggle";
 import Warning from "@/components/Warning";
@@ -179,10 +178,14 @@ export default function AccommodationDetailsPage() {
               Total Cost of booking: <strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost}</strong><br />
               Your stay includes: <strong>2 nights</strong><br />
               from <FontAwesomeIcon icon={faCalendarCheck} /> <strong>Fri 12 Sept</strong><br />
-              (check-in from <strong>4pm</strong>) <br />
+              (check-in from <strong>{party.cabin.checkIn}</strong>) <br />
               to <FontAwesomeIcon icon={faCalendarXmark} /> <strong>Sun 14 Sept</strong><br />
-              (check-out by <strong>10am</strong>)<br />
+              (check-out by <strong>{party.cabin.checkOut}</strong>)<br />
               <strong>Free onsite parking</strong>
+              <br />
+              <br />
+              <FontAwesomeIcon icon={faMugHot} /> {" "}
+              <strong>Don’t rush off!</strong> Pastries and coffee will be served in the barn until <strong>12pm</strong> after check-out. Swing by for a tasty send-off!
             </InfoBlock>
 
             <Text>
@@ -227,39 +230,39 @@ export default function AccommodationDetailsPage() {
                       </Text>
 
                       {/* Your Guests */}
-                        <>
-                          <GuestBox>
-                            <FontAwesomeIcon icon={faUserFriends} /> <strong>Guests on your booking:</strong>
-                          </GuestBox>
-                          <List>
-                            {partyGuestsInRoom.map(g => (
-                              g.rsvp !== "No" &&
-                                  <li key={g.id}>
-                                    <span> {g.firstName} {g.lastName}</span>
-                                    {g.isBaby && (
-                                      <FontAwesomeIcon
-                                        icon={faBaby}
-                                        style={{marginLeft: '0.5rem'}}
-                                        title="Baby"
-                                      />
-                                    )}
-                                    {g.isChild && !g.isBaby && (
-                                      <FontAwesomeIcon
-                                        icon={faChild}
-                                        style={{marginLeft: '0.5rem'}}
-                                        title="Child"
-                                      />
-                                    )}
-                                  </li>
-                            ))}
-                          </List>
-                           {/* Baby Note */}
-                      {hasBaby && (
-                        <GoldInfoBox icon={faBaby}>
-                          We’re excited to welcome your little one! Please note, travel cots aren’t provided — feel free to bring your own.
-                        </GoldInfoBox>
-                      )}
-                        </>
+                      <>
+                        <GuestBox>
+                          <FontAwesomeIcon icon={faUserFriends} /> <strong>Guests on your booking:</strong>
+                        </GuestBox>
+                        <List>
+                          {partyGuestsInRoom.map(g => (
+                            g.rsvp !== "No" &&
+                            <li key={g.id}>
+                              <span> {g.firstName} {g.lastName}</span>
+                              {g.isBaby && (
+                                <FontAwesomeIcon
+                                  icon={faBaby}
+                                  style={{marginLeft: '0.5rem'}}
+                                  title="Baby"
+                                />
+                              )}
+                              {g.isChild && !g.isBaby && (
+                                <FontAwesomeIcon
+                                  icon={faChild}
+                                  style={{marginLeft: '0.5rem'}}
+                                  title="Child"
+                                />
+                              )}
+                            </li>
+                          ))}
+                        </List>
+                        {/* Baby Note */}
+                        {hasBaby && (
+                          <GoldInfoBox icon={faBaby}>
+                            We’re excited to welcome your little one! Please note, travel cots aren’t provided — feel free to bring your own.
+                          </GoldInfoBox>
+                        )}
+                      </>
                       {/* Other Guests */}
                       {otherGuestsInRoom.length > 0 && (
                         <>

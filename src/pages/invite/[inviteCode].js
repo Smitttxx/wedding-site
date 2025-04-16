@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { useRef, Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import Confetti from 'react-confetti';
 import Layout from '@/components/Layout';
 import NavBar from '@/components/NavBar';
 import RSVP from '@/components/RSVP';
@@ -16,10 +15,10 @@ import BusInfoOption from '@/components/BusInfoOption';
 import DietaryNotes from '@/components/DietaryNotes';
 import { Section, SectionHeading } from '@/components/Section';
 import LoadingIndicator from '@/components/LoadingOverlay';
-import { TartanInfoBox } from '@/components/TartanInfoBox';
 import { GoldInfoBox } from '@/components/GoldInfoBox';
+import { RedInfoBox } from '@/components/RedInfoBox';
 import { faChild, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
-import {Page} from "@/components/Page";
+import { Page } from '@/components/Page';
 
 const RSVPWrapper = styled.div`
   display: flex;
@@ -51,13 +50,6 @@ const Button = styled.button`
   }
 `;
 
-const Message = styled.p`
-  font-style: italic;
-  text-align: center;
-  font-size: 1.25rem;
-  margin-top: 1rem;
-`;
-
 export default function GuestPage() {
   const router = useRouter();
   const { inviteCode } = router.query;
@@ -70,13 +62,8 @@ export default function GuestPage() {
   const [dietary, setDietary] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [rsvpLocked, setIsRsvpLocked] = useState(false);
-  const [apiError, setApiError] = useState('');
-  const [errors, setErrors] = useState({
-    rsvp: [],
-    accommodation: false,
-    fridayParty: false,
-    needsBus: false
-  });
+  const [errors, setErrors] = useState({ rsvp: [], accommodation: false, fridayParty: false, needsBus: false });
+  const [validationMessages, setValidationMessages] = useState([]);
 
   const rsvpRef = useRef(null);
   const accommodationRef = useRef(null);
@@ -93,10 +80,9 @@ export default function GuestPage() {
       setFridayParty(typeof data.fridayParty === 'boolean' ? data.fridayParty : null);
       setNeedsBus(typeof data.needsBus === 'boolean' ? data.needsBus : null);
       setDietary(data.dietary ?? '');
-      setRsvpLocked(data.rsvpLocked);
+      setIsRsvpLocked(data.rsvpLocked);
     } catch (err) {
       console.error(err);
-      setApiError('Something went wrong loading your invite.');
     }
   };
 
@@ -109,34 +95,57 @@ export default function GuestPage() {
   }, [router.isReady]);
 
   const validateForm = () => {
+    const messages = [];
     const someoneSaidYes = formData.some(g => g.rsvp === 'Yes');
     const isOffsite = accommodationPreference === 'other';
 
     const newErrors = {
-      rsvp: formData.filter(g => g.rsvp === null).map(g => g.id),
-      accommodation: someoneSaidYes && accommodationPreference === null,
-      fridayParty: someoneSaidYes && fridayParty === null,
-      needsBus: someoneSaidYes && isOffsite && needsBus === null
+      rsvp: [],
+      accommodation: false,
+      fridayParty: false,
+      needsBus: false
     };
 
-    setErrors(newErrors);
-    if (
-      newErrors.rsvp.length ||
-      newErrors.accommodation ||
-      newErrors.fridayParty ||
-      newErrors.needsBus
-    ) {
-      if (newErrors.rsvp.length) rsvpRef.current?.scrollIntoView({ behavior: 'smooth' });
-      else if (newErrors.accommodation) accommodationRef.current?.scrollIntoView({ behavior: 'smooth' });
-      else if (newErrors.fridayParty) fridayRef.current?.scrollIntoView({ behavior: 'smooth' });
-      else if (newErrors.needsBus) busRef.current?.scrollIntoView({ behavior: 'smooth' });
-      return false;
+    formData.forEach(g => {
+      if (g.rsvp !== 'Yes' && g.rsvp !== 'No') newErrors.rsvp.push(g.id);
+    });
+
+    if (someoneSaidYes) {
+      if (accommodationPreference === null) {
+        newErrors.accommodation = true;
+        messages.push('Please select your accommodation preference.');
+      }
+      if (fridayParty === null) {
+        newErrors.fridayParty = true;
+        messages.push('Please let us know if you’re coming to the Friday night party.');
+      }
+      if (isOffsite && needsBus === null) {
+        newErrors.needsBus = true;
+        messages.push('Please let us know if you need a spot on the bus.');
+      }
     }
-    return true;
+
+    if (newErrors.rsvp.length > 0) {
+      messages.push('Please RSVP "Yes" or "No" for all guests.');
+    }
+
+    setErrors(newErrors);
+    setValidationMessages(messages);
+
+    return messages.length === 0;
   };
 
   const handleSave = async () => {
-    if (!validateForm()) return;
+    const allSaidNo = formData.every(g => g.rsvp === 'No');
+
+    if (allSaidNo) {
+      setAccommodationPreference('other');
+      setFridayParty(false);
+      setNeedsBus(false);
+    }
+
+    const isValid = validateForm();
+    if (!isValid) return;
 
     setIsLoading(true);
     const attending = formData.some(g => g.rsvp === 'Yes');
@@ -146,11 +155,11 @@ export default function GuestPage() {
       guests: formData,
       dietary,
       rsvpLocked: true,
-      fridayParty,
-      needsBus
+      fridayParty: attending ? fridayParty : false,
+      needsBus: attending ? needsBus : false
     };
 
-    if (party.guestType === 'OnSite' && accommodationPreference === 'other') {
+    if (party.guestType === 'OnSite' && (accommodationPreference === 'other' || allSaidNo)) {
       payload.guestType = 'OtherAccommodation';
     }
 
@@ -169,95 +178,99 @@ export default function GuestPage() {
   if (!party || isLoading) {
     return (
       <Fragment>
-            <NavBar />
-      <Layout>
-        <Page>
-          <LoadingIndicator />
-        </Page>
+        <NavBar />
+        <Layout>
+          <Page>
+            <LoadingIndicator />
+          </Page>
         </Layout>
-        </Fragment>
+      </Fragment>
     );
   }
 
   return (
     <Fragment>
-            <NavBar />
-    <Layout>
-      <Page>
-        <PartyHeader party={party} />
+      <NavBar />
+      <Layout>
+        <Page>
+          <PartyHeader party={party} />
 
-        <Section ref={rsvpRef}>
-          <SectionHeading>RSVP</SectionHeading>
-          <RSVPWrapper>
-            {formData.map((guest, i) => (
-              <RSVP key={guest.id} guest={guest} index={i} handleChange={(index, key, val) => {
-                const updated = [...formData];
-                updated[index][key] = val;
-                setFormData(updated);
-              }} />
-            ))}
+          <Section ref={rsvpRef}>
+            <SectionHeading>RSVP</SectionHeading>
+            <RSVPWrapper>
+              {formData.map((guest, i) => (
+                <RSVP key={guest.id} guest={guest} index={i} handleChange={(index, key, val) => {
+                  const updated = [...formData];
+                  updated[index][key] = val;
+                  setFormData(updated);
+                }} />
+              ))}
             </RSVPWrapper>
             {party.guests.some(g => g.isChild || g.isBaby) && (
-            <GoldInfoBox icon={faChild}>
-              {party.guests.filter(g => g.isChild || g.isBaby).length === 1 ? (
-                <>
-                  We see a little one is joining the RSVP — yay!  
-                  Kids are warmly invited and will be looked after by lovely wedding nannies on the big day, with activities like ball pits, crafts, and games to keep them entertained while you celebrate.
-                </>
-              ) : (
-                <>
-                  We see little ones are joining the RSVP — yay!  
-                  Children are warmly invited and will be looked after by lovely wedding nannies on the big day, with activities like ball pits, crafts, and games to keep them entertained while you celebrate.
-                </>
-              )}
-            </GoldInfoBox>
-          )}
-        </Section>
-
-        {formData.some(g => g.rsvp === 'Yes') && (
-          <>
-            <RefContainer ref={accommodationRef}>
-              <AccommodationOptions
-                guestType={party.guestType}
-                accommodationOption={accommodationPreference}
-                setAccommodationOption={setAccommodationPreference}
-                needsBus={needsBus}
-                setNeedsBus={setNeedsBus}
-                fullWidth
-              />
-            </RefContainer>
-
-            {accommodationPreference === 'onsite' && (
-              <GoldInfoBox icon={faCircleExclamation}>
-                <span>Please continue to the next page once RSVPd to view and pay for your accommodation. If we don’t receive payment by <strong>June 1st 2025</strong>, we may need to offer your room to another guest.</span>
+              <GoldInfoBox icon={faChild}>
+                {party.guests.filter(g => g.isChild || g.isBaby).length === 1 ? (
+                  <>We see a little one is joining — yay! Kids are warmly invited and will be looked after by lovely wedding nannies on the big day.</>
+                ) : (
+                  <>We see little ones are joining — yay! Children are warmly invited and will be looked after by lovely wedding nannies on the big day.</>
+                )}
               </GoldInfoBox>
             )}
+          </Section>
 
-            <RefContainer ref={busRef}>
-              {accommodationPreference === 'other'
-                ? <BusOption needsBus={needsBus} setNeedsBus={setNeedsBus} />
-                : <BusInfoOption />
-              }
-            </RefContainer>
+          {formData.some(g => g.rsvp === 'Yes') && (
+            <>
+              <RefContainer ref={accommodationRef}>
+                <AccommodationOptions
+                  guestType={party.guestType}
+                  accommodationOption={accommodationPreference}
+                  setAccommodationOption={setAccommodationPreference}
+                  needsBus={needsBus}
+                  setNeedsBus={setNeedsBus}
+                  fullWidth
+                />
+              </RefContainer>
 
-            <RefContainer ref={fridayRef}>
-              <FridayPartySection
-                fridayParty={fridayParty}
-                setFridayParty={setFridayParty}
-              />
-            </RefContainer>
+              {accommodationPreference === 'onsite' && (
+                <GoldInfoBox icon={faCircleExclamation}>
+                  <span>Please continue to the next page to pay for your accommodation. Payment is due by <strong>June 1st 2025</strong>.</span>
+                </GoldInfoBox>
+              )}
 
-            <DietaryNotes dietary={dietary} setDietary={setDietary} />
-          </>
-        )}
+              <RefContainer ref={busRef}>
+                {accommodationPreference === 'other'
+                  ? <BusOption needsBus={needsBus} setNeedsBus={setNeedsBus} />
+                  : <BusInfoOption />
+                }
+              </RefContainer>
 
-        <Button onClick={handleSave}>
-          {accommodationPreference === 'onsite'
-            ? 'Save RSVP & Go to Accommodation Details'
-            : 'Save RSVP'}
-        </Button>
-      </Page>
+              <RefContainer ref={fridayRef}>
+                <FridayPartySection
+                  fridayParty={fridayParty}
+                  setFridayParty={setFridayParty}
+                />
+              </RefContainer>
+
+              <DietaryNotes dietary={dietary} setDietary={setDietary} />
+            </>
+          )}
+
+          {validationMessages.length > 0 && (
+            <RedInfoBox>
+              <ul style={{ marginLeft: '1.2rem' }}>
+                {validationMessages.map((msg, idx) => (
+                  <li key={idx}>{msg}</li>
+                ))}
+              </ul>
+            </RedInfoBox>
+          )}
+
+          <Button onClick={handleSave}>
+            {accommodationPreference === 'onsite'
+              ? 'Save RSVP & Go to Accommodation Details'
+              : 'Save RSVP'}
+          </Button>
+        </Page>
       </Layout>
-      </Fragment>
+    </Fragment>
   );
 }

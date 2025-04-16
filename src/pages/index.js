@@ -6,6 +6,10 @@ import {AnimatedSection, Section, SectionHeading} from '../components/Section';
 import {Page} from "@/components/Page";
 import {differenceInDays} from 'date-fns';
 import {TartanInfoBox} from "@/components/TartanInfoBox";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faClock, faMapLocationDot} from '@fortawesome/free-solid-svg-icons';
+import {InfoBlock} from "@/components/InfoBlock";
+import WeddingTimeline from "@/components/WeddingTimeline";
 
 const TopNotice = styled.div`
   background: ${props => props.theme.colors.accent};
@@ -108,18 +112,11 @@ export default function HomePage() {
           <AnimatedSection >
             <SectionHeading>Our Story</SectionHeading>
             <Paragraph>
-              We met four years ago at a gaming event in Liverpool — not online (though we basically lived online after that).
-              We started as best friends, gaming into the early hours, until one Halloween, Joe made the first move. From that
-              moment, we were inseparable. In 2022, our greatest adventure began: we became parents to our little whirlwind, Sully.
-              Somewhere along the way, Joe popped the question (Laura said yes, obviously), and here we are — planning a wedding with
-              our favourite people.
+            We met at a gaming event in Liverpool and quickly became inseparable. A few years later, while on a cruise through Belgium (and very pregnant), Joe proposed. Now we’re getting married — and best of all, we get to share it with our little one, Sully.
             </Paragraph>
 
             <PhotoRow>
-              <Snapshot src="/image.png" alt="Gaming computers" width={250} height={200} />
-              <Snapshot src="/TLP.jpeg" alt="TLP event" width={250} height={200} />
-              <Snapshot src="/together.jpeg" alt="Couple holiday" width={250} height={200} />
-              <Snapshot src="/now.jpeg" alt="Our son Sully" width={250} height={200} />
+              <Snapshot src="/familyPhoto.jpg" alt="Family Photo" width={250} height={200} layout="responsive" />
             </PhotoRow>
 
           </AnimatedSection>
@@ -135,24 +132,40 @@ export default function HomePage() {
           <Paragraph>
             The wedding weekend takes place at Borelands, perched above the stunning Loch Tay. Join us for a relaxed celebration
             full of Scottish charm — think views, bonfires, and togetherness.
-          </Paragraph>
+            </Paragraph>
+            <InfoBlock>
+            <FontAwesomeIcon icon={faMapLocationDot} /> Address: Boreland Farm, Fearnan, Aberfeldy PH15 2PG
+
+            </InfoBlock>
+
           </AnimatedSection>
+
+
+          
 
           <AnimatedSection >
             <SectionHeading>Friday Night</SectionHeading>
             <Snapshot src="/cowshed.webp" alt="Friday Night" width={700} height={400} layout="responsive" />
             <Paragraph>
-              We’re hosting a laid-back BBQ to welcome everyone to Borelands. Food is on us, but it’s BYOB — bring your favourites!
-              Expect fires, good music, and cosy chats before the big day.
+          We’d love to welcome everyone to Borelands the night before the wedding with a relaxed BBQ.  
+  The food’s on us — and it’s extra special, cooked over an open flame by the father of the bride and the father of the groom.  
+  If you’d like to bring a bottle of wine or something you love to drink, we’ll have glasses ready and waiting.  
+  Expect fires, good music, and a chance to catch up before the big day.
             </Paragraph>
+            <InfoBlock>
+              <FontAwesomeIcon icon={faClock} />  Festivities kick off around 6pm on Friday evening
+            </InfoBlock>
           </AnimatedSection>
 
           <AnimatedSection >
-            <SectionHeading>Order of the Day</SectionHeading>
+            <SectionHeading>The Big Day</SectionHeading>
             <IntroImage src="/indoor-wedding.jpeg" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
             <Paragraph>
-              Heres how our Saturday unfolds: 💍 12:30 Ceremony, 🥂 13:00 Drinks & Photos, 🍽️ 15:30 Wedding Breakfast, 💃 19:00 Party Begins!
-            </Paragraph>
+  {"We've planned the day to flow naturally, with plenty of time for celebration, laughter, and relaxed moments together. "}
+ {" Here's what to expect from the big day — from welcome drinks to the final song."}
+</Paragraph>
+            <SectionHeading>Order of the Day</SectionHeading>
+            <WeddingTimeline />
           </AnimatedSection>
 
           <AnimatedSection >
@@ -160,7 +173,7 @@ export default function HomePage() {
             <Snapshot src="/bar.jpeg" alt="Bar" width={700} height={400} layout="responsive"
             />
             <Paragraph>
-              Friday is BYOB. On Saturday, there’ll be a fully stocked bar. No need to bring anything — just bring your best dance moves!
+              Friday is bring your own bottle. On Saturday, there’ll be a fully stocked bar. No need to bring anything — just bring your best dance moves!
             </Paragraph>
           </AnimatedSection>
 

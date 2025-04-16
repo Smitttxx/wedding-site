@@ -1,10 +1,10 @@
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 import Link from 'next/link';
 import styled from 'styled-components';
 import Layout from '../../components/Layout';
-import { SectionHeading } from '../../components/Section';
-import { Page } from "@/components/Page";
-import { Fragment, useEffect, useState } from 'react';
+import {SectionHeading} from '../../components/Section';
+import {Page} from "@/components/Page";
+import {Fragment, useEffect, useState} from 'react';
 import axios from 'axios';
 import NavBar from "@/components/NavBar";
 
@@ -37,13 +37,13 @@ const StyledButton = styled.a`
 
   &:hover {
     background: ${props =>
-      props.disabled ? '#ccc' : props.theme.colors.primaryDark};
+    props.disabled ? '#ccc' : props.theme.colors.primaryDark};
   }
 `;
 
 export default function ConfirmedPage() {
   const router = useRouter();
-  const { inviteCode } = router.query;
+  const {inviteCode} = router.query;
 
   const [party, setParty] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -71,28 +71,28 @@ export default function ConfirmedPage() {
 
   if (loading) {
     return (
-          <Fragment>
-            <NavBar />
-      <Layout>
-        <Page>
-          <SectionHeading>Loading...</SectionHeading>
-        </Page>
+      <Fragment>
+        <NavBar />
+        <Layout>
+          <Page>
+            <SectionHeading>Loading...</SectionHeading>
+          </Page>
         </Layout>
-        </Fragment>
+      </Fragment>
     );
   }
 
   if (error || !party) {
     return (
       <Fragment>
-            <NavBar />
-      <Layout>
-        <Page>
-          <SectionHeading>Oops!</SectionHeading>
-          <Message>{error || 'Something went wrong. Please try again.'}</Message>
-        </Page>
+        <NavBar />
+        <Layout>
+          <Page>
+            <SectionHeading>Oops!</SectionHeading>
+            <Message>{error || 'Something went wrong. Please try again.'}</Message>
+          </Page>
         </Layout>
-        </Fragment>
+      </Fragment>
     );
   }
 
@@ -101,18 +101,18 @@ export default function ConfirmedPage() {
 
   return (
     <Fragment>
-            <NavBar />
-    <Layout>
-      <Page>
-        <SectionHeading>
-          {hasAttendingGuest ? 'Thanks for RSVPing 🎉' : "We'll Miss You 😢"}
-        </SectionHeading>
+      <NavBar />
+      <Layout>
+        <Page>
+          <SectionHeading>
+            {hasAttendingGuest ? 'Thanks for RSVPing 🎉' : "We'll Miss You 😢"}
+          </SectionHeading>
 
-        {hasAttendingGuest ? (
+          {hasAttendingGuest ? (
             party.guestType === 'AccommodationNotOffered' ? (
               <>
                 <Message>
-                  We’re so glad you’ll be joining us to celebrate our big day in the Scottish Highlands! 💛
+                  We’re so glad you’ll be joining us to celebrate our big day in the Scottish Highlands!
                   <br /><br />
                   We weren’t able to offer on-site accommodation this time, but we’re thrilled you can still join us.
                   We’ll be in touch with travel details and everything you need to enjoy the weekend.
@@ -124,7 +124,7 @@ export default function ConfirmedPage() {
             ) : (
               <>
                 <Message>
-                  We’re so glad you’ll be joining us to celebrate our big day in the Scottish Highlands! 💛
+                  We’re so glad you’ll be joining us to celebrate our big day in the Scottish Highlands!
                   <br /><br />
                   You’ve let us know you’ll be arranging your own accommodation — thank you!
                   We’ll keep you posted with travel tips and party updates.
@@ -144,9 +144,8 @@ export default function ConfirmedPage() {
               </Note>
             </>
           )}
-
-      </Page>
+        </Page>
       </Layout>
-      </Fragment>
+    </Fragment>
   );
 }

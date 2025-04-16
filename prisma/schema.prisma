@@ -69,6 +69,8 @@ model Cabin {
   roomCount          Int? 
   hotTub             String?
   parties            GuestParty[]
+  checkIn            String?
+  checkOut           String?
 }
 
 model Room {

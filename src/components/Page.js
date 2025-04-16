@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Page = styled.div`
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   background-color: ${props => props.theme.colors.background};
   box-shadow:
