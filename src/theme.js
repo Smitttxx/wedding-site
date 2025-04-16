@@ -9,7 +9,8 @@ const theme = {
 	  text: '#1e1e1e',           // Soft white for body text
 	  success: '#4caf50',        // Soft green for confirmations
 	  error: '#f44336',          // Red for errors
-	  warning: '#ff9800'         // Orange for alerts
+		warning: '#ff9800',         // Orange for alerts
+	  lightError: "#ffebee",
 	},
 	fonts: {
 	  heading: "'Cormorant Garamond', serif", // Elegant headers
