@@ -75,6 +75,16 @@ export default function GuestPage() {
       const res = await axios.get(`/api/invite/${inviteCode}`);
       const data = res.data;
 
+      if (data.rsvpLocked) {
+        if (data.guestType === 'OnSite') {
+          router.push(`/accommodationDetails/${inviteCode}`);
+        } else {
+          router.push(`/confirmed/${inviteCode}`);
+        }
+      } else {
+        router.push(`/invite/${inviteCode}`);
+      }
+
       setParty(data);
       setFormData(data.guests.map(g => ({ ...g, rsvp: g.rsvp ?? null })));
       setFridayParty(typeof data.fridayParty === 'boolean' ? data.fridayParty : null);
@@ -86,18 +96,6 @@ export default function GuestPage() {
     }
   };
 
-  useEffect(() => {
-    if (data.rsvpLocked) {
-      if (data.guestType === 'OnSite') {
-        router.push(`/accommodationDetails/${inviteCode}`);
-      } else {
-        router.push(`/confirmed/${inviteCode}`);
-      }
-    } else {
-      router.push(`/invite/${inviteCode}`);
-    }
-}, [inviteCode]);
-  
   useEffect(() => {
     fetchParty();
 }, [inviteCode]);
