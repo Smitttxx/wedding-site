@@ -55,11 +55,9 @@ const PhotoRow = styled.div`
 
 const Snapshot = styled(Image)`
   border-radius: 12px;
-`;
-
-const IntroImage = styled(Image)`
   border-radius: 12px;
-  margin-bottom: 1.5rem;
+  border: 3px solid ${props => props.theme.colors.accent};;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   max-width: 100%;
   height: auto;
 `;
@@ -87,7 +85,7 @@ export default function HomePage() {
       <Layout>
         <Page>
           <SectionHeading>Laura & Joe’s Wedding</SectionHeading>
-          <IntroImage src="/outdoor-wedding.avif" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
+          <Snapshot src="/outdoor-wedding.avif" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
           <ExcitedMessage>
             We’re so excited to welcome you to Borelands and share the beautiful views of Loch Tay with you!<br />
             It’s going to be the best weekend of our lives — and we’re so happy you’ll be part of it. Let’s celebrate, laugh, cry, dance (a lot), and make some magical memories together. ✨
@@ -159,7 +157,7 @@ export default function HomePage() {
 
           <AnimatedSection >
             <SectionHeading>The Big Day</SectionHeading>
-            <IntroImage src="/indoor-wedding.jpeg" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
+            <Snapshot src="/indoor-wedding.jpeg" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
             <Paragraph>
               {"We've planned the day to flow naturally, with plenty of time for celebration, laughter, and relaxed moments together. "}
               {" Here's what to expect from the big day — from welcome drinks to the final song."}
