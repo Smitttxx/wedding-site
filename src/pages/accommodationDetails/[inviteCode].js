@@ -120,8 +120,8 @@ export default function AccommodationDetailsPage() {
   const router = useRouter();
   const {inviteCode} = router.query;
   const [party, setParty] = useState(null);
-  const [confirmed, setConfirmed] = useState(null);
   const [error, setError] = useState(false);
+  const [confirmed, setConfirmed] = useState(null);
   const [isLoading, setIsLoading] = useState(false)
   const theme = useTheme();
   const [needsBus, setNeedsBus] = useState(null)
@@ -132,6 +132,11 @@ export default function AccommodationDetailsPage() {
       const res = await axios.get(`/api/invite/${inviteCode}`);
       setParty(res.data);
       setIsLoading(false)
+
+      if (res.data.guestType === 'OtherAccommodation' || res.data.guestType === 'AccommodationNotOffered') {
+        router.push(`/invite/${inviteCode}`);
+      }
+
     };
 
     if (inviteCode) fetchData();
@@ -158,7 +163,6 @@ export default function AccommodationDetailsPage() {
     party.guests.map(g => g.room?.name).filter(Boolean)
   ));
 
-  console.log(needsBus, "Needsbus")
   const partyGuestIds = new Set(party.guests.map(g => g.id));
 
   const othersInCabin = party.cabin?.rooms
@@ -186,16 +190,23 @@ export default function AccommodationDetailsPage() {
       <Layout>
         <Page>
           <PartyHeader party={party} />
+          <Text><strong>Thanks for RSVPing{party.paid && " and paying for your accommodation!"}</strong><br />
+              We’re so glad you can make it and can’t wait to celebrate with you.
+            </Text>
+          {
+            party.paid &&
+            <InfoBlock>
+            <strong>Payment of <span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} received, thanks!</strong><br />
+            {party.bookingReference && <Fragment>Your booking reference is:  <span style={{color: theme.colors.accent, fontSize: "1.3em", textTransform: "uppercase"}}> {party.bookingReference}</span><br /></Fragment>}
+            </InfoBlock>
+          }
+          
+
 
           <Section>
             <SectionHeading>Accommodation Summary</SectionHeading>
-            <Text><strong>Thanks for RSVPing{party.paid && " and paying for your accommodation!"}</strong><br />
-              We’re so glad you can make it and can’t wait to celebrate with you.
-            </Text>
             <InfoBlock>
-              {party.paid && <Fragment><strong>Payment of <span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} received, thanks!</strong><br /></Fragment>}
-              {party.bookingReference && <Fragment>Your booking reference is:  <span style={{color: theme.colors.accent, fontSize: "1.3em", textTransform: "uppercase"}}> {party.bookingReference}</span><br /></Fragment>}
-              Total Cost of booking: <strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost}</strong><br />
+              {!party.paid && <>Total Cost of booking: <strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost}</strong><br /></>}
               Your stay includes: <strong>2 nights</strong><br />
               from <FontAwesomeIcon icon={faCalendarCheck} /> <strong>Fri 12 Sept</strong><br />
               (check-in from <strong>{party.cabin.checkIn}</strong>) <br />
@@ -290,12 +301,12 @@ export default function AccommodationDetailsPage() {
                       {otherGuestsInRoom.length > 0 && (
                         <>
                           <GuestBox>
-                            <FontAwesomeIcon icon={faSuitcase} /> <strong>Other guests sharing this room:</strong>
+                            <FontAwesomeIcon icon={faSuitcase} /> Other guests sharing this <strong>room:</strong>
                           </GuestBox>
                           <List>
                             {otherGuestsInRoom.map(g => (
                               <li key={g.id}>
-                                {g.firstName} {g.lastName} {g.relation && `(${g.relation})`}
+                                {g.firstName} {g.lastName} <span>{g.relation && `(${g.relation})`}</span>
                               </li>
                             ))}
                           </List>
@@ -311,7 +322,7 @@ export default function AccommodationDetailsPage() {
 
             {othersInCabin?.length > 0 && (
               <Section>
-                <SectionHeading>Other Guests in Your Cabin</SectionHeading>
+                <SectionHeading>Other Guests sharing this <strong>Cabin:</strong></SectionHeading>
                 <List>
                   {othersInCabin.map(g => (
                     <li key={g.id}>{g.firstName} {g.lastName} <span>{g.relation && `(${g.relation})`}</span></li>
@@ -322,15 +333,17 @@ export default function AccommodationDetailsPage() {
             )}
 
             {!party.paid &&
+              <>  
               <AccommodationConfirmationToggle
                 confirmed={confirmed}
                 setConfirmed={setConfirmed}
                 error={error}
               />
+              {confirmed === false && <BusOption needsBus={needsBus} setNeedsBus={setNeedsBus} />}
+            </>
             }
 
-            {confirmed === false && <BusOption needsBus={needsBus} setNeedsBus={setNeedsBus} />}
-            {confirmed !== null && (
+            {confirmed !== null && 
               <Button
                 onClick={() => {
                   if (confirmed) handleContinue();
@@ -349,7 +362,7 @@ export default function AccommodationDetailsPage() {
                   </>
                 )}
               </Button>
-            )}
+            }
 
           </Section>
         </Page>
