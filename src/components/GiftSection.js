@@ -93,13 +93,10 @@ export default function GiftSection({ gifts, section }) {
   const [selectedGift, setSelectedGift] = useState(null);
   const [inviteCode, setInviteCode] = useState('');
 
-  console.log(section, "section")
-
   const handleGiftClaim = async (giftId) => {
     if (!inviteCode) return alert('Please enter your invite code to reserve this gift.');
 
     await axios.patch(`/api/gifts/${giftId}`, { from: inviteCode });
-    alert('Thanks for your gift! 🎁');
     window.location.reload();
   };
 
@@ -115,7 +112,6 @@ export default function GiftSection({ gifts, section }) {
       message: formData.message,
     });
 
-    alert('Thanks for your gift! 🎁');
     setFormData({ name: '', amount: '', from: '', message: '' });
     setSubmitting(false);
   };

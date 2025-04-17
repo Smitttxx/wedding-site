@@ -55,7 +55,6 @@ export default function PaymentPage() {
   const theme = useTheme();
   const router = useRouter();
   const {inviteCode} = router.query;
-  console.log(inviteCode);
   const [party, setParty] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
   const [paymentError, setPaymentError] = useState(false);

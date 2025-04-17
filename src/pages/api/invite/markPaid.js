@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   try {
     const party = await prisma.guestParty.update({
       where: { id: partyId },
-      data: { paid: true, bookingReference: bookingReference},
+      data: { paid: true, bookingReference: bookingReference, guestType: "OnSite"},
     });
 
     res.status(200).json(party);

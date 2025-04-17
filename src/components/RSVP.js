@@ -114,8 +114,8 @@ export default function RSVP({
                   value={guest.rsvp}
                   onChange={val => handleChange(index, 'rsvp', val)}
                   options={[
-                    {value: 'Yes', label: 'Attending'},
-                    {value: 'No', label: 'Not Attending'}
+                    {value: 'Yes', label: 'Count me in!'},
+                    {value: 'No', label: 'Sadly, I cant make it'}
                   ]}
                 />
               </RadioWrapper>
