@@ -113,7 +113,6 @@ const GuestBox = styled.div`
   padding: 1rem;
   box-shadow: 0 2px 6px rgba(191, 161, 78, 0.1);
   color: ${props => props.theme.colors.primary};
-  margin: 10px -16px;
 `;
 
 export default function AccommodationDetailsPage() {
@@ -272,7 +271,7 @@ export default function AccommodationDetailsPage() {
                           {partyGuestsInRoom.map(g => (
                             g.rsvp !== "No" &&
                             <li key={g.id}>
-                              <div> <strong>{g.firstName} {g.lastName}</strong></div>
+                              <div> <strong>{g.firstName} {g.lastName}
                               {g.isBaby && (
                                 <FontAwesomeIcon
                                   icon={faBaby}
@@ -286,11 +285,13 @@ export default function AccommodationDetailsPage() {
                                   style={{marginLeft: '0.5rem'}}
                                   title="Child"
                                 />
-                              )}
+                                  )}
+                                  </strong></div>
                             </li>
                           ))}
                         </List>
                         {/* Baby Note */}
+                          <br/>
                         {hasBaby && (
                           <GoldInfoBox icon={faBaby}>
                             We’re excited to welcome your little one! Please note, travel cots aren’t provided — feel free to bring your own.

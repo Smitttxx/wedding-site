@@ -11,4 +11,7 @@ export const Page = styled.div`
     inset 0 0 6px rgba(0, 0, 0, 0.2);
   padding: 1.2rem;
   text-align: center;
+  @media (max-width: 374px) {
+    padding: 0.4rem;
+  }
 `;

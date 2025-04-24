@@ -13,6 +13,9 @@ const OuterWrapper = styled.div`
   @media (min-width: 768px) {
     padding: 2rem;
   }
+  @media (max-width: 374px) {
+    padding: 1rem;
+  }
 `;
 
 export default function Layout({ children }) {

@@ -13,6 +13,8 @@ const Box = styled.div`
   padding: 10px;
   margin: 15px 0;
   box-shadow: 0 4px 10px rgba(191, 161, 78, 0.3);
+  width: fit-content;
+  margin: auto;
 `;
 
 const IconWrapper = styled.div`

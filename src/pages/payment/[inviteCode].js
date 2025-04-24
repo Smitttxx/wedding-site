@@ -155,7 +155,8 @@ export default function PaymentPage() {
                   {" "}for 2 nights.</Text>
               {party.guests.some(g => g.isChild || g.isBaby) && (
                 <Text><strong>Children and babies stay free</strong>.</Text>
-              )}
+                )}
+                              <br/>
               <GoldInfoBox icon={faTimesCircle}>Oops, something went wrong. Would you like to try again?</GoldInfoBox>
 
               <Elements stripe={stripePromise} options={{clientSecret}}>
@@ -181,10 +182,10 @@ export default function PaymentPage() {
               {party.guests.some(g => g.isChild || g.isBaby) && (
                 <Text><strong>Children and babies stay free</strong>.</Text>
               )}
-
+              <br/>
               <GoldInfoBox icon={faCircleExclamation}>
                 Your room is reserved from <strong>Friday to Sunday</strong> {"While you're welcome to arrive on Saturday if preferred, the rate covers the full weekend."} <br /><br />
-                <span>Please make payment by <strong>June 1st 2025</strong> to secure your room.</span>
+                <span>Please make payment by <strong>July 2nd 2025</strong> to secure your room.</span>
                 <span><strong>Please note all payments are non refundable.</strong></span>
               </GoldInfoBox>
 

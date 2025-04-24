@@ -7,6 +7,7 @@ import Warning from './Warning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoneyBillWave, faBus, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import {GoldInfoBox} from "./GoldInfoBox";
+import {Fragment} from "react";
 
 const Note = styled.p`
   font-size: 0.95rem;
@@ -47,12 +48,15 @@ export default function AccommodationConfirmationToggle({ confirmed, setConfirme
         ]}
 		  />
 		       {/* Deadline reminder if confirmed === true */}
-			   {confirmed === true && (
-        <GoldInfoBox icon={faCircleExclamation}>
+      {confirmed === true && (
+        <Fragment>
+          <br/>
+ <GoldInfoBox icon={faCircleExclamation}>
           <span>
-            Please continue to the next page to pay and confirm your room. If we don’t receive payment by <strong>June 1st 2025</strong>, we may need to offer your room to another guest.
+            Please continue to the next page to pay and confirm your room. If we don’t receive payment by <strong>July 2nd 2025</strong>, we may need to offer your room to another guest.
           </span>
         </GoldInfoBox>
+        </Fragment>
       )}
       {error && <Warning>Please confirm your accommodation choice.</Warning>}
     </Section>
