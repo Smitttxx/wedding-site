@@ -76,6 +76,9 @@ export default function GiftsPage() {
       <Layout>
         <Page>
           <SectionHeading>Gifts</SectionHeading>
+          <h1>
+           🚧🚧🚧 PAGE UNDER CONSTRUCTION 🚧🚧🚧 
+          </h1>
           <Paragraph>
             {"Your presence means the world to us — we’re truly grateful you're joining us for our big weekend."}
           </Paragraph>

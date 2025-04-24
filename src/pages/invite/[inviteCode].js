@@ -17,7 +17,7 @@ import { Section, SectionHeading } from '@/components/Section';
 import LoadingIndicator from '@/components/LoadingOverlay';
 import { GoldInfoBox } from '@/components/GoldInfoBox';
 import { RedInfoBox } from '@/components/RedInfoBox';
-import { faChild, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faChild, faBed, faFire, faBus, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 import { Page } from '@/components/Page';
 
 const RSVPWrapper = styled.div`
@@ -91,6 +91,7 @@ export default function GuestPage() {
       setNeedsBus(typeof data.needsBus === 'boolean' ? data.needsBus : null);
       setDietary(data.dietary ?? '');
       setIsRsvpLocked(data.rsvpLocked);
+      setAccommodationPreference(data.guestType === "AccommodationNotOffered" ? "other" : null)
     } catch (err) {
       console.error(err);
     }
@@ -119,21 +120,35 @@ export default function GuestPage() {
     if (someoneSaidYes) {
       if (accommodationPreference === null) {
         newErrors.accommodation = true;
-        messages.push('Please select your accommodation preference.');
+        messages.push({
+          icon: faBed,
+          text: 'Please select your accommodation preference.'
+        });
       }
       if (fridayParty === null) {
         newErrors.fridayParty = true;
-        messages.push('Please let us know if you’re coming to the Friday night party.');
+        messages.push({
+          icon: faFire,
+          text: 'Please let us know if you’re coming to the Friday night party.'
+        });
       }
       if (isOffsite && needsBus === null) {
         newErrors.needsBus = true;
-        messages.push('Please let us know if you need a spot on the bus.');
+        messages.push({
+          icon: faBus,
+          text: 'Please let us know if you need a spot on the bus.'
+        });
       }
     }
-
+    
     if (newErrors.rsvp.length > 0) {
-      messages.push('Please RSVP "Yes" or "No" for all guests.');
-    }
+      messages.push({
+        icon: faUserCheck,
+        text: 'Please RSVP "Yes" or "No" for all guests.'
+      });
+    }    
+
+    console.log(messages)
 
     setErrors(newErrors);
     setValidationMessages(messages);
@@ -177,7 +192,7 @@ export default function GuestPage() {
         ? `/accommodationDetails/${inviteCode}`
         : `/confirmed/${inviteCode}`;
     
-      await router.push(target);
+      router.push(target);
     } catch (err) {
       console.error('Error saving:', err);
     } finally {
@@ -207,6 +222,11 @@ export default function GuestPage() {
 
           <Section ref={rsvpRef}>
             <SectionHeading>RSVP</SectionHeading>
+            <GoldInfoBox icon={faUserCheck}>
+                      <span>
+                        Please RSVP for all guests by <strong>June 13th 2025</strong>.
+                      </span>
+                    </GoldInfoBox>
             <RSVPWrapper>
               {formData.map((guest, i) => (
                 <RSVP key={guest.id} guest={guest} index={i} handleChange={(index, key, val) => {
@@ -259,13 +279,9 @@ export default function GuestPage() {
           )}
 
           {validationMessages.length > 0 && (
-            <RedInfoBox>
-              <ul style={{ marginLeft: '1.2rem' }}>
-                {validationMessages.map((msg, idx) => (
-                  <li key={idx}>{msg}</li>
-                ))}
-              </ul>
-            </RedInfoBox>
+              validationMessages.map((msg, idx) => (
+                <GoldInfoBox icon={msg.icon}  key={idx}>{msg.text}</GoldInfoBox>
+                ))
           )}
 
           <Button onClick={handleSave}>

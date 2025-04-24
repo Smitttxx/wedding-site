@@ -91,7 +91,7 @@ export default function CabinDetails({cabin}) {
             src={cabin.videoUrl}
             title="Cabin video tour"
             frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;"
             allowFullScreen
           />
         )}

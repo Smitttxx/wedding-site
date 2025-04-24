@@ -3,7 +3,6 @@ import '@/styles/globals.css';
 import { Cormorant_Garamond, Lora, Raleway } from 'next/font/google';
 import { ThemeProvider } from 'styled-components';
 import theme from '../theme';
-
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['400', '600'],
@@ -25,12 +24,13 @@ const raleway = Raleway({
   display: 'swap',
 });
 
-function MyApp({ Component, pageProps }) {
+function MyApp({Component, pageProps}) {
+
   return (
     <ThemeProvider theme={theme}>
     <div
       className={`${cormorant.variable} ${lora.variable} ${raleway.variable}`}
-    >
+      >
       <Component {...pageProps} />
       </div>
       </ThemeProvider>

@@ -211,7 +211,7 @@ async function main() {
             firstName: 'Becca',
             lastName: 'Roberts',
             room: { connect: { id: farmhouse.rooms[1].id } },
-            relation: 'Maid Of Honour'
+            relation: 'Maid of Honour'
           }
         ]
       }
@@ -234,7 +234,7 @@ async function main() {
             firstName: 'Jay',
             lastName: '',
             room: { connect: { id: farmhouse.rooms[2].id } },
-            relation: 'Friend Of The Couple'
+            relation: 'Friend of the Couple'
           },
           {
             firstName: 'Becky',
@@ -263,20 +263,20 @@ async function main() {
             firstName: 'Tom',
             lastName: 'Speakman',
             room: { connect: { id: farmhouse.rooms[3].id } },
-             relation: 'Friend Of The Couple'
+             relation: 'Friend of the Couple'
           },
           {
             firstName: 'Toni',
             lastName: 'Abblitt',
             room: { connect: { id: farmhouse.rooms[3].id } },
-             relation: 'Friend Of The Couple'
+             relation: 'Friend of the Couple'
           },
           {
             firstName: 'Renly',
             lastName: 'Speakman',
             isBaby: true,
             room: { connect: { id: farmhouse.rooms[3].id } },
-             relation: 'Friend Of The Couples Baby'
+             relation: 'Friend of the Couples Baby'
           }
         ]
       }
@@ -299,7 +299,7 @@ async function main() {
             firstName: 'Connor',
             lastName: 'Costello',
             room: { connect: { id: farmhouse.rooms[3].id } },
-             relation: 'Friend Of The Couple'
+             relation: 'Friend of the Couple'
           },
           {
             firstName: 'Ellie',
@@ -318,23 +318,23 @@ async function main() {
       token: 'grahamAndPuja',
       guestType: 'OnSite',
       inviteCode: 'x6mp',
-      accommodationCost: 22000,
+      accommodationCost: 26000,
       cabin: {
-        connect: { id: farmhouse.id }
+        connect: { id: longhouse.id }
       },
       guests: {
         create: [
           {
             firstName: 'Graham',
             lastName: 'Frain',
-            room: { connect: { id: farmhouse.rooms[4].id } },
-             relation: 'Friend Of The Couple'
+            room: { connect: { id: longhouse.rooms[0].id } },
+             relation: 'Friend of the Couple'
           },
           {
             firstName: 'Puja',
             lastName: 'Biswas',
-            room: { connect: { id: farmhouse.rooms[4].id } },
-             relation: 'Friend Of The Couples Partner'
+            room: { connect: { id: longhouse.rooms[0].id } },
+             relation: 'Friend of the Couples Partner'
           }
         ]
       }
@@ -347,36 +347,36 @@ async function main() {
       token: 'seanAndKim',
       guestType: 'OnSite',
       inviteCode: '0gh3',
-      accommodationCost: 22000,
+      accommodationCost: 26000,
       cabin: {
-        connect: { id: farmhouse.id }
+        connect: { id: longhouse.id }
       },
       guests: {
         create: [
           {
             firstName: 'Sean',
             lastName: 'Boardman',
-            room: { connect: { id: farmhouse.rooms[4].id } },
+            room: { connect: { id: longhouse.rooms[3].id } },
              relation: 'Groomsmen'
           },
           {
             firstName: 'Kim',
             lastName: '',
-            room: { connect: { id: farmhouse.rooms[4].id } },
-             relation: 'Friend Of The Couple'
+            room: { connect: { id: longhouse.rooms[3].id } },
+             relation: 'Friend of the Couple'
           }
         ]
       }
     }
   });
 
-  const maddieAndNatasha = await prisma.GuestParty.create({
+  const maddie = await prisma.GuestParty.create({
     data: {
-      partyName: 'Maddie & Natasha',
-      token: 'maddieAndNatasha',
+      partyName: 'Maddie',
+      token: 'maddie',
       guestType: 'OnSite',
       inviteCode: '5msi',
-      accommodationCost: 22000,
+      accommodationCost: 11000,
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -386,13 +386,30 @@ async function main() {
             firstName: 'Madeline',
             lastName: 'Austin',
             room: { connect: { id: farmhouse.rooms[5].id } },
-             relation: 'Sister Of The Groom'
+             relation: 'Sister of the Groom'
           },
+        ]
+      }
+    }
+  });
+
+  const natasha = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Natasha',
+      token: 'natasha',
+      guestType: 'OnSite',
+      inviteCode: '78hg',
+      accommodationCost: 11000,
+      cabin: {
+        connect: { id: farmhouse.id }
+      },
+      guests: {
+        create: [
           {
             firstName: 'Natasha',
             lastName: '',
             room: { connect: { id: farmhouse.rooms[5].id } },
-             relation: 'Friend Of The Couple'
+             relation: 'Friend of the Couple'
           }
         ]
       }
@@ -415,46 +432,152 @@ async function main() {
             firstName: 'Barry',
             lastName: '',
             room: { connect: { id: farmhouse.rooms[5].id } },
-             relation: 'Friend Of The Couple'
+             relation: 'Friend of the Couple'
           },
         ]
       }
     }
   });
 
-  const markAndHelen = await prisma.GuestParty.create({
+  const patrick = await prisma.GuestParty.create({
     data: {
-      partyName: 'Mark & Helen',
-      token: 'markAndHelen',
+      partyName: 'Patrick',
+      token: 'patrick',
       guestType: 'OnSite',
-      inviteCode: '4bg7',
-      accommodationCost: 26000,
+      inviteCode: '8anw',
+      accommodationCost: 11000,
       cabin: {
-        connect: { id: longhouse.id }
+        connect: { id: farmhouse.id }
       },
       guests: {
         create: [
           {
-            firstName: 'Mark',
-            lastName: 'Walters',
-            room: { connect: { id: longhouse.rooms[0].id } },
-             relation: 'Friend Of The Couple'
+            firstName: 'Patrick',
+            lastName: '',
+            relation: 'Friend of the Couple',
+            room: { connect: { id: farmhouse.rooms[4].id } },
           },
-          {
-            firstName: 'Helen',
-            lastName: 'Walters',
-            room: { connect: { id: longhouse.rooms[0].id } },
-             relation: 'Friend Of The Couple'
-          }
         ]
       }
     }
   });
 
-  const jakeAndAnthia = await prisma.GuestParty.create({
+  const lauren = await prisma.GuestParty.create({
     data: {
-      partyName: 'Jake & Anthia',
-      token: 'jakeAndAnthia',
+      partyName: 'Lauren',
+      token: 'lauren',
+      guestType: 'OnSite',
+      inviteCode: '2q8h',
+      accommodationCost: 11000,
+      cabin: {
+        connect: { id: farmhouse.id }
+      },
+      guests: {
+        create: [
+          {
+            firstName: 'Lauren',
+            lastName: '',
+            relation: 'Friend of the Couple',
+            room: { connect: { id: farmhouse.rooms[5].id } },
+          },
+        ]
+      }
+    }
+  });
+
+  const connor = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Connor',
+      token: 'connor',
+      guestType: 'OnSite',
+      inviteCode: '7aj8',
+      accommodationCost: 11000,
+      cabin: {
+        connect: { id: farmhouse.id }
+      },
+      guests: {
+        create: [
+          {
+            firstName: 'Connor',
+            lastName: '',
+            relation: 'Friend of the Couple',
+            room: { connect: { id: farmhouse.rooms[4].id } },
+          },
+        ]
+      }
+    }
+  });
+
+  const brian = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Brian',
+      token: 'brian',
+      guestType: 'OnSite',
+      inviteCode: '7q3n',
+      accommodationCost: 11000,
+      cabin: {
+        connect: { id: farmhouse.id }
+      },
+      guests: {
+        create: [
+          {
+            firstName: 'Brian',
+            lastName: '',
+            relation: 'Friend of the Couple',
+            room: { connect: { id: farmhouse.rooms[4].id } },
+          },
+        ]
+      }
+    }
+  });
+
+  const gary = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Gary',
+      token: 'gary',
+      guestType: 'OnSite',
+      inviteCode: '9a67',
+      accommodationCost: 11000,
+      cabin: {
+        connect: { id: farmhouse.id }
+      },
+      guests: {
+        create: [
+          {
+            firstName: 'Gary',
+            lastName: '',
+            relation: 'Friend of the Couple',
+            room: { connect: { id: farmhouse.rooms[4].id } },
+          },
+        ]
+      }
+    }
+  });
+
+  const matt = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Matt',
+      token: 'matt',
+      guestType: 'OnSite',
+      inviteCode: 'ma19',
+      accommodationCost: 11000,
+      guests: {
+        create: [
+          {
+            firstName: 'Matt',
+            lastName: '',
+            relation: 'Friend of the Couple',
+            room: { connect: { id: farmhouse.rooms[4].id } },
+          },
+        ]
+      }
+    }
+  });
+
+  const jakeAndAnthea = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Jake & Anthea',
+      token: 'jakeAndAnthea',
       guestType: 'OnSite',
       inviteCode: 'b58x',
       accommodationCost: 26000,
@@ -467,13 +590,13 @@ async function main() {
             firstName: 'Jake',
             lastName: 'Wright',
             room: { connect: { id: longhouse.rooms[1].id } },
-             relation: 'Colleague'
+            relation: 'Colleague'
           },
           {
-            firstName: 'Anthia',
+            firstName: 'Anthea',
             lastName: '',
             room: { connect: { id: longhouse.rooms[1].id } },
-              relation: 'Colleagues Partner'
+            relation: 'Colleagues Partner'
           }
         ]
       }
@@ -496,13 +619,13 @@ async function main() {
             firstName: 'Lee',
             lastName: 'Hancock',
             room: { connect: { id: longhouse.rooms[2].id } },
-             relation: 'Friend Of The Couple'
+             relation: 'Friend of the Couple'
           },
           {
             firstName: 'Ally',
             lastName: 'Hancock',
             room: { connect: { id: longhouse.rooms[2].id } },
-             relation: 'Friend Of The Couple'
+             relation: 'Friend of the Couple'
           }
         ]
       }
@@ -513,25 +636,17 @@ async function main() {
     data: {
       partyName: 'Pete & Cynthia',
       token: 'peteAndCynthia',
-      guestType: 'OnSite',
+      guestType: 'AccommodationNotOffered',
       inviteCode: 'c2g6',
-      accommodationCost: 26000,
-      cabin: {
-        connect: { id: longhouse.id }
-      },
       guests: {
         create: [
           {
             firstName: 'Pete',
             lastName: '',
-            room: { connect: { id: longhouse.rooms[3].id } },
-             relation: 'Family Of The Groom'
           },
           {
             firstName: 'Cynthia',
             lastName: '',
-            room: { connect: { id: longhouse.rooms[3].id } },
-             relation: 'Family Of The Groom'
           }
         ]
       }
@@ -554,23 +669,23 @@ async function main() {
             firstName: 'Nigel',
             lastName: 'Austin',
             room: { connect: { id: benCruachan.rooms[0].id } },
-             relation: 'Farther Of The Groom'
+             relation: 'Father of the Groom'
           },
           {
             firstName: 'Ruth',
             lastName: 'Austin',
             room: { connect: { id: benCruachan.rooms[0].id } },
-             relation: 'Mother Of The Groom'
+             relation: 'Mother of the Groom'
           }
         ]
       }
     }
   });
 
-  const mikeAndAnne = await prisma.GuestParty.create({
+  const mikeAndAnn = await prisma.GuestParty.create({
     data: {
-      partyName: 'Mike & Anne',
-      token: 'mikeAndAnne',
+      partyName: 'Mike & Ann',
+      token: 'mikeAndAnn',
       guestType: 'OnSite',
       inviteCode: '4gf5',
       accommodationCost: 30000,
@@ -583,13 +698,13 @@ async function main() {
             firstName: 'Mike',
             lastName: 'Austin',
             room: { connect: { id: benCruachan.rooms[1].id } },
-             relation: 'Grand Farther Of The Groom'
+             relation: 'Grandfather of the Groom'
           },
           {
-            firstName: 'Anne',
+            firstName: 'Ann',
             lastName: 'Austin',
             room: { connect: { id: benCruachan.rooms[1].id } },
-             relation: 'Grand Mother Of The Groom'
+             relation: 'Grandmother of the Groom'
           }
         ]
       }
@@ -602,7 +717,7 @@ async function main() {
       token: 'mikeAndEllen',
       guestType: 'OnSite',
       inviteCode: '7cvt',
-      accommodationCost: 26000,
+      accommodationCost: 30000,
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -612,13 +727,13 @@ async function main() {
             firstName: 'Mike',
             lastName: 'Downey',
             room: { connect: { id: benCruachan.rooms[2].id } },
-             relation: 'Friend Of The Couple'
+             relation: 'Friend of the Couple'
           },
           {
             firstName: 'Ellen',
             lastName: 'Downey',
             room: { connect: { id: benCruachan.rooms[2].id } },
-            relation: 'Friend Of The Couple'
+            relation: 'Friend of the Couple'
           }
         ]
       }
@@ -641,7 +756,7 @@ async function main() {
             firstName: 'David',
             lastName: 'Austin',
             room: { connect: { id: benCruachan.rooms[3].id } },
-            relation: 'Family Of The Groom'
+            relation: 'Family of the Groom'
           },
         ]
       }
@@ -664,7 +779,7 @@ async function main() {
             firstName: 'Steven',
             lastName: 'Austin',
             room: { connect: { id: benCruachan.rooms[3].id } },
-            relation: 'Family Of The Groom'
+            relation: 'Family of the Groom'
           },
         ]
       }
@@ -687,7 +802,7 @@ async function main() {
             firstName: 'Tom',
             lastName: 'Downey',
             room: { connect: { id: benCruachan.rooms[3].id } },
-            relation: 'Friend Of The Couple'
+            relation: 'Friend of the Couple'
           },
         ]
       }
@@ -710,13 +825,13 @@ async function main() {
             firstName: 'George',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[0].id } },
-            relation: 'God Farther Of The Bride'
+            relation: 'Godfather of the Bride'
           },
           {
             firstName: 'Rebecca',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[0].id } },
-            relation: 'God Mother Of The Bride'
+            relation: 'Godmother of the Bride'
           }
         ]
       }
@@ -739,13 +854,13 @@ async function main() {
             firstName: 'Eddie',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[1].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Maureen',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[1].id } },
-           relation: 'Family Of The Bride'
+           relation: 'Family of the Bride'
           }
         ]
       }
@@ -768,13 +883,13 @@ async function main() {
             firstName: 'Kevin',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[2].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Lynn',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[2].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           }
         ]
       }
@@ -797,13 +912,13 @@ async function main() {
             firstName: 'Cieran',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[2].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Chloe',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[2].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           }
         ]
       }
@@ -826,13 +941,13 @@ async function main() {
             firstName: 'John',
             lastName: 'Scott',
             room: { connect: { id: schiehallion.rooms[3].id } },
-            relation: 'Family Of The Groom'
+            relation: 'Family of the Groom'
           },
           {
             firstName: 'Andrea',
             lastName: 'Scott',
             room: { connect: { id: schiehallion.rooms[3].id } },
-            relation: 'Family Of The Groom'
+            relation: 'Family of the Groom'
           }
         ]
       }
@@ -855,13 +970,13 @@ async function main() {
             firstName: 'Dougie',
             lastName: 'Smith',
             room: { connect: { id: benDrummond.rooms[0].id } },
-            relation: 'Farther Of The Bride'
+            relation: 'Father of the Bride'
           },
           {
             firstName: 'Maria',
             lastName: 'Smith',
             room: { connect: { id: benDrummond.rooms[0].id } },
-            relation: 'Mother Of The Bride'
+            relation: 'Mother of the Bride'
           }
         ]
       }
@@ -884,34 +999,34 @@ async function main() {
             firstName: 'Ross',
             lastName: 'Mitchall',
             room: { connect: { id: benDrummond.rooms[1].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Nicci',
             lastName: 'Mitchall',
             room: { connect: { id: benDrummond.rooms[1].id } },
-            relation: 'Sister Of The Bride'
+            relation: 'Sister of the Bride'
           },
           {
             firstName: 'Jaxson',
             lastName: 'Mitchall',
             isChild: true,
             room: { connect: { id: benDrummond.rooms[2].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Jenson',
             lastName: 'Mitchall',
             isChild: true,
             room: { connect: { id: benDrummond.rooms[2].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Skye',
             lastName: 'Mitchall',
             isChild: true,
             room: { connect: { id: benDrummond.rooms[2].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           }
         ]
       }
@@ -934,34 +1049,34 @@ async function main() {
             firstName: 'Ryan',
             lastName: '',
             room: { connect: { id: benLawers.rooms[0].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Vicky',
             lastName: '',
             room: { connect: { id: benLawers.rooms[0].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Mimi-Rose',
             lastName: '',
             isBaby: true,
             room: { connect: { id: benLawers.rooms[0].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Milo',
             lastName: '',
             isChild: true,
             room: { connect: { id: benLawers.rooms[2].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Macie',
             lastName: '',
             isChild: true,
             room: { connect: { id: benLawers.rooms[2].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           }
         ]
       }
@@ -984,26 +1099,26 @@ async function main() {
             firstName: 'William',
             lastName: '',
             room: { connect: { id: benLawers.rooms[1].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Shona',
             lastName: '',
             room: { connect: { id: benLawers.rooms[1].id } },
-            relation: 'Family Of The Bride'
+            relation: 'Family of the Bride'
           },
           {
             firstName: 'Luca',
             lastName: '',
             isChild: true,
-            relation: 'Family Of The Bride',
+            relation: 'Family of the Bride',
             room: { connect: { id: benLawers.rooms[2].id } }
           },
           {
             firstName: 'Holly',
             lastName: '',
             isChild: true,
-            relation: 'Family Of The Bride',
+            relation: 'Family of the Bride',
             room: { connect: { id: benLawers.rooms[2].id } }
           }
         ]
@@ -1027,13 +1142,13 @@ async function main() {
             firstName: 'Kenny',
             lastName: '',
             room: { connect: { id: cottage.rooms[0].id } },
-            relation: 'Friend Of The Couple'
+            relation: 'Friend of the Couple'
           },
           {
             firstName: 'Una',
             lastName: '',
             room: { connect: { id: cottage.rooms[0].id } },
-            relation: 'Friend Of The Couple'
+            relation: 'Friend of the Couple'
           }
         ]
       }
@@ -1056,7 +1171,7 @@ async function main() {
             firstName: 'Una',
             lastName: '',
             room: { connect: { id: cottage.rooms[0].id } },
-            relation: 'Friend Of The Couple'
+            relation: 'Brides Guardian Angel Growing Up'
           },
         ]
       }
@@ -1069,7 +1184,7 @@ async function main() {
       token: 'steveAndLinda',
       guestType: 'OnSite',
       inviteCode: 'z61b',
-      accommodationCost: 26000,
+      accommodationCost: 30000,
       cabin: {
         connect: { id: cottage.id }
       },
@@ -1079,13 +1194,13 @@ async function main() {
             firstName: 'Steve',
             lastName: 'Morgan',
             room: { connect: { id: cottage.rooms[1].id } },
-            relation: 'Family Of The Groom'
+            relation: 'Family of the Groom'
           },
           {
             firstName: 'Linda',
             lastName: 'Morgan',
             room: { connect: { id: cottage.rooms[1].id } },
-            relation: 'Family Of The Groom'
+            relation: 'Family of the Groom'
           }
         ]
       }
@@ -1108,7 +1223,7 @@ async function main() {
             firstName: 'Kevin',
             lastName: '',
             room: { connect: { id: cottage.rooms[2].id } },
-             relation: 'Friend Of The Couple'
+             relation: 'Friend of the Couple'
           },
         ]
       }
@@ -1131,7 +1246,7 @@ async function main() {
             firstName: 'Rhys',
             lastName: '',
             room: { connect: { id: cottage.rooms[2].id } },
-             relation: 'Friend Of The Couple'
+             relation: 'Friend of the Couple'
           },
         ]
       }

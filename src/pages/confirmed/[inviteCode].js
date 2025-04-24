@@ -104,9 +104,12 @@ export default function ConfirmedPage() {
       <NavBar />
       <Layout>
         <Page>
-          <SectionHeading>
-            {hasAttendingGuest ? 'Thanks for RSVPing 🎉' : "We'll Miss You 😢"}
-          </SectionHeading>
+        <SectionHeading>
+  {hasAttendingGuest
+    ? `Thanks for RSVPing, ${party.guests.map(g => g.firstName).join(' & ')}`
+    : `We’ll Miss You, ${party.guests.map(g => g.firstName).join(' & ')}`}
+</SectionHeading>
+
 
           {hasAttendingGuest ? (
             party.guestType === 'AccommodationNotOffered' ? (

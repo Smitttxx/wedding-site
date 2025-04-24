@@ -27,7 +27,9 @@ export default function FridayPartySection({fridayParty, setFridayParty, error})
         If you fancy a tipple, bring a bottle — we’ll bring the glasses.
         <br />
         <br />
-         Festivities kick off around <strong>6pm</strong> on Friday evening
+        Festivities kick off around <strong>6pm</strong> on Friday evening
+        <br/>
+        <br/>
 
       </Note>
       <ToggleRadioGroup

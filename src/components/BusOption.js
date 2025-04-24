@@ -25,7 +25,7 @@ export default function BusOption({ needsBus, setNeedsBus, error = false }) {
 
       <Label>Would you like a seat on the guest bus after the wedding?</Label>
       <Note>
-        We’ll have buses heading to <strong>Aberfeldy</strong> and <strong>Kenmore</strong> so you can relax and enjoy the evening.
+        We’ll have buses heading to <strong>Aberfeldy</strong> and <strong>Kenmore</strong> at <strong>11:30pm</strong> so you can relax and enjoy the evening.
       </Note>
 
       <ToggleRadioGroup

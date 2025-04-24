@@ -47,6 +47,9 @@ export default function DynamicGiftSectionPage() {
       <Layout>
         <Page>
           <SectionHeading>{readableTitle}</SectionHeading>
+          <h1>
+           🚧🚧🚧 PAGE UNDER CONSTRUCTION 🚧🚧🚧 
+          </h1>
           {loading ? <p>Loading gifts...</p> : <GiftSection gifts={gifts} section={section} />}
         </Page>
       </Layout>
