@@ -37,7 +37,7 @@ export default function DietaryNotes({ dietary, setDietary }) {
     <Section>
 		  <SectionHeading>{"What to expect at the wedding breakfast?"}</SectionHeading>
       <Description>
-        {"It'll be a laid-back, buffet-style spread — think proper flavour from the Texas smoker, maybe some lamb, aberdeen angus hanger steak, smoked salmon... that kind of vibe. If you’ve got any dietary needs or allergies, just let us know below."}
+        {"A served wedding buffet bursting with choice, think proper flavour from the Texas smoker, think barbecued Scotch leg of lamb, Aberdeen Angus hanger steak, East Neuk salt cured smoked salmon... that kind of vibe. If you’ve got any dietary needs or allergies, just let us know below."}
       </Description>
       <Label>Dietary requirements or allergies:</Label>
       <Textarea
