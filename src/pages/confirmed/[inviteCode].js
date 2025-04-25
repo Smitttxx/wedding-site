@@ -116,13 +116,22 @@ export default function ConfirmedPage() {
               <>
                 <Message>
                   We’re so glad you’ll be joining us to celebrate our big day in the Scottish Highlands!
-                  <br /><br />
-                  We weren’t able to offer on-site accommodation this time, but we’re thrilled you can still join us.
-                  We’ll be in touch with travel details and everything you need to enjoy the weekend.
+                  <p>
+                    There are many lovely places to stay in the nearby towns just a short drive from the venue:
+                    <ul>
+                      <li>
+                       <strong>Kenmore:</strong> approximately <strong>5</strong> minutes by car
+                      </li>
+                      <li>
+                        <strong>Aberfeldy:</strong> approximately <strong>15</strong> minutes by car
+                      </li>
+                    </ul>
+                    <p>
+                    A <strong>guest bus</strong> will run from the venue to both towns
+                    after the wedding at <strong>11:30pm,</strong> so you can relax and enjoy the celebration.
+                    </p>
+                  </p>
                 </Message>
-                <Note>
-                  If a space opens up on-site, we’ll be in touch — but in the meantime, please don’t hesitate to reach out if you need any help finding a place nearby.
-                </Note>
               </>
             ) : (
               <>
@@ -130,11 +139,12 @@ export default function ConfirmedPage() {
                   We’re so glad you’ll be joining us to celebrate our big day in the Scottish Highlands!
                   <br /><br />
                   You’ve let us know you’ll be arranging your own accommodation — thank you!
-                  We’ll keep you posted with travel tips and party updates.
+                    We’ll keep you posted with travel tips and party updates.
+                    <p>
+                    A <strong>guest bus</strong> will run from the venue to both towns
+                    after the wedding at <strong>11:30pm,</strong> so you can relax and enjoy the celebration.
+                    </p>
                 </Message>
-                <Note>
-                  If your plans change and you’d like to stay on-site (if space opens up), just let us know. We’d love to have you nearby!
-                </Note>
               </>
             )
           ) : (
