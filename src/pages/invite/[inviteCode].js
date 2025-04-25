@@ -226,16 +226,7 @@ export default function GuestPage() {
                       <span>
                         Please RSVP for all guests by <strong>June 13th 2025</strong>.
                       </span>
-                    </GoldInfoBox>
-            <RSVPWrapper>
-              {formData.map((guest, i) => (
-                <RSVP key={guest.id} guest={guest} index={i} handleChange={(index, key, val) => {
-                  const updated = [...formData];
-                  updated[index][key] = val;
-                  setFormData(updated);
-                }} />
-              ))}
-            </RSVPWrapper>
+            </GoldInfoBox>
             {party.guests.some(g => g.isChild || g.isBaby) && (
               <GoldInfoBox icon={faChild}>
                 {party.guests.filter(g => g.isChild || g.isBaby).length === 1 ? (
@@ -245,6 +236,15 @@ export default function GuestPage() {
                 )}
               </GoldInfoBox>
             )}
+            <RSVPWrapper>
+              {formData.map((guest, i) => (
+                <RSVP key={guest.id} guest={guest} index={i} handleChange={(index, key, val) => {
+                  const updated = [...formData];
+                  updated[index][key] = val;
+                  setFormData(updated);
+                }} />
+              ))}
+            </RSVPWrapper>
           </Section>
 
           {formData.some(g => g.rsvp === 'Yes') && (

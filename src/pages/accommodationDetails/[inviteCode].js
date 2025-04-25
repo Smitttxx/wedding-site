@@ -226,7 +226,7 @@ export default function AccommodationDetailsPage() {
               Staying on-site means you can enjoy the Friday festivities, get ready with ease, and be just a <strong>minute’s walk</strong> from the venue on the big day.
             </Text>
 
-            <DownloadLink href="/site-map.jpg" download>
+            <DownloadLink href="/new-site-map.png" download>
               🗺️ Download the Site Map
             </DownloadLink>
 
