@@ -126,6 +126,7 @@ export default function ConfirmedPage() {
                         <strong>Aberfeldy:</strong> approximately <strong>15</strong> minutes by car
                       </li>
                     </ul>
+                    <br/>
                     <p>
                     A <strong>guest bus</strong> will run from the venue to both towns
                     after the wedding at <strong>11:30pm,</strong> so you can relax and enjoy the celebration.
@@ -140,8 +141,9 @@ export default function ConfirmedPage() {
                   <br /><br />
                   You’ve let us know you’ll be arranging your own accommodation — thank you!
                     We’ll keep you posted with travel tips and party updates.
+                    <br/>
                     <p>
-                    A <strong>guest bus</strong> will run from the venue to both towns
+                    A <strong>guest bus</strong> will run from the venue to <strong>Aberfeldy and Kenmore</strong>
                     after the wedding at <strong>11:30pm,</strong> so you can relax and enjoy the celebration.
                     </p>
                 </Message>
