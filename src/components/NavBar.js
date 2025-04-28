@@ -2,6 +2,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Link from 'next/link';
 import {
   faHome,
   faGift,
@@ -60,29 +61,16 @@ const NavLinks = styled.div`
   }
 `;
 
-const HomeNavLink = styled.a`
-  color: white;
-  font-weight: 600;
-  font-family: ${props => props.theme.fonts.ui};
-  transition: color 0.2s ease-in-out;
-font-size: 1.2rem;
-text-decoration: none;
-&:hover,
-&:focus {
-  color: ${props => props.theme.colors.accent};
-}
-`
-
-const NavLink = styled.a`
+const StyledLink = styled(Link)`
   color: white;
   font-weight: 600;
   font-family: ${props => props.theme.fonts.ui};
   text-decoration: none;
   position: relative;
   transition: color 0.2s ease-in-out;
-font-size: 1.4rem;
-display: flex;
-gap: 10px; 
+  font-size: 1.4rem;
+  display: flex;
+  gap: 10px; 
   &:hover,
   &:focus {
     color: ${props => props.theme.colors.accent};
@@ -106,16 +94,20 @@ gap: 10px;
   }
 `;
 
+const HomeLink = styled(StyledLink)`
+  font-size: 1.2rem;
+`;
+
 export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <Nav>
-      <HomeNavLink href="/">Our Forever Starts Here</HomeNavLink>
+      <HomeLink href="/">Our Forever Starts Here</HomeLink>
       <NavLinks open={menuOpen}>
-        <NavLink href="/"><FontAwesomeIcon icon={faHome} />Home</NavLink>
-        <NavLink href="/invite"><FontAwesomeIcon icon={faEnvelopeOpenText} />RSVP</NavLink>
-        <NavLink href="/gifts"><FontAwesomeIcon icon={faGift} />Gifts</NavLink>
+        <StyledLink href="/"><FontAwesomeIcon icon={faHome} />Home</StyledLink>
+        <StyledLink href="/invite"><FontAwesomeIcon icon={faEnvelopeOpenText} />RSVP</StyledLink>
+        <StyledLink href="/gifts"><FontAwesomeIcon icon={faGift} />Gifts</StyledLink>
       </NavLinks>
       <MenuToggle onClick={() => setMenuOpen(!menuOpen)}>☰</MenuToggle>
     </Nav>
