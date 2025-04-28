@@ -5,6 +5,10 @@ import {Page} from '@/components/Page';
 import {SectionHeading} from '@/components/Section';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import GiftModal from '../../components/GiftModal';
 
 const Paragraph = styled.p`
   font-size: 1.1rem;
@@ -47,7 +51,6 @@ const GiftDescription = styled.p`
   color: ${props => props.theme.colors.text};
 `;
 
-
 const ButtonLink = styled(Link)`
   display: inline-block;
   margin-top: 2rem;
@@ -68,50 +71,186 @@ const ButtonLink = styled(Link)`
   }
 `;
 
+const FormContainer = styled.div`
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+`;
+
+const FormTitle = styled.h3`
+  text-align: center;
+  color: ${props => props.theme.colors.primary};
+  margin-bottom: 1.5rem;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const Input = styled.input`
+  padding: 0.75rem;
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.borderRadius};
+  font-size: 1rem;
+`;
+
+const TextArea = styled.textarea`
+  padding: 0.75rem;
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.borderRadius};
+  font-size: 1rem;
+  min-height: 100px;
+  resize: vertical;
+`;
+
+const SubmitButton = styled.button`
+  padding: 0.75rem 1.5rem;
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  border: none;
+  border-radius: ${props => props.theme.borderRadius};
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1rem;
+
+  &:hover {
+    background: ${props => props.theme.colors.primaryDark};
+  }
+`;
+
+const gifts = [
+  {
+    id: 'cruise',
+    title: 'Cruise Memories',
+    image: '/cruise.webp',
+    description: 'Help us make waves on our honeymoon cruise — from cocktails at sunset to late-night dance floors.',
+    section: 'TheCruise',
+  },
+  {
+    id: 'garden',
+    title: 'Sully\'s Garden',
+    image: '/garden.jpg',
+    description: 'Our current garden needs a lot of work for it to be safe for Sully. Help us create a magical little garden — a space for running wild, growing veggies, and making mud pies.',
+    section: 'SullysGarden',
+  },
+  {
+    id: 'general',
+    title: 'Other Gifts',
+    image: '/house.jpeg',
+    description: 'Other gifts',
+    section: 'GeneralGifts',
+  },
+];
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 export default function GiftsPage() {
+  const [selectedGift, setSelectedGift] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    message: '',
+    purpose: '',
+    amount: ''
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSelectedGift({
+      id: 'custom',
+      title: 'Custom Gift',
+      ...formData,
+      amount: parseFloat(formData.amount) * 100 // Convert to pence for Stripe
+    });
+  };
+
   return (
     <>
       <NavBar />
       <Layout>
         <Page>
           <SectionHeading>Gifts</SectionHeading>
-          <h1>
-           🚧🚧🚧 PAGE UNDER CONSTRUCTION 🚧🚧🚧 
-          </h1>
           <Paragraph>
-            {"Your presence means the world to us — we’re truly grateful you're joining us for our big weekend."}
+            {"Your presence means the world to us — we're truly grateful you're joining us for our big weekend."}
           </Paragraph>
           <Paragraph>
-            We’re lucky to already have a home (and our dream kitchen!), so instead of traditional gifts, we’d love for you to help us create memories. If you feel moved to gift something, we’ve created a few options below.
+            We're lucky to already have a home (and our dream kitchen!), so instead of traditional gifts, we'd love for you to help us create memories. If you feel moved to gift something, we've created a few options below.
           </Paragraph>
           <GiftCardGrid>
-            <GiftCard>
-              <GiftTitle>Cruise Memories</GiftTitle>
-              <GiftImage src="/cruise.webp" width={220} height={150} alt="Cruise ship" />
-              <GiftDescription>
-                Help us make waves on our honeymoon cruise — from cocktails at sunset to late-night dance floors.
-              </GiftDescription>
-              <ButtonLink href="/gifts/cruise" passHref>Cruise Gifts</ButtonLink>
-            </GiftCard>
-
-            <GiftCard>
-              <GiftTitle>Sully’s Garden</GiftTitle>
-              <GiftImage src="/garden.jpg" width={220} height={150} alt="Garden for Sully" />
-              <GiftDescription>
-                Our current garden needs a lot of work for it to be safe for Sully. Help us create a magical little garden — a space for running wild, growing veggies, and making mud pies.
-              </GiftDescription>
-              <ButtonLink href="/gifts/sullys-garden" passHref>Sully’s Garden Gifts</ButtonLink>
-            </GiftCard>
-
-            <GiftCard>
-              <GiftTitle>Other Gifts</GiftTitle>
-              <GiftImage src="/house.jpeg" width={220} height={150} alt="Other Gifts" />
-              <GiftDescription>
-                Other gifts              </GiftDescription>
-              <ButtonLink href="/gifts/general-gifts" passHref>Other Gifts</ButtonLink>
-            </GiftCard>
+            {gifts.map((gift) => (
+              <GiftCard key={gift.id}>
+                <GiftTitle>{gift.title}</GiftTitle>
+                <GiftImage src={gift.image} width={220} height={150} alt={gift.title} />
+                <GiftDescription>{gift.description}</GiftDescription>
+                <ButtonLink href={`/gifts/${gift.id}`}>
+                  View {gift.title} Gifts
+                </ButtonLink>
+              </GiftCard>
+            ))}
           </GiftCardGrid>
+
+          <FormContainer>
+            <FormTitle>Or Make a Custom Gift</FormTitle>
+            <Form onSubmit={handleSubmit}>
+              <Input
+                type="text"
+                name="name"
+                placeholder="Your Name"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+              />
+              <TextArea
+                name="message"
+                placeholder="Your Message"
+                value={formData.message}
+                onChange={handleInputChange}
+                required
+              />
+              <TextArea
+                name="purpose"
+                placeholder="What would you like us to use this gift for?"
+                value={formData.purpose}
+                onChange={handleInputChange}
+                required
+              />
+              <Input
+                type="number"
+                name="amount"
+                placeholder="Amount (£)"
+                value={formData.amount}
+                onChange={handleInputChange}
+                min="1"
+                step="0.01"
+                required
+              />
+              <SubmitButton type="submit">Continue to Payment</SubmitButton>
+            </Form>
+          </FormContainer>
+
+          {selectedGift && (
+            <Elements stripe={stripePromise}>
+              <GiftModal
+                isOpen={true}
+                onClose={() => setSelectedGift(null)}
+                gift={selectedGift}
+                amount={selectedGift.amount}
+              />
+            </Elements>
+          )}
         </Page>
       </Layout>
     </>

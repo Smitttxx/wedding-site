@@ -1423,10 +1423,10 @@ async function main() {
       {
         section: 'SullysGarden',
         name: 'Decking Boards (Pack of 5)',
-        description: 'Perfect for Sully’s garden play area',
+        description: "Perfect for Sully's garden play area",
         amount: 30,
         quantity: 5,
-        imagePath: "/garden.jpeg"
+        imagePath: "/garden.jpg"
       },
       {
         section: 'SullysGarden',
@@ -1434,7 +1434,7 @@ async function main() {
         description: 'To help us build something beautiful',
         amount: 50,
         quantity: 5,
-        imagePath: "/garden.jpeg"
+        imagePath: "/garden.jpg"
       },
       {
         section: 'SullysGarden',
@@ -1442,7 +1442,7 @@ async function main() {
         description: 'For messy afternoons in the sunshine',
         amount: 40,
         quantity: 1,
-        imagePath: "/garden.jpeg"
+        imagePath: "/garden.jpg"
       },
       {
         section: 'SullysGarden',
@@ -1450,7 +1450,7 @@ async function main() {
         description: 'A comfy place to watch Sully play',
         amount: 120,
         quantity: 3,
-        imagePath: "/garden.jpeg"
+        imagePath: "/garden.jpg"
       },
 
       // Cruise

@@ -86,18 +86,26 @@ model Room {
 }
 
 model Gift {
-  id         Int      @id @default(autoincrement())
-  section    GiftSection
-  name       String
-  description String?
-  amount     Int?
-  quantity   Int?
-  claimed    Int      @default(0)
-  available  Boolean  @default(true)
-  from       String?
-  message    String?
-  imagePath    String?
-  createdAt  DateTime @default(now())
+  id              Int         @id @default(autoincrement())
+  name            String      // Name of the gift
+  description     String      // Description of the gift
+  amount          Int         // Amount in pence
+  quantity        Int?        // Optional quantity available
+  claimed         Int         @default(0) // Number of times this gift has been claimed
+  section         GiftSection // Which section the gift belongs to (garden, cruise, etc.)
+  imagePath       String?     // Optional image path for the gift
+  createdAt       DateTime    @default(now())
+  purchases       GiftPurchase[] // Relation to purchases
+}
+
+model GiftPurchase {
+  id              Int      @id @default(autoincrement())
+  giftId          Int      // Reference to the original gift
+  gift            Gift     @relation(fields: [giftId], references: [id])
+  name            String   // Name of the person giving the gift
+  message         String?  // Optional message from the gifter
+  paymentIntentId String?  // Optional Stripe payment intent ID
+  createdAt       DateTime @default(now())
 }
 
 enum GiftSection {
