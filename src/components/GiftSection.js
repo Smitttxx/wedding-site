@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Image from 'next/image';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -21,6 +22,21 @@ const Card = styled.div`
   font-family: ${props => props.theme.fonts.base};
 `;
 
+const GiftImage = styled(Image)`
+  border-radius: 8px;
+`;
+
+const GiftTitle = styled.h4`
+  margin: 0.75rem 0 0.5rem;
+  font-family: ${props => props.theme.fonts.heading};
+  color: ${props => props.theme.colors.primary};
+`;
+
+const GiftDescription = styled.p`
+  font-size: 0.95rem;
+  color: ${props => props.theme.colors.text};
+`;
+
 const Button = styled.button`
   background: ${props => props.theme.colors.primary};
   color: white;
@@ -31,6 +47,7 @@ const Button = styled.button`
   margin-top: 1rem;
   cursor: pointer;
   font-family: ${props => props.theme.fonts.ui};
+  width: 100%;
 
   &:hover {
     background: ${props => props.theme.colors.primaryDark};
@@ -82,7 +99,7 @@ const Label = styled.label`
   font-family: ${props => props.theme.fonts.ui};
 `;
 
-export default function GiftSection({ gifts, section }) {
+export default function GiftSection({ gifts, section, onGiftClick }) {
   const [formData, setFormData] = useState({
     name: '',
     amount: '',
@@ -125,27 +142,25 @@ export default function GiftSection({ gifts, section }) {
 
           return (
             <Card key={gift.id}>
-              <h4 style={{ fontFamily: 'Cormorant Garamond, serif', color: '#0b3d2e' }}>{gift.name}</h4>
-              <p>{gift.description}</p>
-              {gift.amount && <p><strong>£{gift.amount}</strong></p>}
-              {gift.quantity && (
-                <p>
-                  {remaining} of {gift.quantity} available
-                </p>
+              <GiftTitle>{gift.name}</GiftTitle>
+              {gift.imagePath && (
+                <GiftImage 
+                  src={gift.imagePath} 
+                  width={220} 
+                  height={150} 
+                  alt={gift.name} 
+                />
               )}
-              {!soldOut && (
-                <ClaimForm onSubmit={(e) => { e.preventDefault(); handleGiftClaim(gift.id); }}>
-                  <Input
-                    type="text"
-                    placeholder="Your invite code"
-                    value={inviteCode}
-                    onChange={(e) => setInviteCode(e.target.value)}
-                    required
-                  />
-                  <Button type="submit">Gift this</Button>
-                </ClaimForm>
+              <GiftDescription>{gift.description}</GiftDescription>
+              {remaining !== null && (
+                <p>Remaining: {remaining} of {gift.quantity}</p>
               )}
-              {soldOut && <Button disabled>Already gifted</Button>}
+              <Button 
+                onClick={() => onGiftClick(gift)}
+                disabled={soldOut}
+              >
+                {soldOut ? 'Sold Out' : `Gift £${(gift.amount / 100).toFixed(2)}`}
+              </Button>
             </Card>
           );
         })}
