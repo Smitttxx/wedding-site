@@ -7,7 +7,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 import GiftModal from '../../components/GiftModal';
 
 const Paragraph = styled.p`
@@ -124,6 +126,27 @@ const SubmitButton = styled.button`
   }
 `;
 
+const Label = styled.label`
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+`;
+
+const StyledCardElement = styled(CardElement)`
+  padding: 0.75rem;
+  border: 1px solid ${props => props.theme.colors.accent};
+  border-radius: ${props => props.theme.borderRadius};
+  background-color: #fff;
+  font-size: 1rem;
+  color: ${props => props.theme.colors.text};
+  transition: border 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: ${props => props.theme.colors.primary};
+  }
+`;
+
 const gifts = [
   {
     id: 'cruise',
@@ -150,14 +173,18 @@ const gifts = [
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
-export default function GiftsPage() {
-  const [selectedGift, setSelectedGift] = useState(null);
+function CustomGiftForm({ onClose }) {
   const [formData, setFormData] = useState({
     name: '',
     message: '',
-    purpose: '',
     amount: ''
   });
+  const [postcode, setPostcode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState(null);
+  const stripe = useStripe();
+  const elements = useElements();
+  const router = useRouter();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -169,13 +196,122 @@ export default function GiftsPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSelectedGift({
-      id: 'custom',
-      title: 'Custom Gift',
-      ...formData,
-      amount: parseFloat(formData.amount) * 100 // Convert to pence for Stripe
-    });
+    if (!stripe || !elements) return;
+    setLoading(true);
+
+    try {
+      // Create payment intent
+      const response = await axios.post('/api/create-gift-payment-intent', {
+        amount: parseFloat(formData.amount) * 100,
+        giftId: 'custom'
+      });
+
+      const result = await stripe.confirmCardPayment(response.data.clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+          billing_details: {
+            address: {
+              postal_code: postcode,
+            },
+          },
+        },
+      });
+
+      if (result.error) {
+        console.error('Payment failed:', result.error);
+      } else if (result.paymentIntent.status === 'succeeded') {
+        // First create the custom gift
+        const giftResponse = await axios.post('/api/create-custom-gift', {
+          name: 'Custom Gift',
+          description: formData.message,
+          amount: parseFloat(formData.amount) * 100,
+          section: 'GeneralGifts'
+        });
+
+        // Then save the purchase with the new gift ID
+        await axios.post('/api/save-gift', {
+          name: formData.name,
+          message: formData.message,
+          giftId: giftResponse.data.id,
+          amount: parseFloat(formData.amount) * 100,
+          paymentIntentId: result.paymentIntent.id,
+        });
+        router.push('/gifts/thank-you');
+      }
+    } catch (error) {
+      console.error('Error processing payment:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  return (
+    <FormContainer>
+      <FormTitle>Make a Custom Gift</FormTitle>
+      <Form onSubmit={handleSubmit}>
+        <Input
+          type="text"
+          name="name"
+          placeholder="Your Name"
+          value={formData.name}
+          onChange={handleInputChange}
+          required
+        />
+        <TextArea
+          name="message"
+          placeholder="What would you like us to use this gift for?"
+          value={formData.message}
+          onChange={handleInputChange}
+          required
+        />
+        <Input
+          type="number"
+          name="amount"
+          placeholder="Amount (£)"
+          value={formData.amount}
+          onChange={handleInputChange}
+          min="1"
+          step="0.01"
+          required
+        />
+        <div>
+          <Label htmlFor="card-element">Card Details:</Label>
+          <StyledCardElement
+            id="card-element"
+            options={{
+              hidePostalCode: true,
+              style: {
+                base: {
+                  fontSize: '16px',
+                  color: '#000',
+                  '::placeholder': {
+                    color: '#aab7c4',
+                  },
+                },
+              },
+            }}
+          />
+        </div>
+        <div>
+          <Label htmlFor="postcode">Billing Postcode:</Label>
+          <Input
+            id="postcode"
+            value={postcode}
+            onChange={(e) => setPostcode(e.target.value)}
+            placeholder="e.g. PH15 2PG"
+            required
+          />
+        </div>
+        <SubmitButton type="submit" disabled={!stripe || loading}>
+          {loading ? 'Processing...' : `Gift £${formData.amount || '0.00'}`}
+        </SubmitButton>
+      </Form>
+    </FormContainer>
+  );
+}
+
+export default function GiftsPage() {
+  const [selectedGift, setSelectedGift] = useState(null);
 
   return (
     <>
@@ -202,44 +338,9 @@ export default function GiftsPage() {
             ))}
           </GiftCardGrid>
 
-          <FormContainer>
-            <FormTitle>Or Make a Custom Gift</FormTitle>
-            <Form onSubmit={handleSubmit}>
-              <Input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-              <TextArea
-                name="message"
-                placeholder="Your Message"
-                value={formData.message}
-                onChange={handleInputChange}
-                required
-              />
-              <TextArea
-                name="purpose"
-                placeholder="What would you like us to use this gift for?"
-                value={formData.purpose}
-                onChange={handleInputChange}
-                required
-              />
-              <Input
-                type="number"
-                name="amount"
-                placeholder="Amount (£)"
-                value={formData.amount}
-                onChange={handleInputChange}
-                min="1"
-                step="0.01"
-                required
-              />
-              <SubmitButton type="submit">Continue to Payment</SubmitButton>
-            </Form>
-          </FormContainer>
+          <Elements stripe={stripePromise}>
+            <CustomGiftForm />
+          </Elements>
 
           {selectedGift && (
             <Elements stripe={stripePromise}>
