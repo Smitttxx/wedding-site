@@ -28,12 +28,11 @@ export default function DynamicGiftSectionPage() {
         const enumSection =
           section === 'garden' ? 'SullysGarden' :
           section === 'cruise' ? 'TheCruise' :
-          section === 'general' ? 'GeneralGifts' :
-          '';
+          null;
     
-        const filtered = res.data.filter(gift =>
-          gift.section === enumSection
-        );  
+        const filtered = enumSection
+          ? res.data.filter(gift => gift.section === enumSection)
+          : [];
         setGifts(filtered);
         setLoading(false);
       });
@@ -47,6 +46,8 @@ export default function DynamicGiftSectionPage() {
     ? 'Cruise Memories'
     : 'Gifts';
 
+  const isSupportedSection = section === 'garden' || section === 'cruise';
+
   return (
     <>
       <NavBar />
@@ -54,31 +55,36 @@ export default function DynamicGiftSectionPage() {
         <Page>
           <SectionHeading>{readableTitle}</SectionHeading>
           {loading ? <p>Loading gifts...</p> : (
-            <>
-              <GiftSection 
-                gifts={gifts} 
-                section={section} 
-                onGiftClick={setSelectedGift}
-              />
-              {selectedGift && (
-                <Elements 
-                  stripe={stripePromise}
-                  options={{
-                    clientSecret: selectedGift.clientSecret,
-                    appearance: {
-                      theme: 'stripe',
-                    },
-                  }}
-                >
-                  <GiftModal
-                    isOpen={!!selectedGift}
-                    onClose={() => setSelectedGift(null)}
-                    gift={selectedGift}
-                    amount={selectedGift.amount}
-                  />
-                </Elements>
-              )}
-            </>
+            isSupportedSection ? (
+              <>
+                <GiftSection 
+                  gifts={gifts} 
+                  section={section} 
+                  onGiftClick={setSelectedGift}
+                />
+                {selectedGift && (
+                  <Elements 
+                    stripe={stripePromise}
+                    options={{
+                      clientSecret: selectedGift.clientSecret,
+                      appearance: {
+                        theme: 'stripe',
+                      },
+                    }}
+                  >
+                    <GiftModal
+                      isOpen={!!selectedGift}
+                      onClose={() => setSelectedGift(null)}
+                      gift={selectedGift}
+                      amount={selectedGift.amount}
+                      clientSecret={selectedGift.clientSecret}
+                    />
+                  </Elements>
+                )}
+              </>
+            ) : (
+              <p style={{textAlign: 'center', marginTop: '2rem'}}>This gift section is not available.</p>
+            )
           )}
         </Page>
       </Layout>

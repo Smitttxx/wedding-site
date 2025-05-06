@@ -106,7 +106,7 @@ const Button = styled.button`
   }
 `;
 
-export default function GiftModal({ isOpen, onClose, gift, amount }) {
+export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret }) {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
   const [postcode, setPostcode] = useState('');
@@ -114,6 +114,9 @@ export default function GiftModal({ isOpen, onClose, gift, amount }) {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
+
+  console.log('clientSecret:', clientSecret);
+  console.log('gift:', gift);
 
   if (!isOpen) return null;
 
@@ -159,7 +162,13 @@ export default function GiftModal({ isOpen, onClose, gift, amount }) {
     <ModalOverlay>
       <ModalContent>
         <CloseButton onClick={onClose}>×</CloseButton>
-        <h2>Gift {gift.title}</h2>
+        <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
+          <h2 style={{ margin: '0.5rem 0 0.25rem' }}>{gift.name}</h2>
+          <p style={{ color: '#666', fontSize: '1rem', margin: 0 }}>{gift.description}</p>
+          <div style={{ fontWeight: 'bold', color: '#bfa14e', marginTop: 8 }}>
+            Gift Amount: £{(amount / 100).toFixed(2)}
+          </div>
+        </div>
         <Form onSubmit={handleSubmit}>
           <div>
             <Label htmlFor="name">Your Name:</Label>

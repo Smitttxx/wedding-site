@@ -194,7 +194,7 @@ async function main() {
       partyName: 'Sonny & Becca',
       token: 'sonnyAndBecca',
       guestType: 'OnSite',
-      inviteCode: 'oh7k',
+      inviteCode: '7h7k',
       accommodationCost: 30000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -252,7 +252,7 @@ async function main() {
       partyName: 'Tom & Toni',
       token: 'tomAndToni',
       guestType: 'OnSite',
-      inviteCode: '8fg0',
+      inviteCode: '8fg9',
       accommodationCost: 22000,
       cabin: {
         connect: { id: farmhouse.id }
@@ -346,7 +346,7 @@ async function main() {
       partyName: 'Sean & Kim',
       token: 'seanAndKim',
       guestType: 'OnSite',
-      inviteCode: '0gh3',
+      inviteCode: 'ygh3',
       accommodationCost: 26000,
       cabin: {
         connect: { id: longhouse.id }
@@ -370,10 +370,10 @@ async function main() {
     }
   });
 
-  const maddie = await prisma.GuestParty.create({
+  const madeline = await prisma.GuestParty.create({
     data: {
-      partyName: 'Maddie',
-      token: 'maddie',
+      partyName: 'Madeline',
+      token: 'madeline',
       guestType: 'OnSite',
       inviteCode: '5msi',
       accommodationCost: 11000,
@@ -631,7 +631,7 @@ async function main() {
       partyName: 'Lee & Ally',
       token: 'leeAndAlly',
       guestType: 'OnSite',
-      inviteCode: '9i4o',
+      inviteCode: '9i46',
       accommodationCost: 26000,
       cabin: {
         connect: { id: longhouse.id }
@@ -814,7 +814,7 @@ async function main() {
       partyName: 'Tom',
       token: 'tom',
       guestType: 'OnSite',
-      inviteCode: 'c90l',
+      inviteCode: 'c9hl',
       accommodationCost: 11000,
       cabin: {
         connect: { id: benCruachan.id }
@@ -866,7 +866,7 @@ async function main() {
       partyName: 'Eddie & Maureen',
       token: 'eddieAndMaureen',
       guestType: 'OnSite',
-      inviteCode: 'zv60',
+      inviteCode: 'zv6q',
       accommodationCost: 30000,
       cabin: {
         connect: { id: schiehallion.id }
@@ -895,7 +895,7 @@ async function main() {
       partyName: 'Kevin & Lynn',
       token: 'kevinAndLynn',
       guestType: 'AccommodationNotOffered',
-      inviteCode: '0ba3',
+      inviteCode: '7ba3',
       guests: {
         create: [
           {
@@ -1005,7 +1005,7 @@ async function main() {
       partyName: 'Ross & Nicci',
       token: 'rossAndNicci',
       guestType: 'OnSite',
-      inviteCode: 'b0pl',
+      inviteCode: 'b8pl',
       accommodationCost: 30000,
       cabin: {
         connect: { id: benDrummond.id }
@@ -1128,7 +1128,7 @@ async function main() {
       partyName: 'William & Shona',
       token: 'williamAndShona',
       guestType: 'OnSite',
-      inviteCode: '0pag',
+      inviteCode: '9pag',
       accommodationCost: 30000,
       cabin: {
         connect: { id: benLawers.id }
@@ -1323,6 +1323,11 @@ async function main() {
           {
             firstName: 'Tabitha',
             lastName: 'Russell',
+          },
+          {
+            firstName: 'Hermione',
+            lastName: '',
+            isChild: true,
           },
         ]
       }
@@ -1537,80 +1542,186 @@ async function main() {
   await prisma.gift.createMany({
     data: [
       // Sully's Garden
-      {
-        section: 'SullysGarden',
-        name: 'Decking Boards (Pack of 5)',
-        description: "Perfect for Sully's garden play area",
-        amount: 30,
-        quantity: 5,
-        imagePath: "/garden.jpg"
-      },
-      {
-        section: 'SullysGarden',
-        name: '£50 B&Q Voucher',
-        description: 'To help us build something beautiful',
-        amount: 50,
-        quantity: 5,
-        imagePath: "/garden.jpg"
-      },
-      {
-        section: 'SullysGarden',
-        name: 'Sandpit Set',
-        description: 'For messy afternoons in the sunshine',
-        amount: 40,
-        quantity: 1,
-        imagePath: "/garden.jpg"
-      },
-      {
-        section: 'SullysGarden',
-        name: 'Garden Furniture',
-        description: 'A comfy place to watch Sully play',
-        amount: 120,
-        quantity: 3,
-        imagePath: "/garden.jpg"
-      },
-
+        {
+          "section": "SullysGarden",
+          "name": "Decking Boards (Pack of 5)",
+          "description": "To build a safe play space for Sully’s adventures",
+          "amount": 30,
+          "quantity": 5,
+          "imagePath": "/decking.avif"
+        },
+        {
+          "section": "SullysGarden",
+          "name": "£50 B&Q Voucher",
+          "description": "To help us build something beautiful",
+          "amount": 50,
+          "quantity": 10,
+          "imagePath": "/BQ_CaseStudy2.1-01.jpg"
+        },
+        {
+          "section": "SullysGarden",
+          "name": "Sandpit Set",
+          "description": "For messy afternoons in the sunshine",
+          "amount": 40,
+          "quantity": 1,
+          "imagePath": "/istockphoto-123493359-612x612.jpg"
+        },
+        {
+          "section": "SullysGarden",
+          "name": "Garden Furniture Set",
+          "description": "A comfy place to relax while Sully plays",
+          "amount": 120,
+          "quantity": 3,
+          "imagePath": "/istockphoto-1226810755-612x612.jpg"
+        },
+        {
+          "section": "SullysGarden",
+          "name": "Outdoor Storage Box",
+          "description": "Keep toys and tools safe and tidy",
+          "amount": 60,
+          "quantity": 1,
+          "imagePath": "/download.jpeg"
+        },
+        {
+          "section": "SullysGarden",
+          "name": "Flower & Veggie Planter Boxes",
+          "description": "Let’s grow something together!",
+          "amount": 25,
+          "quantity": 4,
+          "imagePath": "/download (1).jpeg"
+        },
+        {
+          "section": "SullysGarden",
+          "name": "Child-Safe Garden Tools",
+          "description": "Little tools for little green thumbs",
+          "amount": 20,
+          "quantity": 1,
+          "imagePath": "/download (2).jpeg"
+        },
+        {
+          "section": "SullysGarden",
+          "name": "Outdoor Solar Lights (Set)",
+          "description": "Magical evenings in Sully’s garden",
+          "amount": 35,
+          "quantity": 2,
+          "imagePath": "/shopping.webp"
+        },
+        {
+          "section": "SullysGarden",
+          "name": "Mini Climbing Frame",
+          "description": "Burning off energy the fun way",
+          "amount": 150,
+          "quantity": 1,
+          "imagePath": "/download (3).jpeg"
+        },
+        {
+          "section": "SullysGarden",
+          "name": "Picnic Bench for Kids",
+          "description": "Snack time in the sun!",
+          "amount": 45,
+          "quantity": 1,
+          "imagePath": "/208080_main_childrens-picnic-table.jpg"
+        },
+    
+    
       // Cruise
-      {
-        section: 'TheCruise',
-        name: 'Excursion: Bruges Canal Tour',
-        description: 'A scenic boat ride through Bruges',
-        amount: 35,
-        quantity: 1,
-        imagePath: "/cruise.webp"
+    
+        {
+          "section": "TheCruise",
+          "name": "Gunbae Korean BBQ Experience",
+          "description": "An interactive Korean BBQ dinner with drinking games and communal seating.",
+          "amount": 60,
+          "quantity": 2,
+          "imagePath": "/Gunbae-1104x438.avif"
+        },
+        {
+          "section": "TheCruise",
+          "name": "Pink Agave Mexican Dinner",
+          "description": "A vibrant Mexican dining experience featuring dishes like Cochinita Pibil.",
+          "amount": 55,
+          "quantity": 2,
+          "imagePath": "/Pink-Agave-1104x438.avif"
       },
       {
-        section: 'TheCruise',
-        name: 'Onboard Couples Massage',
-        description: 'A relaxing treat at sea',
-        amount: 90,
-        quantity: 1,
-        imagePath: "/cruise.webp"
-      },
-      {
-        section: 'TheCruise',
-        name: 'Specialty Dining Night',
-        description: 'Dinner with ocean views',
-        amount: 60,
-        quantity: 3,
-        imagePath: "/cruise.webp"
-      },
-      {
-        section: 'GeneralGifts',
-        name: "Wendego",
-        description: "",
-        amount: 60000,
-        quantity: 1,
-        imagePath: "/house.jpeg"
-      },
-      {
-        section: 'GeneralGifts',
-        name: 'Hoover',
-        description: 'Cleaning',
-        amount: 200,
-        quantity: 1,
-        imagePath: "/house.jpeg"
-      }
+        "section": "TheCruise",
+        "name": "The Wake Steak & Seafood Experience",
+        "description": "An elegant dining experience at The Wake, Virgin Voyages' upscale steak and seafood restaurant, offering panoramic ocean views and a refined menu.",
+        "amount": 70,
+        "quantity": 2,
+        "imagePath": "/The-Wake-1104x438.avif"
+      },      
+        {
+          "section": "TheCruise",
+          "name": "Test Kitchen Experimental Tasting Menu",
+          "description": "A multi-course, experimental dining adventure for the culinary curious.",
+          "amount": 70,
+          "quantity": 2,
+          "imagePath": "/Test-Kitchen-1104x438.avif"
+        },
+        {
+          "section": "TheCruise",
+          "name": "£40 Bar Tab",
+          "description": "Prepaid drink credit with a $25 bonus, totaling $225 for onboard beverages.",
+          "amount": 160,
+          "quantity": 2,
+          "imagePath": "/virgin-bar-tab.avif"
+        },
+        {
+          "section": "TheCruise",
+          "name": "£100 Bar Tab",
+          "description": "Prepaid drink credit with a $100 bonus, totaling $600 for onboard beverages.",
+          "amount": 400,
+          "quantity": 1,
+          "imagePath": "/virgin-bar-tab.avif"
+        },
+        {
+          "section": "TheCruise",
+          "name": "Santorini Sunset Cruise",
+          "description": "An evening boat tour to witness the iconic Santorini sunset.",
+          "amount": 65,
+          "quantity": 2,
+          "imagePath": "/santorini-sunset.jpg"
+        },
+        {
+          "section": "TheCruise",
+          "name": "Bodrum Turkish Bath Experience",
+          "description": "Traditional Hammam spa experience in Bodrum.",
+          "amount": 50,
+          "quantity": 2,
+          "imagePath": "/bodrum-spa.jpg"
+        },
+        {
+          "section": "TheCruise",
+          "name": "Mykonos Beach Club Day",
+          "description": "Relaxing day at a renowned Mykonos beach club with sunbeds and cocktails.",
+          "amount": 70,
+          "quantity": 2,
+          "imagePath": "/mykanos-bech.jpg"
+        },
+        {
+          "section": "TheCruise",
+          "name": "Dubrovnik Old Town Walking Tour",
+          "description": "Guided tour through the historic streets of Dubrovnik's Old Town.",
+          "amount": 40,
+          "quantity": 2,
+          "imagePath": "/dubrovnik.jpg"
+        },
+        {
+          "section": "TheCruise",
+          "name": "Kotor Bay Boat Tour",
+          "description": "Scenic boat ride exploring the stunning Bay of Kotor.",
+          "amount": 55,
+          "quantity": 2,
+          "imagePath": "/kotor-bay-boat-tour-10.webp"
+        },
+        {
+          "section": "TheCruise",
+          "name": "Corfu Olive Oil Tasting",
+          "description": "Visit to a local olive oil farm with tastings and insights into production.",
+          "amount": 35,
+          "quantity": 2,
+          "imagePath": "/olive-oil.jpg"
+        }
     ]
   });
 
