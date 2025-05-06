@@ -1586,9 +1586,9 @@ async function main() {
       // Sully's Garden
         {
           "section": "SullysGarden",
-          "name": "Decking Boards (Pack of 5)",
+          "name": "Decking Boards (Pack of 4)",
           "description": "To build a safe play space for Sully's adventures",
-          "amount": 3000,
+          "amount": 6875,
           "quantity": 5,
           "imagePath": "/decking.avif"
         },
@@ -1642,7 +1642,7 @@ async function main() {
         },
         {
           "section": "SullysGarden",
-          "name": "Outdoor Solar Lights (Set)",
+          "name": "Outdoor Solar Lights",
           "description": "Magical evenings in Sully's garden",
           "amount": 3500,
           "quantity": 2,
@@ -1702,25 +1702,25 @@ async function main() {
         },
         {
           "section": "TheCruise",
-          "name": "£40 Bar Tab",
-          "description": "Prepaid drink credit with a $25 bonus, totaling $225 for onboard beverages.",
+          "name": "£50 Bar Tab",
+          "description": "Prepaid £50 Bar Tab , used for onboard beverages.",
           "amount": 4000,
-          "quantity": 2,
+          "quantity": 5,
           "imagePath": "/virgin-bar-tab.avif"
         },
         {
           "section": "TheCruise",
           "name": "£100 Bar Tab",
-          "description": "Prepaid drink credit with a $100 bonus, totaling $600 for onboard beverages.",
+          "description": "Prepaid £125 Bar Tab, which includes a £25 bonus on our sailing",
           "amount": 10000,
-          "quantity": 1,
+          "quantity": 3,
           "imagePath": "/virgin-bar-tab.avif"
         },
         {
           "section": "TheCruise",
           "name": "Santorini Sunset Cruise",
           "description": "An evening boat tour to witness the iconic Santorini sunset.",
-          "amount": 6500,
+          "amount": 8500,
           "quantity": 2,
           "imagePath": "/santorini-sunset.jpg"
         },
