@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faChampagneGlasses, faRing ,faUtensils, faMusic, faCamera, faCakeCandles,faMartiniGlassCitrus, faBus, faUsers, faWhiskeyGlass, faIceCream, faHamburger, faComments } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faChampagneGlasses, faRing ,faUtensils, faMusic, faCamera, faCakeCandles,faMartiniGlassCitrus, faBus, faUsers, faWhiskeyGlass, faIceCream, faHamburger, faComments, faHouse } from '@fortawesome/free-solid-svg-icons';
 const TimelineWrapper = styled.div`
   background: rgba(255, 255, 255, 0.85);
   padding: 1.25rem;
@@ -36,7 +36,7 @@ const TimelineItem = styled.div`
   gap: 1rem;
   font-size: 1rem;
   flex-direction: row;
-
+  align-items: flex-end;
   &::before {
     display: none;
   }
@@ -205,6 +205,15 @@ export default function WeddingTimeline() {
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faBus} />
+          <Time>11:30</Time>
+        </IconWrapper>
+        <TextBlock>
+          <Label>Bus departs for local towns</Label>
+        </TextBlock>
+      </TimelineItem>
+      <TimelineItem>
+        <IconWrapper>
+          <FontAwesomeIcon icon={faHouse} />
           <Time>00:00</Time>
         </IconWrapper>
         <TextBlock>

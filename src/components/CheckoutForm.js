@@ -5,35 +5,58 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
 const Form = styled.form`
-  padding: 0.5em;
-  background: ${({ theme }) => theme.colors.background};
+  padding: 2.5rem;
   border-radius: ${({ theme }) => theme.borderRadius};
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    0 4px 12px rgba(191, 161, 78, 0.15),
+    0 0 0 1px ${({ theme }) => theme.colors.accent},
+    0 0 0 4px ${({ theme }) => theme.colors.lightAccent};
   max-width: 450px;
   margin: 2rem auto;
   color: ${({ theme }) => theme.colors.text};
   font-family: ${({ theme }) => theme.fonts.base};
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, ${({ theme }) => theme.colors.accent}, ${({ theme }) => theme.colors.lightAccent});
+    border-radius: ${({ theme }) => theme.borderRadius};
+    z-index: -1;
+    opacity: 0.5;
+  }
 `;
 
 const Label = styled.label`
   font-weight: bold;
   display: block;
   margin-bottom: 0.5rem;
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.primary};
+  font-family: ${({ theme }) => theme.fonts.ui};
+  font-size: 1.1rem;
+  text-shadow: 1px 1px 2px rgba(191, 161, 78, 0.1);
 `;
 
 const StyledCardElement = styled(CardElement)`
   padding: 0.75rem;
   border: 1px solid ${({ theme }) => theme.colors.accent};
   border-radius: ${({ theme }) => theme.borderRadius};
-  background-color: #fff;
+  background-color: white;
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.text};
-  transition: border 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(191, 161, 78, 0.1);
 
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 
+      0 0 0 2px rgba(191, 161, 78, 0.1),
+      inset 0 1px 3px rgba(191, 161, 78, 0.1);
   }
 `;
 
@@ -47,16 +70,20 @@ const Button = styled.button`
   font-weight: bold;
   cursor: pointer;
   width: 100%;
-  font-size: 1rem;
-  transition: background 0.3s ease;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: ${({ theme }) => theme.colors.primaryDark};
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(191, 161, 78, 0.2);
   }
 
   &:disabled {
-    background: #ccc;
+    background: ${({ theme }) => theme.colors.lightError};
+    color: ${({ theme }) => theme.colors.error};
     cursor: not-allowed;
+    opacity: 0.7;
   }
 `;
 
@@ -67,6 +94,22 @@ const Input = styled.input`
   margin-top: 0.5rem;
   width: 100%;
   font-size: 1rem;
+  background: white;
+  box-shadow: inset 0 1px 3px rgba(191, 161, 78, 0.1);
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 
+      0 0 0 2px rgba(191, 161, 78, 0.1),
+      inset 0 1px 3px rgba(191, 161, 78, 0.1);
+  }
+
+  &:disabled {
+    background: ${({ theme }) => theme.colors.background};
+    cursor: not-allowed;
+  }
 `;
 
 export default function CheckoutForm({ partyId, clientSecret, amount, inviteCode }) {
@@ -104,36 +147,36 @@ export default function CheckoutForm({ partyId, clientSecret, amount, inviteCode
 
   return (
     <Form onSubmit={handleSubmit}>
-    <Label htmlFor="card-element">Card Details:</Label>
-    <StyledCardElement
-  id="card-element"
-  options={{
-    hidePostalCode: true, // hide Stripe's ZIP field
-    style: {
-      base: {
-        fontSize: '16px',
-        color: '#000',
-        '::placeholder': {
-          color: '#aab7c4',
-        },
-      },
-    },
-  }}
-/>
-  <br/>
-    <Label htmlFor="postcode">Billing Postcode:</Label>
-    <Input
-      id="postcode"
-      name="postcode"
-      value={postcode}
-      onChange={(e) => setPostcode(e.target.value)}
-      placeholder="e.g. PH15 2PG"
-      required
-    />
+      <Label htmlFor="card-element">Card Details:</Label>
+      <StyledCardElement
+        id="card-element"
+        options={{
+          hidePostalCode: true,
+          style: {
+            base: {
+              fontSize: '16px',
+              color: '#000',
+              '::placeholder': {
+                color: '#aab7c4',
+              },
+            },
+          },
+        }}
+      />
+      <br/>
+      <Label htmlFor="postcode">Billing Postcode:</Label>
+      <Input
+        id="postcode"
+        name="postcode"
+        value={postcode}
+        onChange={(e) => setPostcode(e.target.value)}
+        placeholder="e.g. PH15 2PG"
+        required
+      />
 
-    <Button type="submit" disabled={!stripe || loading}>
-      {loading ? 'Processing...' : `Pay £${(amount / 100).toFixed(2)}`}
-    </Button>
-  </Form>
+      <Button type="submit" disabled={!stripe || loading}>
+        {loading ? 'Processing...' : `Pay £${(amount / 100).toFixed(2)}`}
+      </Button>
+    </Form>
   );
 }

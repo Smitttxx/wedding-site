@@ -26,7 +26,8 @@ import {
   faMoneyBillWave,
   faBus,
   faBath,
-  faMugHot
+  faMugHot,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 import AccommodationConfirmationToggle from "@/components/AccommodationConfirmationToggle";
 import LoadingIndicator from "@/components/LoadingOverlay";
@@ -121,21 +122,26 @@ export default function AccommodationDetailsPage() {
   const [party, setParty] = useState(null);
   const [error, setError] = useState(false);
   const [confirmed, setConfirmed] = useState(null);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
   const theme = useTheme();
-  const [needsBus, setNeedsBus] = useState(null)
+  const [needsBus, setNeedsBus] = useState(null);
 
   useEffect(() => {
-    setIsLoading(true)
     const fetchData = async () => {
-      const res = await axios.get(`/api/invite/${inviteCode}`);
-      setParty(res.data);
-      setIsLoading(false)
+      try {
+        setIsLoading(true);
+        const res = await axios.get(`/api/invite/${inviteCode}`);
+        setParty(res.data);
 
-      if (res.data.guestType === 'OtherAccommodation' || res.data.guestType === 'AccommodationNotOffered') {
-        router.push(`/invite/${inviteCode}`);
+        if (res.data.guestType === 'OtherAccommodation' || res.data.guestType === 'AccommodationNotOffered') {
+          router.push(`/invite/${inviteCode}`);
+        }
+      } catch (err) {
+        console.error('Error fetching party:', err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
-
     };
 
     if (inviteCode) fetchData();
@@ -156,7 +162,43 @@ export default function AccommodationDetailsPage() {
     router.push(`/payment/${inviteCode}`);
   };
 
-  if (!party) return null;
+  if (isLoading) {
+    return (
+      <Fragment>
+        <NavBar />
+        <Layout>
+          <Page>
+            <LoadingIndicator 
+              title="🏠 Loading..."
+              subtitle="Getting your accommodation details ready"
+              fullPage={true}
+            />
+          </Page>
+        </Layout>
+      </Fragment>
+    );
+  }
+
+  if (error || !party) {
+    return (
+      <Fragment>
+        <NavBar />
+        <Layout>
+          <Page>
+            <Section>
+              <SectionHeading>Error</SectionHeading>
+              <GoldInfoBox icon={faTimesCircle}>
+                We couldn't find your accommodation details. Please try again or contact us for help.
+              </GoldInfoBox>
+              <Button onClick={() => router.push('/')}>
+                Return to Home
+              </Button>
+            </Section>
+          </Page>
+        </Layout>
+      </Fragment>
+    );
+  }
 
   const yourRooms = Array.from(new Set(
     party.guests.map(g => g.room?.name).filter(Boolean)
@@ -170,19 +212,6 @@ export default function AccommodationDetailsPage() {
 
   const cost = (party.accommodationCost / 100).toFixed(2);
 
-  if (!party || isLoading) {
-    return (
-      <Fragment>
-        <NavBar />
-        <Layout>
-          <Page>
-            <LoadingIndicator />
-          </Page>
-        </Layout>
-      </Fragment>
-    );
-  }
-
   return (
     <Fragment>
       <NavBar />
@@ -190,7 +219,7 @@ export default function AccommodationDetailsPage() {
         <Page>
           <PartyHeader party={party} />
           <Text><strong>Thanks for RSVPing{party.paid && " and paying for your accommodation!"}</strong><br />
-              We’re so glad you can make it and can’t wait to celebrate with you.
+              We're so glad you can make it and can't wait to celebrate with you.
             </Text>
           {
             party.paid &&
@@ -215,7 +244,7 @@ export default function AccommodationDetailsPage() {
               <br />
               <br />
               <FontAwesomeIcon icon={faMugHot} /> {" "}
-              <strong>Don’t rush off!</strong> Pastries and coffee will be served in the barn until <strong>12pm</strong> after check-out. Swing by for a tasty send-off!
+              <strong>Don't rush off!</strong> Pastries and coffee will be served in the barn until <strong>12pm</strong> after check-out. Swing by for a tasty send-off!
             </InfoBlock>
 
             <Text>
@@ -223,7 +252,7 @@ export default function AccommodationDetailsPage() {
             </Text>
 
             <Text>
-              Staying on-site means you can enjoy the Friday festivities, get ready with ease, and be just a <strong>minute’s walk</strong> from the venue on the big day.
+              Staying on-site means you can enjoy the Friday festivities, get ready with ease, and be just a <strong>minute's walk</strong> from the venue on the big day.
             </Text>
 
             <DownloadLink href="/new-site-map.png" download>
@@ -294,7 +323,7 @@ export default function AccommodationDetailsPage() {
                           <br/>
                         {hasBaby && (
                           <GoldInfoBox icon={faBaby}>
-                            We’re excited to welcome your little one! Please note, travel cots aren’t provided — feel free to bring your own.
+                            We're excited to welcome your little one! Please note, travel cots aren't provided — feel free to bring your own.
                           </GoldInfoBox>
                         )}
                       </>
@@ -359,7 +388,7 @@ export default function AccommodationDetailsPage() {
                 ) : (
                   <>
                     <FontAwesomeIcon icon={faBus} style={{marginRight: '0.5rem'}} />
-                    Confirm You’re Staying Offsite
+                    Confirm You're Staying Offsite
                   </>
                 )}
               </Button>

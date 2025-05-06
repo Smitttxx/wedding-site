@@ -111,28 +111,9 @@ export default function GiftModal({ isOpen, onClose, gift, amount }) {
   const [message, setMessage] = useState('');
   const [postcode, setPostcode] = useState('');
   const [loading, setLoading] = useState(false);
-  const [clientSecret, setClientSecret] = useState(null);
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
-
-  // Create payment intent when modal opens
-  useEffect(() => {
-    if (isOpen && !clientSecret) {
-      const createPaymentIntent = async () => {
-        try {
-          const response = await axios.post('/api/create-gift-payment-intent', {
-            amount,
-            giftId: gift.id,
-          });
-          setClientSecret(response.data.clientSecret);
-        } catch (error) {
-          console.error('Error creating payment intent:', error);
-        }
-      };
-      createPaymentIntent();
-    }
-  }, [isOpen, gift, amount, clientSecret]);
 
   if (!isOpen) return null;
 

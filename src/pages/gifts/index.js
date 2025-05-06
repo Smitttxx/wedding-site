@@ -76,53 +76,97 @@ const ButtonLink = styled(Link)`
 const FormContainer = styled.div`
   max-width: 600px;
   margin: 3rem auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 2.5rem;
+  background: ${({ theme }) => theme.colors.lightAccent};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  box-shadow: 
+    0 4px 12px rgba(191, 161, 78, 0.15),
+    0 0 0 1px ${({ theme }) => theme.colors.accent},
+    0 0 0 4px ${({ theme }) => theme.colors.lightAccent};
+  border: 2px solid ${({ theme }) => theme.colors.accent};
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, ${({ theme }) => theme.colors.accent}, ${({ theme }) => theme.colors.lightAccent});
+    border-radius: ${({ theme }) => theme.borderRadius};
+    z-index: -1;
+    opacity: 0.5;
+  }
 `;
 
 const FormTitle = styled.h3`
   text-align: center;
-  color: ${props => props.theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   margin-bottom: 1.5rem;
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: 1.8rem;
+  border-bottom: 2px dashed ${({ theme }) => theme.colors.accent};
+  padding-bottom: 1rem;
+  text-shadow: 1px 1px 2px rgba(191, 161, 78, 0.1);
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
+  font-family: ${({ theme }) => theme.fonts.base};
 `;
 
 const Input = styled.input`
   padding: 0.75rem;
-  border: 1px solid ${props => props.theme.colors.border};
-  border-radius: ${props => props.theme.borderRadius};
+  border: 1px solid ${({ theme }) => theme.colors.accent};
+  border-radius: ${({ theme }) => theme.borderRadius};
   font-size: 1rem;
+  width: 100%;
+  font-family: ${({ theme }) => theme.fonts.base};
+  transition: all 0.3s ease;
+  background: white;
+  box-shadow: inset 0 1px 3px rgba(191, 161, 78, 0.1);
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 
+      0 0 0 2px rgba(191, 161, 78, 0.1),
+      inset 0 1px 3px rgba(191, 161, 78, 0.1);
+  }
+
+  &:disabled {
+    background: ${({ theme }) => theme.colors.background};
+    cursor: not-allowed;
+  }
 `;
 
 const TextArea = styled.textarea`
   padding: 0.75rem;
-  border: 1px solid ${props => props.theme.colors.border};
-  border-radius: ${props => props.theme.borderRadius};
+  border: 1px solid ${({ theme }) => theme.colors.accent};
+  border-radius: ${({ theme }) => theme.borderRadius};
   font-size: 1rem;
-  min-height: 100px;
+  width: 100%;
+  font-family: ${({ theme }) => theme.fonts.base};
+  transition: all 0.3s ease;
   resize: vertical;
-`;
+  min-height: 100px;
+  background: white;
+  box-shadow: inset 0 1px 3px rgba(191, 161, 78, 0.1);
 
-const SubmitButton = styled.button`
-  padding: 0.75rem 1.5rem;
-  background: ${props => props.theme.colors.primary};
-  color: white;
-  border: none;
-  border-radius: ${props => props.theme.borderRadius};
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 1rem;
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 
+      0 0 0 2px rgba(191, 161, 78, 0.1),
+      inset 0 1px 3px rgba(191, 161, 78, 0.1);
+  }
 
-  &:hover {
-    background: ${props => props.theme.colors.primaryDark};
+  &:disabled {
+    background: ${({ theme }) => theme.colors.background};
+    cursor: not-allowed;
   }
 `;
 
@@ -130,20 +174,54 @@ const Label = styled.label`
   display: block;
   margin-bottom: 0.5rem;
   font-weight: bold;
+  color: ${({ theme }) => theme.colors.primary};
+  font-family: ${({ theme }) => theme.fonts.ui};
+  font-size: 1.1rem;
+  text-shadow: 1px 1px 2px rgba(191, 161, 78, 0.1);
 `;
 
 const StyledCardElement = styled(CardElement)`
   padding: 0.75rem;
-  border: 1px solid ${props => props.theme.colors.accent};
-  border-radius: ${props => props.theme.borderRadius};
-  background-color: #fff;
+  border: 1px solid ${({ theme }) => theme.colors.accent};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  background-color: white;
   font-size: 1rem;
-  color: ${props => props.theme.colors.text};
-  transition: border 0.3s ease;
+  color: ${({ theme }) => theme.colors.text};
+  transition: all 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(191, 161, 78, 0.1);
 
   &:focus {
     outline: none;
-    border-color: ${props => props.theme.colors.primary};
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 
+      0 0 0 2px rgba(191, 161, 78, 0.1),
+      inset 0 1px 3px rgba(191, 161, 78, 0.1);
+  }
+`;
+
+const SubmitButton = styled.button`
+  padding: 1rem;
+  background: ${({ theme }) => theme.colors.primary};
+  color: white;
+  border: none;
+  border-radius: ${({ theme }) => theme.borderRadius};
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background: ${({ theme }) => theme.colors.primaryDark};
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(191, 161, 78, 0.2);
+  }
+
+  &:disabled {
+    background: ${({ theme }) => theme.colors.lightError};
+    color: ${({ theme }) => theme.colors.error};
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 `;
 
@@ -161,14 +239,7 @@ const gifts = [
     image: '/garden.jpg',
     description: 'Our current garden needs a lot of work for it to be safe for Sully. Help us create a magical little garden — a space for running wild, growing veggies, and making mud pies.',
     section: 'SullysGarden',
-  },
-  {
-    id: 'general',
-    title: 'Other Gifts',
-    image: '/house.jpeg',
-    description: 'Other gifts',
-    section: 'GeneralGifts',
-  },
+  }
 ];
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
@@ -247,7 +318,9 @@ function CustomGiftForm({ onClose }) {
 
   return (
     <FormContainer>
-      <FormTitle>Make a Custom Gift</FormTitle>
+      <FormTitle>Add Your Personal Touch</FormTitle>
+      <p>Each gift—no matter the size—is a part of the foundation we're building together. We’re so grateful for your love and kindness.</p>
+      <br/>
       <Form onSubmit={handleSubmit}>
         <Input
           type="text"

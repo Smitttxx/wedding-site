@@ -61,7 +61,15 @@ export default function DynamicGiftSectionPage() {
                 onGiftClick={setSelectedGift}
               />
               {selectedGift && (
-                <Elements stripe={stripePromise}>
+                <Elements 
+                  stripe={stripePromise}
+                  options={{
+                    clientSecret: selectedGift.clientSecret,
+                    appearance: {
+                      theme: 'stripe',
+                    },
+                  }}
+                >
                   <GiftModal
                     isOpen={!!selectedGift}
                     onClose={() => setSelectedGift(null)}
