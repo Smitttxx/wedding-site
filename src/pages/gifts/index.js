@@ -11,6 +11,7 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import GiftModal from '../../components/GiftModal';
+import GiftSection from '../../components/GiftSection';
 
 const Paragraph = styled.p`
   font-size: 1.1rem;
@@ -386,6 +387,8 @@ function CustomGiftForm({ onClose }) {
 export default function GiftsPage() {
   const [selectedGift, setSelectedGift] = useState(null);
 
+  console.log('selectedGift in parent:', selectedGift);
+
   return (
     <>
       <NavBar />
@@ -422,6 +425,7 @@ export default function GiftsPage() {
                 onClose={() => setSelectedGift(null)}
                 gift={selectedGift}
                 amount={selectedGift.amount}
+                clientSecret={selectedGift.clientSecret}
               />
             </Elements>
           )}
