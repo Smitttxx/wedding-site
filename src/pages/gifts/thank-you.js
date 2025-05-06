@@ -41,10 +41,7 @@ export default function ThankYouPage() {
         <Page>
           <SectionHeading>Thank You!</SectionHeading>
           <Paragraph>
-            Thank you so much for your generous gift! We're truly touched by your thoughtfulness and can't wait to create these special memories together.
-          </Paragraph>
-          <Paragraph>
-            You'll receive a confirmation email shortly with the details of your gift.
+            Thank you so much for your generous gift! We&apos;re truly touched by your thoughtfulness and can&apos;t wait to create these special memories together.
           </Paragraph>
           <Button onClick={() => window.location.href = '/'}>
             Return to Home

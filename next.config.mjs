@@ -1,13 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  source: '/(.*)',
-    headers: [
+  async headers() {
+    return [
       {
-        key: 'Content-Security-Policy',
-        value: "frame-src https://www.youtube.com https://www.youtube-nocookie.com;"
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-src https://www.youtube.com https://www.youtube-nocookie.com;"
+          }
+        ]
       }
-    ],
+    ];
+  },
   compiler: {
     styledComponents: true,
   },

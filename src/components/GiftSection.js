@@ -169,7 +169,7 @@ export default function GiftSection({ gifts, section, onGiftClick }) {
       {section === "general-gifts" &&       
       <Form onSubmit={handleFormSubmit}>
         <h3 style={{ fontFamily: 'Cormorant Garamond, serif', textAlign: 'center', color: '#0b3d2e' }}>
-          Make a Custom Contribution
+           Personalize Your Gift
         </h3>
         <Label>What should we use it for?</Label>
         <Input
