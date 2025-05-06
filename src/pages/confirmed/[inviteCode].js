@@ -41,6 +41,12 @@ const StyledButton = styled.a`
   }
 `;
 
+const List = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+
 export default function ConfirmedPage() {
   const router = useRouter();
   const {inviteCode} = router.query;
@@ -58,7 +64,7 @@ export default function ConfirmedPage() {
         setParty(res.data);
       } catch (err) {
         console.error('Failed to fetch party:', err);
-        setError('We couldn’t load your confirmation details. Please try again or contact us.');
+        setError('We couldn&apos;t load your confirmation details. Please try again or contact us.');
       } finally {
         setLoading(false);
       }
@@ -107,7 +113,7 @@ export default function ConfirmedPage() {
         <SectionHeading>
   {hasAttendingGuest
     ? `Thanks for RSVPing, ${party.guests.map(g => g.firstName).join(' & ')}`
-    : `We’ll Miss You, ${party.guests.map(g => g.firstName).join(' & ')}`}
+    : `We&apos;ll Miss You, ${party.guests.map(g => g.firstName).join(' & ')}`}
 </SectionHeading>
 
 
@@ -115,47 +121,49 @@ export default function ConfirmedPage() {
             party.guestType === 'AccommodationNotOffered' ? (
               <>
                 <Message>
-                  We’re so glad you’ll be joining us to celebrate our big day in the Scottish Highlands!
+                  We&apos;re so glad you&apos;ll be joining us to celebrate our big day in the Scottish Highlands!
+                </Message>
+                <div>
+                  There are many lovely places to stay in the nearby towns just a short drive from the venue:
+                  <List>
+                    <li>
+                      <strong>Kenmore:</strong> approximately <strong>5</strong> minutes by car
+                    </li>
+                    <li>
+                      <strong>Aberfeldy:</strong> approximately <strong>15</strong> minutes by car
+                    </li>
+                  </List>
+                  <br/>
                   <p>
-                    There are many lovely places to stay in the nearby towns just a short drive from the venue:
-                    <ul>
-                      <li>
-                       <strong>Kenmore:</strong> approximately <strong>5</strong> minutes by car
-                      </li>
-                      <li>
-                        <strong>Aberfeldy:</strong> approximately <strong>15</strong> minutes by car
-                      </li>
-                    </ul>
-                    <br/>
-                    <p>
                     A <strong>guest bus</strong> will run from the venue to both towns
                     after the wedding at <strong>11:30pm,</strong> so you can relax and enjoy the celebration.
-                    </p>
                   </p>
-                </Message>
+                </div>
               </>
             ) : (
               <>
                 <Message>
-                  We’re so glad you’ll be joining us to celebrate our big day in the Scottish Highlands!
+                  We&apos;re so glad you&apos;ll be joining us to celebrate our big day in the Scottish Highlands!
                   <br /><br />
-                  You’ve let us know you’ll be arranging your own accommodation — thank you!
-                    We’ll keep you posted with travel tips and party updates.
-                    <br/>
-                    <p>
+                  You&apos;ve let us know you&apos;ll be arranging your own accommodation — thank you!
+                  We&apos;ll keep you posted with travel tips and party updates.
+                </Message>
+                <div>
+                  <br/>
+                  <p>
                     A <strong>guest bus</strong> will run from the venue to <strong>Aberfeldy and Kenmore</strong>
                     after the wedding at <strong>11:30pm,</strong> so you can relax and enjoy the celebration.
-                    </p>
-                </Message>
+                  </p>
+                </div>
               </>
             )
           ) : (
             <>
               <Message>
-                We’re really sorry you won’t be able to join us — but thank you so much for letting us know.
+                We&apos;re really sorry you won&apos;t be able to join us — but thank you so much for letting us know.
               </Message>
               <Note>
-                If your plans change, please don’t hesitate to get in touch. We’d love to celebrate with you if you’re able to make it!
+                If your plans change, please don&apos;t hesitate to get in touch. We&apos;d love to celebrate with you if you&apos;re able to make it!
               </Note>
             </>
           )}
