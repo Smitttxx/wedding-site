@@ -1588,7 +1588,7 @@ async function main() {
           "section": "SullysGarden",
           "name": "Decking Boards (Pack of 5)",
           "description": "To build a safe play space for Sully's adventures",
-          "amount": 30,
+          "amount": 3000,
           "quantity": 5,
           "imagePath": "/decking.avif"
         },
@@ -1596,7 +1596,7 @@ async function main() {
           "section": "SullysGarden",
           "name": "£50 B&Q Voucher",
           "description": "To help us build something beautiful",
-          "amount": 50,
+          "amount": 5000,
           "quantity": 10,
           "imagePath": "/BQ_CaseStudy2.1-01.jpg"
         },
@@ -1604,7 +1604,7 @@ async function main() {
           "section": "SullysGarden",
           "name": "Sandpit Set",
           "description": "For messy afternoons in the sunshine",
-          "amount": 40,
+          "amount": 4000,
           "quantity": 1,
           "imagePath": "/istockphoto-123493359-612x612.jpg"
         },
@@ -1612,7 +1612,7 @@ async function main() {
           "section": "SullysGarden",
           "name": "Garden Furniture Set",
           "description": "A comfy place to relax while Sully plays",
-          "amount": 120,
+          "amount": 12000,
           "quantity": 3,
           "imagePath": "/istockphoto-1226810755-612x612.jpg"
         },
@@ -1620,7 +1620,7 @@ async function main() {
           "section": "SullysGarden",
           "name": "Outdoor Storage Box",
           "description": "Keep toys and tools safe and tidy",
-          "amount": 60,
+          "amount": 6000,
           "quantity": 1,
           "imagePath": "/download.jpeg"
         },
@@ -1628,7 +1628,7 @@ async function main() {
           "section": "SullysGarden",
           "name": "Flower & Veggie Planter Boxes",
           "description": "Let's grow something together!",
-          "amount": 25,
+          "amount": 2500,
           "quantity": 4,
           "imagePath": "/download (1).jpeg"
         },
@@ -1636,7 +1636,7 @@ async function main() {
           "section": "SullysGarden",
           "name": "Child-Safe Garden Tools",
           "description": "Little tools for little green thumbs",
-          "amount": 20,
+          "amount": 2000,
           "quantity": 1,
           "imagePath": "/download (2).jpeg"
         },
@@ -1644,7 +1644,7 @@ async function main() {
           "section": "SullysGarden",
           "name": "Outdoor Solar Lights (Set)",
           "description": "Magical evenings in Sully's garden",
-          "amount": 35,
+          "amount": 3500,
           "quantity": 2,
           "imagePath": "/shopping.webp"
         },
@@ -1652,7 +1652,7 @@ async function main() {
           "section": "SullysGarden",
           "name": "Mini Climbing Frame",
           "description": "Burning off energy the fun way",
-          "amount": 150,
+          "amount": 15000,
           "quantity": 1,
           "imagePath": "/download (3).jpeg"
         },
@@ -1660,7 +1660,7 @@ async function main() {
           "section": "SullysGarden",
           "name": "Picnic Bench for Kids",
           "description": "Snack time in the sun!",
-          "amount": 45,
+          "amount": 4500,
           "quantity": 1,
           "imagePath": "/208080_main_childrens-picnic-table.jpg"
         },
@@ -1672,7 +1672,7 @@ async function main() {
           "section": "TheCruise",
           "name": "Gunbae Korean BBQ Experience",
           "description": "An interactive Korean BBQ dinner with drinking games and communal seating.",
-          "amount": 60,
+          "amount": 6000,
           "quantity": 2,
           "imagePath": "/Gunbae-1104x438.avif"
         },
@@ -1680,7 +1680,7 @@ async function main() {
           "section": "TheCruise",
           "name": "Pink Agave Mexican Dinner",
           "description": "A vibrant Mexican dining experience featuring dishes like Cochinita Pibil.",
-          "amount": 55,
+          "amount": 5500,
           "quantity": 2,
           "imagePath": "/Pink-Agave-1104x438.avif"
       },
@@ -1688,7 +1688,7 @@ async function main() {
         "section": "TheCruise",
         "name": "The Wake Steak & Seafood Experience",
         "description": "An elegant dining experience at The Wake, Virgin Voyages' upscale steak and seafood restaurant, offering panoramic ocean views and a refined menu.",
-        "amount": 70,
+        "amount": 7000,
         "quantity": 2,
         "imagePath": "/The-Wake-1104x438.avif"
       },      
@@ -1696,7 +1696,7 @@ async function main() {
           "section": "TheCruise",
           "name": "Test Kitchen Experimental Tasting Menu",
           "description": "A multi-course, experimental dining adventure for the culinary curious.",
-          "amount": 70,
+          "amount": 7000,
           "quantity": 2,
           "imagePath": "/Test-Kitchen-1104x438.avif"
         },
@@ -1704,7 +1704,7 @@ async function main() {
           "section": "TheCruise",
           "name": "£40 Bar Tab",
           "description": "Prepaid drink credit with a $25 bonus, totaling $225 for onboard beverages.",
-          "amount": 160,
+          "amount": 4000,
           "quantity": 2,
           "imagePath": "/virgin-bar-tab.avif"
         },
@@ -1712,7 +1712,7 @@ async function main() {
           "section": "TheCruise",
           "name": "£100 Bar Tab",
           "description": "Prepaid drink credit with a $100 bonus, totaling $600 for onboard beverages.",
-          "amount": 400,
+          "amount": 10000,
           "quantity": 1,
           "imagePath": "/virgin-bar-tab.avif"
         },
@@ -1720,7 +1720,7 @@ async function main() {
           "section": "TheCruise",
           "name": "Santorini Sunset Cruise",
           "description": "An evening boat tour to witness the iconic Santorini sunset.",
-          "amount": 65,
+          "amount": 6500,
           "quantity": 2,
           "imagePath": "/santorini-sunset.jpg"
         },
@@ -1728,7 +1728,7 @@ async function main() {
           "section": "TheCruise",
           "name": "Bodrum Turkish Bath Experience",
           "description": "Traditional Hammam spa experience in Bodrum.",
-          "amount": 50,
+          "amount": 5000,
           "quantity": 2,
           "imagePath": "/bodrum-spa.jpg"
         },
@@ -1736,7 +1736,7 @@ async function main() {
           "section": "TheCruise",
           "name": "Mykonos Beach Club Day",
           "description": "Relaxing day at a renowned Mykonos beach club with sunbeds and cocktails.",
-          "amount": 70,
+          "amount": 7000,
           "quantity": 2,
           "imagePath": "/mykanos-bech.jpg"
         },
@@ -1744,7 +1744,7 @@ async function main() {
           "section": "TheCruise",
           "name": "Dubrovnik Old Town Walking Tour",
           "description": "Guided tour through the historic streets of Dubrovnik's Old Town.",
-          "amount": 40,
+          "amount": 4000,
           "quantity": 2,
           "imagePath": "/dubrovnik.jpg"
         },
@@ -1752,7 +1752,7 @@ async function main() {
           "section": "TheCruise",
           "name": "Kotor Bay Boat Tour",
           "description": "Scenic boat ride exploring the stunning Bay of Kotor.",
-          "amount": 55,
+          "amount": 5500,
           "quantity": 2,
           "imagePath": "/kotor-bay-boat-tour-10.webp"
         },
@@ -1760,7 +1760,7 @@ async function main() {
           "section": "TheCruise",
           "name": "Corfu Olive Oil Tasting",
           "description": "Visit to a local olive oil farm with tastings and insights into production.",
-          "amount": 35,
+          "amount": 3500,
           "quantity": 2,
           "imagePath": "/olive-oil.jpg"
         }
