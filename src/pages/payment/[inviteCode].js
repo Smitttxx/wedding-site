@@ -140,7 +140,12 @@ export default function PaymentPage() {
     );
   }
 
-  const cost = (party.accommodationCost / 100).toFixed(2);
+  const accommodationCost = party.accommodationCost || 0;
+  const bookingFee = party.bookingFee || 0;
+  const total = accommodationCost + bookingFee;
+  const cost = (accommodationCost / 100).toFixed(2);
+  const fee = (bookingFee / 100).toFixed(2);
+  const totalDisplay = (total / 100).toFixed(2);
   const adultCount = party.guests.filter(g => !g.isChild && !g.isBaby).length;
 
   const appearance = {
@@ -166,7 +171,7 @@ export default function PaymentPage() {
               <InfoBlock>
                 <div>
                   <FontAwesomeIcon icon={faReceipt} />{' '}
-                  <strong>You&apos;ve paid:</strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} total for 2 nights
+                  <strong>You&apos;ve paid:</strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{totalDisplay} total for 2 nights
                 </div>
                 <div>
                   <FontAwesomeIcon icon={faUsers} />{' '}
@@ -203,12 +208,12 @@ export default function PaymentPage() {
             <Section>
               <SectionHeading>Payment Failed</SectionHeading>
               <Text>The total cost is 
-              <span style={{color: theme.colors.accent, marginLeft: '0.25rem'}}>£</span><strong>{cost}</strong>
+              <span style={{color: theme.colors.accent, marginLeft: '0.25rem'}}>£</span><strong>{totalDisplay}</strong>
                   {" "}for 2 nights.</Text>
               {party.guests.some(g => g.isChild || g.isBaby) && (
                 <Text><strong>Children and babies stay free</strong>.</Text>
-                )}
-                              <br/>
+              )}
+              <br/>
               <GoldInfoBox icon={faTimesCircle}>Oops, something went wrong. Would you like to try again?</GoldInfoBox>
 
               {clientSecret && (
@@ -216,7 +221,7 @@ export default function PaymentPage() {
                   <CheckoutForm
                     partyId={party.id}
                     clientSecret={clientSecret}
-                    amount={party.accommodationCost}
+                    amount={total}
                     inviteCode={inviteCode}
                   />
                 </Elements>
@@ -232,7 +237,7 @@ export default function PaymentPage() {
             <Section>
               <SectionHeading>Payment</SectionHeading>
               <Text>The total cost is <strong>                <span style={{color: theme.colors.accent, marginLeft: '0.25rem'}}>£</span>
-              {cost}</strong> for 2 nights.</Text>
+              {totalDisplay}</strong> for 2 nights.</Text>
               {party.guests.some(g => g.isChild || g.isBaby) && (
                 <Text><strong>Children and babies stay free</strong>.</Text>
               )}
@@ -247,7 +252,7 @@ export default function PaymentPage() {
                 <CheckoutForm
                   partyId={party.id}
                   clientSecret={clientSecret}
-                  amount={party.accommodationCost}
+                  amount={total}
                   inviteCode={inviteCode}
                 />
               </Elements>

@@ -2,6 +2,11 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+
+function calculateBookingFee(baseCost) {
+  return Math.round(baseCost * 0.015 + 20);
+}
+
 async function main() {
 
   // cabins 
@@ -167,6 +172,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'jir6',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -196,6 +202,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '7h7k',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -225,6 +232,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '4yhb',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -254,6 +262,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '8fg9',
       accommodationCost: 22000,
+      bookingFee: calculateBookingFee(22000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -290,6 +299,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '2jiu',
       accommodationCost: 22000,
+      bookingFee: calculateBookingFee(22000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -319,6 +329,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'x6mp',
       accommodationCost: 26000,
+      bookingFee: calculateBookingFee(26000),
       cabin: {
         connect: { id: longhouse.id }
       },
@@ -348,6 +359,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'ygh3',
       accommodationCost: 26000,
+      bookingFee: calculateBookingFee(26000),
       cabin: {
         connect: { id: longhouse.id }
       },
@@ -377,6 +389,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '5msi',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -400,6 +413,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '5i2j',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -423,6 +437,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '78hg',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -446,6 +461,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'nm1p',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -469,6 +485,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '8anw',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -492,6 +509,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '2q8h',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -515,6 +533,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '7aj8',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -538,6 +557,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '7q3n',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -561,6 +581,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '9a67',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -584,6 +605,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'ma19',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       guests: {
         create: [
           {
@@ -604,6 +626,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'b58x',
       accommodationCost: 26000,
+      bookingFee: calculateBookingFee(26000),
       cabin: {
         connect: { id: longhouse.id }
       },
@@ -633,6 +656,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '9i46',
       accommodationCost: 26000,
+      bookingFee: calculateBookingFee(26000),
       cabin: {
         connect: { id: longhouse.id }
       },
@@ -683,6 +707,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'k56p',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -712,6 +737,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '4gf5',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -741,6 +767,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '7cvt',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -770,6 +797,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'drg4',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -793,6 +821,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '76gj',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -816,6 +845,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'c9hl',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -839,6 +869,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '46vy',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: schiehallion.id }
       },
@@ -868,6 +899,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'zv6q',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: schiehallion.id }
       },
@@ -920,6 +952,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'j8s4',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: schiehallion.id }
       },
@@ -949,6 +982,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'k8z3',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: schiehallion.id }
       },
@@ -978,6 +1012,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'f57n',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: benDrummond.id }
       },
@@ -1007,6 +1042,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'b8pl',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: benDrummond.id }
       },
@@ -1057,6 +1093,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'z16f',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: benLawers.id }
       },
@@ -1107,6 +1144,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '1829',
       accommodationCost: 2000,
+      bookingFee: calculateBookingFee(2000),
       cabin: {
         connect: { id: benLawers.id }
       },
@@ -1130,6 +1168,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: '9pag',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: benLawers.id }
       },
@@ -1173,6 +1212,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'c57x',
       accommodationCost: 22000,
+      bookingFee: calculateBookingFee(22000),
       cabin: {
         connect: { id: cottage.id }
       },
@@ -1202,6 +1242,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'q4mg',
       accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
       cabin: {
         connect: { id: cottage.id }
       },
@@ -1225,6 +1266,7 @@ async function main() {
       guestType: 'OnSite',
       inviteCode: 'z61b',
       accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
       cabin: {
         connect: { id: cottage.id }
       },
@@ -1545,7 +1587,7 @@ async function main() {
         {
           "section": "SullysGarden",
           "name": "Decking Boards (Pack of 5)",
-          "description": "To build a safe play space for Sully’s adventures",
+          "description": "To build a safe play space for Sully's adventures",
           "amount": 30,
           "quantity": 5,
           "imagePath": "/decking.avif"
@@ -1585,7 +1627,7 @@ async function main() {
         {
           "section": "SullysGarden",
           "name": "Flower & Veggie Planter Boxes",
-          "description": "Let’s grow something together!",
+          "description": "Let's grow something together!",
           "amount": 25,
           "quantity": 4,
           "imagePath": "/download (1).jpeg"
@@ -1601,7 +1643,7 @@ async function main() {
         {
           "section": "SullysGarden",
           "name": "Outdoor Solar Lights (Set)",
-          "description": "Magical evenings in Sully’s garden",
+          "description": "Magical evenings in Sully's garden",
           "amount": 35,
           "quantity": 2,
           "imagePath": "/shopping.webp"

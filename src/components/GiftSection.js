@@ -113,7 +113,6 @@ export default function GiftSection({ gifts, section, onGiftClick }) {
     <>
       <Grid>
         {gifts.map((gift) => {
-          console.log(gift)
           if (gift.section !== "GeneralGifts") {
             const remaining = gift.quantity ? gift.quantity - gift.claimed : null;
             const soldOut = remaining !== null && remaining <= 0;

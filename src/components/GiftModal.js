@@ -115,9 +115,6 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
   const elements = useElements();
   const router = useRouter();
 
-  console.log('clientSecret:', clientSecret);
-  console.log('gift:', gift);
-
   if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
