@@ -235,7 +235,7 @@ const gifts = [
   },
   {
     id: 'garden',
-    title: 'Sully\'s Garden',
+    title: 'Sully&apos;s Garden',
     image: '/garden.jpg',
     description: 'Our current garden needs a lot of work for it to be safe for Sully. Help us create a magical little garden — a space for running wild, growing veggies, and making mud pies.',
     section: 'SullysGarden',
@@ -319,7 +319,7 @@ function CustomGiftForm({ onClose }) {
   return (
     <FormContainer>
       <FormTitle>Add Your Personal Touch</FormTitle>
-      <p>Each gift—no matter the size—is a part of the foundation we're building together. We’re so grateful for your love and kindness.</p>
+      <p>Each gift—no matter the size—is a part of the foundation we&apos;re building together. We&apos;re so grateful for your love and kindness.</p>
       <br/>
       <Form onSubmit={handleSubmit}>
         <Input
@@ -393,7 +393,7 @@ export default function GiftsPage() {
         <Page>
           <SectionHeading>Gifts</SectionHeading>
           <Paragraph>
-            {"Your presence means the world to us — we're truly grateful you're joining us for our big weekend."}
+            {"Your presence means the world to us — we&apos;re truly grateful you&apos;re joining us for our big weekend."}
           </Paragraph>
           <Paragraph>
             We are lucky to already have a home (and our dream kitchen!), so instead of traditional gifts, we would love for you to help us create memories. If you feel moved to gift something, we have created a few options below.
