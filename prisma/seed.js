@@ -201,8 +201,8 @@ async function main() {
       token: 'sonnyAndBecca',
       guestType: 'OnSite',
       inviteCode: '7h7k',
-      accommodationCost: 30000,
-      bookingFee: calculateBookingFee(30000),
+      accommodationCost: 3,
+      bookingFee: calculateBookingFee(3),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -231,8 +231,8 @@ async function main() {
       token: 'jayAndBecky',
       guestType: 'OnSite',
       inviteCode: '4yhb',
-      accommodationCost: 30000,
-      bookingFee: calculateBookingFee(30000),
+      accommodationCost: 3,
+      bookingFee: calculateBookingFee(3),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -261,8 +261,8 @@ async function main() {
       token: 'tomAndToni',
       guestType: 'OnSite',
       inviteCode: '8fg9',
-      accommodationCost: 22000,
-      bookingFee: calculateBookingFee(22000),
+      accommodationCost: 22,
+      bookingFee: calculateBookingFee(22),
       cabin: {
         connect: { id: farmhouse.id }
       },
