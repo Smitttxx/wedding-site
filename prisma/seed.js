@@ -393,6 +393,29 @@ async function main() {
     }
   });
 
+  const kat = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Kat',
+      token: 'kat',
+      guestType: 'OnSite',
+      inviteCode: '5i2j',
+      accommodationCost: 11000,
+      cabin: {
+        connect: { id: farmhouse.id }
+      },
+      guests: {
+        create: [
+          {
+            firstName: 'Kat',
+            lastName: 'Carroll',
+            room: { connect: { id: farmhouse.rooms[5].id } },
+             relation: 'Friend of the couple'
+          },
+        ]
+      }
+    }
+  });
+
   const natasha = await prisma.GuestParty.create({
     data: {
       partyName: 'Natasha',
@@ -478,7 +501,7 @@ async function main() {
             firstName: 'Lauren',
             lastName: '',
             relation: 'Friend of the Couple',
-            room: { connect: { id: farmhouse.rooms[5].id } },
+            room: { connect: { id: farmhouse.rooms[4].id } },
           },
         ]
       }
@@ -547,7 +570,7 @@ async function main() {
             firstName: 'Gary',
             lastName: '',
             relation: 'Friend of the Couple',
-            room: { connect: { id: farmhouse.rooms[4].id } },
+            room: { connect: { id: cottage.rooms[2].id } },
           },
         ]
       }
@@ -567,7 +590,7 @@ async function main() {
             firstName: 'Matt',
             lastName: '',
             relation: 'Friend of the Couple',
-            room: { connect: { id: farmhouse.rooms[4].id } },
+            room: { connect: { id: cottage.rooms[2].id } },
           },
         ]
       }
@@ -871,24 +894,18 @@ async function main() {
     data: {
       partyName: 'Kevin & Lynn',
       token: 'kevinAndLynn',
-      guestType: 'OnSite',
+      guestType: 'AccommodationNotOffered',
       inviteCode: '0ba3',
-      accommodationCost: 22000,
-      cabin: {
-        connect: { id: schiehallion.id }
-      },
       guests: {
         create: [
           {
             firstName: 'Kevin',
             lastName: '',
-            room: { connect: { id: schiehallion.rooms[2].id } },
             relation: 'Family of the Bride'
           },
           {
             firstName: 'Lynn',
             lastName: '',
-            room: { connect: { id: schiehallion.rooms[2].id } },
             relation: 'Family of the Bride'
           }
         ]
@@ -902,7 +919,7 @@ async function main() {
       token: 'cieranAndChole',
       guestType: 'OnSite',
       inviteCode: 'j8s4',
-      accommodationCost: 22000,
+      accommodationCost: 30000,
       cabin: {
         connect: { id: schiehallion.id }
       },
@@ -997,33 +1014,33 @@ async function main() {
         create: [
           {
             firstName: 'Ross',
-            lastName: 'Mitchall',
+            lastName: 'Mitchell',
             room: { connect: { id: benDrummond.rooms[1].id } },
             relation: 'Family of the Bride'
           },
           {
             firstName: 'Nicci',
-            lastName: 'Mitchall',
+            lastName: 'Mitchell',
             room: { connect: { id: benDrummond.rooms[1].id } },
             relation: 'Sister of the Bride'
           },
           {
             firstName: 'Jaxson',
-            lastName: 'Mitchall',
+            lastName: 'Mitchell',
             isChild: true,
             room: { connect: { id: benDrummond.rooms[2].id } },
             relation: 'Family of the Bride'
           },
           {
             firstName: 'Jenson',
-            lastName: 'Mitchall',
+            lastName: 'Mitchell',
             isChild: true,
             room: { connect: { id: benDrummond.rooms[2].id } },
             relation: 'Family of the Bride'
           },
           {
             firstName: 'Skye',
-            lastName: 'Mitchall',
+            lastName: 'Mitchell',
             isChild: true,
             room: { connect: { id: benDrummond.rooms[2].id } },
             relation: 'Family of the Bride'
@@ -1082,6 +1099,29 @@ async function main() {
       }
     }
   });
+
+  const billy = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Billy',
+      token: 'billy',
+      guestType: 'OnSite',
+      inviteCode: '1829',
+      accommodationCost: 2000,
+      cabin: {
+        connect: { id: benLawers.id }
+      },
+      guests: {
+        create: [
+          {
+            firstName: 'Billy',
+            lastName: '',
+            relation: 'Family of the Bride'
+          }
+        ]
+      }
+    }
+  });
+
 
   const williamAndShona = await prisma.GuestParty.create({
     data: {
@@ -1207,45 +1247,22 @@ async function main() {
     }
   });
 
-  const kevin = await prisma.GuestParty.create({
+  const rhysandFern = await prisma.GuestParty.create({
     data: {
-      partyName: 'Kevin',
-      token: 'kevin',
-      guestType: 'OnSite',
-      inviteCode: 'q92x',
-      accommodationCost: 11000,
-      cabin: {
-        connect: { id: cottage.id }
-      },
-      guests: {
-        create: [
-          {
-            firstName: 'Kevin',
-            lastName: '',
-            room: { connect: { id: cottage.rooms[2].id } },
-             relation: 'Friend of the Couple'
-          },
-        ]
-      }
-    }
-  });
-
-  const rhys = await prisma.GuestParty.create({
-    data: {
-      partyName: 'Rhys',
-      token: 'rhys',
-      guestType: 'OnSite',
+      partyName: 'Rhys & Fern',
+      token: 'rhysAndFern',
+      guestType: 'AccommodationNotOffered',
       inviteCode: 'f6z2',
-      accommodationCost: 11000,
-      cabin: {
-        connect: { id: cottage.id }
-      },
       guests: {
         create: [
           {
             firstName: 'Rhys',
             lastName: '',
-            room: { connect: { id: cottage.rooms[2].id } },
+             relation: 'Friend of the Couple'
+          },
+          {
+            firstName: 'Fern',
+            lastName: '',
              relation: 'Friend of the Couple'
           },
         ]
@@ -1401,7 +1418,7 @@ async function main() {
       partyName: 'Stuart & Debbie',
       token: 'stuartAndDebbie',
       guestType: 'AccommodationNotOffered',
-      inviteCode: 'qzx5',
+      inviteCode: '9qna',
       guests: {
         create: [
           {
@@ -1411,6 +1428,106 @@ async function main() {
           {
             firstName: 'Debbie',
             lastName: 'Rankin',
+          },
+        ]
+      }
+    }
+  });
+
+  const lisaAndAndy = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Lisa & Andy',
+      token: 'listAndAndy',
+      guestType: 'AccommodationNotOffered',
+      inviteCode: 'qzx5',
+      guests: {
+        create: [
+          {
+            firstName: 'Lisa',
+            lastName: 'Sims',
+          },
+          {
+            firstName: 'Andy',
+            lastName: 'Sims',
+          },
+          {
+            firstName: 'Max',
+            lastName: 'Sims',
+            isChild: true
+          },
+        ]
+      }
+    }
+  });
+
+  const ianAndTeresa = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Ian & Teresa',
+      token: 'ianAndTeresa',
+      guestType: 'AccommodationNotOffered',
+      inviteCode: 'ae9a',
+      guests: {
+        create: [
+          {
+            firstName: 'Ian',
+            lastName: 'Macleod',
+          },
+          {
+            firstName: 'Teresa',
+            lastName: 'Macleod',
+          },
+        ]
+      }
+    }
+  });
+
+  const joyce = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Joyce',
+      token: 'joyce',
+      guestType: 'AccommodationNotOffered',
+      inviteCode: '8qn2',
+      guests: {
+        create: [
+          {
+            firstName: 'Joyce',
+            lastName: 'Grant',
+          },
+        ]
+      }
+    }
+  });
+
+  const mattAndAndrea = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Matt & Andrea',
+      token: 'mattAndAndrea',
+      guestType: 'AccommodationNotOffered',
+      inviteCode: '1k2n',
+      guests: {
+        create: [
+          {
+            firstName: 'Matt',
+            lastName: 'Graham',
+          },
+          {
+            firstName: 'Andrea',
+            lastName: 'Graham',
+          },
+          {
+            firstName: 'Harper',
+            lastName: '',
+            isChild: true
+          },
+          {
+            firstName: 'Scarlet',
+            lastName: '',
+            isChild: true
+          },
+          {
+            firstName: 'Lewis',
+            lastName: '',
+            isChild: true
           },
         ]
       }
