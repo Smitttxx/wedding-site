@@ -323,7 +323,7 @@ export default function GiftsPage() {
             {"Your presence means the world to us — we're truly grateful you're joining us for our big weekend."}
           </Paragraph>
           <Paragraph>
-            We're lucky to already have a home (and our dream kitchen!), so instead of traditional gifts, we'd love for you to help us create memories. If you feel moved to gift something, we've created a few options below.
+            We are lucky to already have a home (and our dream kitchen!), so instead of traditional gifts, we would love for you to help us create memories. If you feel moved to gift something, we have created a few options below.
           </Paragraph>
           <GiftCardGrid>
             {gifts.map((gift) => (
