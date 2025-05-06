@@ -19,6 +19,7 @@ import { GoldInfoBox } from '@/components/GoldInfoBox';
 import { RedInfoBox } from '@/components/RedInfoBox';
 import { faChild, faBed, faFire, faBus, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 import { Page } from '@/components/Page';
+import { TartanInfoBox } from '@/components/TartanInfoBox';
 
 const RSVPWrapper = styled.div`
   display: flex;
@@ -129,7 +130,7 @@ export default function GuestPage() {
         newErrors.fridayParty = true;
         messages.push({
           icon: faFire,
-          text: 'Please let us know if you’re coming to the Friday night party.'
+          text: 'Please let us know if you are coming to the Friday night party.'
         });
       }
       if (isOffsite && needsBus === null) {
@@ -222,11 +223,10 @@ export default function GuestPage() {
 
           <Section ref={rsvpRef}>
             <SectionHeading>RSVP</SectionHeading>
-            <GoldInfoBox icon={faUserCheck}>
-                      <span>
-                        Please RSVP for all guests by <strong>June 13th 2025</strong>.
-                      </span>
-            </GoldInfoBox>
+            <TartanInfoBox>
+                Please RSVP for all guests by June 13th 2025.
+            </TartanInfoBox>
+            <br/>
             {party.guests.some(g => g.isChild || g.isBaby) && (
               <GoldInfoBox icon={faChild}>
                 {party.guests.filter(g => g.isChild || g.isBaby).length === 1 ? (

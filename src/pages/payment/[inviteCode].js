@@ -18,8 +18,12 @@ import {faReceipt, faSterlingSign, faUsers, faBaby, faCircleExclamation, faTimes
 import {InfoBlock} from '@/components/InfoBlock';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { useTheme } from 'styled-components';
+import LoadingIndicator from '@/components/LoadingOverlay';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, {
+  apiVersion: '2023-10-16',
+  betas: ['elements_enable_deferred_intent_beta_1'],
+});
 
 const Text = styled.p`
   color: ${props => props.theme.colors.text};
@@ -58,6 +62,7 @@ export default function PaymentPage() {
   const [party, setParty] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
   const [paymentError, setPaymentError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const error = router.query.error === 'true';
@@ -67,6 +72,7 @@ export default function PaymentPage() {
   useEffect(() => {
     const fetchParty = async () => {
       try {
+        setIsLoading(true);
         const res = await axios.get(`/api/invite/${inviteCode}`);
         const data = res.data;
         setParty(data);
@@ -74,11 +80,14 @@ export default function PaymentPage() {
         if (data.accommodationCost && !data.paid) {
           const intentRes = await axios.post('/api/create-payment-intent', {
             guestId: data.id,
+            amount: data.accommodationCost,
           });
           setClientSecret(intentRes.data.clientSecret);
         }
       } catch (err) {
         console.error('Failed to fetch party:', err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -94,11 +103,54 @@ export default function PaymentPage() {
     }
   }, [inviteCode, router.query.success]);
 
+  if (isLoading) {
+    return (
+      <Fragment>
+        <NavBar />
+        <Layout>
+          <Page>
+            <LoadingIndicator 
+              title="💳 Processing..."
+              subtitle="Setting up your payment details"
+            />
+          </Page>
+        </Layout>
+      </Fragment>
+    );
+  }
 
-  if (!party) return null;
+  if (!party) {
+    return (
+      <Fragment>
+        <NavBar />
+        <Layout>
+          <Page>
+            <Section>
+              <SectionHeading>Error</SectionHeading>
+              <GoldInfoBox icon={faTimesCircle}>
+                We couldn't find your party details. Please try again or contact us for help.
+              </GoldInfoBox>
+              <Button onClick={() => router.push('/')}>
+                Return to Home
+              </Button>
+            </Section>
+          </Page>
+        </Layout>
+      </Fragment>
+    );
+  }
 
   const cost = (party.accommodationCost / 100).toFixed(2);
   const adultCount = party.guests.filter(g => !g.isChild && !g.isBaby).length;
+
+  const appearance = {
+    theme: 'stripe',
+  };
+
+  const options = {
+    clientSecret,
+    appearance,
+  };
 
   return (
     <Fragment>
@@ -114,7 +166,7 @@ export default function PaymentPage() {
               <InfoBlock>
                 <div>
                   <FontAwesomeIcon icon={faReceipt} />{' '}
-                  <strong>You’ve paid:</strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} total for 2 nights
+                  <strong>You've paid:</strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} total for 2 nights
                 </div>
                 <div>
                   <FontAwesomeIcon icon={faUsers} />{' '}
@@ -138,8 +190,8 @@ export default function PaymentPage() {
                 Your booking reference is <BookingRef>{party.bookingReference}</BookingRef>
                 </p>
                 <p>
-                  We’re so excited to have you staying on-site with us — it means the world.
-                  Borelands is such a special place, and we’re sure you’re going to fall in love with the views, the vibe, and the weekend ahead.
+                  We're so excited to have you staying on-site with us — it means the world.
+                  Borelands is such a special place, and we're sure you're going to fall in love with the views, the vibe, and the weekend ahead.
                 </p>
               </TartanInfoBox>
               <Button onClick={() => router.push(`/accommodationDetails/${inviteCode}`)} style={{marginTop: '1.5rem'}}>
@@ -159,14 +211,16 @@ export default function PaymentPage() {
                               <br/>
               <GoldInfoBox icon={faTimesCircle}>Oops, something went wrong. Would you like to try again?</GoldInfoBox>
 
-              <Elements stripe={stripePromise} options={{clientSecret}}>
-                <CheckoutForm
-                  partyId={party.id}
-                  clientSecret={clientSecret}
-                  amount={party.accommodationCost}
-                  inviteCode={inviteCode}
-                />
-              </Elements>
+              {clientSecret && (
+                <Elements stripe={stripePromise} options={options}>
+                  <CheckoutForm
+                    partyId={party.id}
+                    clientSecret={clientSecret}
+                    amount={party.accommodationCost}
+                    inviteCode={inviteCode}
+                  />
+                </Elements>
+              )}
               <Button
                 style={{marginTop: '2rem'}}
                 onClick={() => router.push(`/accommodationDetails/${inviteCode}`)}
@@ -189,7 +243,7 @@ export default function PaymentPage() {
                 <span><strong>Please note all payments are non refundable.</strong></span>
               </GoldInfoBox>
 
-              <Elements stripe={stripePromise} options={{clientSecret}}>
+              <Elements stripe={stripePromise} options={options}>
                 <CheckoutForm
                   partyId={party.id}
                   clientSecret={clientSecret}
@@ -204,7 +258,11 @@ export default function PaymentPage() {
                 ← Back to Accommodation Details
               </Button>
             </Section>
-          ) : null}
+          ) : (
+            <Section>
+              <SectionHeading>Loading Payment Form...</SectionHeading>
+            </Section>
+          )}
         </Page>
       </Layout>
     </Fragment>
