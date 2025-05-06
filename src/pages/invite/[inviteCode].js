@@ -100,7 +100,7 @@ export default function GuestPage() {
 
   useEffect(() => {
     fetchParty();
-  }, [inviteCode, fetchParty]);
+  }, [inviteCode]);
 
   const validateForm = () => {
     const messages = [];
