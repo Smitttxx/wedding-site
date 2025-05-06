@@ -78,10 +78,12 @@ export default function CabinDetails({cabin}) {
           <FontAwesomeIcon icon={faUsers} />
           <strong>Capacity:</strong> {cabin.capacity} guests
         </div>
-        <div>
-          <FontAwesomeIcon icon={faHotTubPerson} />
-          <strong>Hot Tub:</strong> {cabin.hotTub}
-        </div>
+        {cabin.name === "Farmhouse" &&        
+          <div>
+            <FontAwesomeIcon icon={faHotTubPerson} />
+            <strong>Hot Tub:</strong> {cabin.hotTub}
+          </div>
+        }
       </InfoBlock>
 
       <MediaWrapper>
