@@ -27,7 +27,8 @@ import {
   faBus,
   faBath,
   faMugHot,
-  faTimesCircle
+  faTimesCircle,
+  faCheckCircle
 } from '@fortawesome/free-solid-svg-icons';
 import AccommodationConfirmationToggle from "@/components/AccommodationConfirmationToggle";
 import LoadingIndicator from "@/components/LoadingOverlay";
@@ -210,7 +211,7 @@ export default function AccommodationDetailsPage() {
     ?.flatMap(room => room.guests)
     ?.filter(g => !partyGuestIds.has(g.id));
 
-  const cost = (party.accommodationCost / 100).toFixed(2);
+  const cost = ((party.accommodationCost + (party.bookingFee || 0)) / 100).toFixed(2);
 
   return (
     <Fragment>
@@ -218,19 +219,29 @@ export default function AccommodationDetailsPage() {
       <Layout>
         <Page>
           <PartyHeader party={party} />
-          <Text><strong>Thanks for RSVPing{party.paid && " and paying for your accommodation!"}</strong><br />
-              We&apos;re so glad you can make it and can&apos;t wait to celebrate with you.
-            </Text>
+          <div style={{
+            background: theme.colors.lightAccent,
+            borderRadius: theme.borderRadius,
+            padding: '1em 1.2em',
+            marginBottom: 20,
+            color: theme.colors.text,
+            fontSize: '1.05em'
+          }}>
+            {party.paid
+              ? <strong>We&apos;re so glad you&apos;ll be joining us – thank you for your RSVP and paying for your accommodation!</strong>
+              : <strong>We&apos;re so glad you&apos;ll be joining us – thank you for your RSVP!</strong>
+              }
+          </div>
           {
             party.paid &&
             <InfoBlock>
-            <strong>Payment of <span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} received, thanks!</strong><br />
-            {party.bookingReference && <Fragment>Your booking reference is:  <span style={{color: theme.colors.accent, fontSize: "1.3em", textTransform: "uppercase"}}> {party.bookingReference}</span><br /></Fragment>}
+              <strong>
+                Payment received, thank you!<br />
+                You have paid <span style={{color: theme.colors.accent, fontSize: "1.1em"}}>£{cost}</span> for your accommodation<br />
+              </strong>
             </InfoBlock>
           }
           
-
-
           <Section>
             <SectionHeading>Accommodation Summary</SectionHeading>
             <InfoBlock>

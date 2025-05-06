@@ -387,8 +387,6 @@ function CustomGiftForm({ onClose }) {
 export default function GiftsPage() {
   const [selectedGift, setSelectedGift] = useState(null);
 
-  console.log('selectedGift in parent:', selectedGift);
-
   return (
     <>
       <NavBar />

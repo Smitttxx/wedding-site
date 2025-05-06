@@ -29,6 +29,7 @@ model GuestParty {
   guests            IndividualGuest[]
   rsvpLocked        Boolean? @default(false)
   bookingReference   String?         
+  bookingFee       Int?
 }
 
 model IndividualGuest {

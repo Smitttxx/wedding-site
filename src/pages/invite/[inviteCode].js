@@ -149,8 +149,6 @@ export default function GuestPage() {
       });
     }    
 
-    console.log(messages)
-
     setErrors(newErrors);
     setValidationMessages(messages);
 
