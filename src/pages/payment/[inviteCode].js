@@ -128,7 +128,7 @@ export default function PaymentPage() {
             <Section>
               <SectionHeading>Error</SectionHeading>
               <GoldInfoBox icon={faTimesCircle}>
-                We couldn't find your party details. Please try again or contact us for help.
+                We couldn&apos;t find your party details. Please try again or contact us for help.
               </GoldInfoBox>
               <Button onClick={() => router.push('/')}>
                 Return to Home
@@ -166,7 +166,7 @@ export default function PaymentPage() {
               <InfoBlock>
                 <div>
                   <FontAwesomeIcon icon={faReceipt} />{' '}
-                  <strong>You've paid:</strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} total for 2 nights
+                  <strong>You&apos;ve paid:</strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{cost} total for 2 nights
                 </div>
                 <div>
                   <FontAwesomeIcon icon={faUsers} />{' '}
@@ -190,8 +190,8 @@ export default function PaymentPage() {
                 Your booking reference is <BookingRef>{party.bookingReference}</BookingRef>
                 </p>
                 <p>
-                  We're so excited to have you staying on-site with us — it means the world.
-                  Borelands is such a special place, and we're sure you're going to fall in love with the views, the vibe, and the weekend ahead.
+                  We&apos;re so excited to have you staying on-site with us — it means the world.
+                  Borelands is such a special place, and we&apos;re sure you&apos;re going to fall in love with the views, the vibe, and the weekend ahead.
                 </p>
               </TartanInfoBox>
               <Button onClick={() => router.push(`/accommodationDetails/${inviteCode}`)} style={{marginTop: '1.5rem'}}>

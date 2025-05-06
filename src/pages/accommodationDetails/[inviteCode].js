@@ -145,7 +145,7 @@ export default function AccommodationDetailsPage() {
     };
 
     if (inviteCode) fetchData();
-  }, [inviteCode]);
+  }, [inviteCode, router]);
 
   const handleOffsite = async () => {
     await axios.post(`/api/accommodation/update`, {
@@ -188,7 +188,7 @@ export default function AccommodationDetailsPage() {
             <Section>
               <SectionHeading>Error</SectionHeading>
               <GoldInfoBox icon={faTimesCircle}>
-                We couldn't find your accommodation details. Please try again or contact us for help.
+                We couldn&apos;t find your accommodation details. Please try again or contact us for help.
               </GoldInfoBox>
               <Button onClick={() => router.push('/')}>
                 Return to Home
@@ -219,7 +219,7 @@ export default function AccommodationDetailsPage() {
         <Page>
           <PartyHeader party={party} />
           <Text><strong>Thanks for RSVPing{party.paid && " and paying for your accommodation!"}</strong><br />
-              We're so glad you can make it and can't wait to celebrate with you.
+              We&apos;re so glad you can make it and can&apos;t wait to celebrate with you.
             </Text>
           {
             party.paid &&
@@ -244,7 +244,7 @@ export default function AccommodationDetailsPage() {
               <br />
               <br />
               <FontAwesomeIcon icon={faMugHot} /> {" "}
-              <strong>Don't rush off!</strong> Pastries and coffee will be served in the barn until <strong>12pm</strong> after check-out. Swing by for a tasty send-off!
+              <strong>Don&apos;t rush off!</strong> Pastries and coffee will be served in the barn until <strong>12pm</strong> after check-out. Swing by for a tasty send-off!
             </InfoBlock>
 
             <Text>
@@ -252,7 +252,7 @@ export default function AccommodationDetailsPage() {
             </Text>
 
             <Text>
-              Staying on-site means you can enjoy the Friday festivities, get ready with ease, and be just a <strong>minute's walk</strong> from the venue on the big day.
+              Staying on-site means you can enjoy the Friday festivities, get ready with ease, and be just a <strong>minute&apos;s walk</strong> from the venue on the big day.
             </Text>
 
             <DownloadLink href="/new-site-map.png" download>
@@ -323,7 +323,7 @@ export default function AccommodationDetailsPage() {
                           <br/>
                         {hasBaby && (
                           <GoldInfoBox icon={faBaby}>
-                            We're excited to welcome your little one! Please note, travel cots aren't provided — feel free to bring your own.
+                            We&apos;re excited to welcome your little one! Please note, travel cots aren&apos;t provided — feel free to bring your own.
                           </GoldInfoBox>
                         )}
                       </>
@@ -388,7 +388,7 @@ export default function AccommodationDetailsPage() {
                 ) : (
                   <>
                     <FontAwesomeIcon icon={faBus} style={{marginRight: '0.5rem'}} />
-                    Confirm You're Staying Offsite
+                    Confirm You&apos;re Staying Offsite
                   </>
                 )}
               </Button>
