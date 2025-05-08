@@ -7,6 +7,10 @@ function calculateBookingFee(baseCost) {
   return Math.round(baseCost * 0.015 + 20);
 }
 
+function getTotalCost(accommodationCost) {
+  return accommodationCost + calculateBookingFee(accommodationCost);
+}
+
 async function main() {
 
   // cabins 
@@ -126,7 +130,7 @@ async function main() {
       name: 'Ben Lawers',
       videoUrl: "https://youtube.com/embed/ti_-jLmQrII",
       imageFileName: 'benLawers.jpg',
-      capacity: 8,
+      capacity: 9,
       roomCount: 3,
       hotTub: "Heated on request — advance notice required",
       checkIn: "4pm",
@@ -135,8 +139,8 @@ async function main() {
         create: [
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
           { name: 'Room 2', roomType: 'Double/Twin', capacity: 2, enSuite: false },
-          { name: 'Room 3', roomType: 'Double Bunk', capacity: 4, enSuite: false }
-
+          {name: 'Room 3', roomType: 'Double Bunk', capacity: 4, enSuite: false},
+          { name: 'Room 4', roomType: 'Sofabed', capacity: 1, enSuite: false }
         ]
       }
     },
@@ -173,6 +177,7 @@ async function main() {
       inviteCode: 'jir6',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -201,8 +206,9 @@ async function main() {
       token: 'sonnyAndBecca',
       guestType: 'OnSite',
       inviteCode: '7h7k',
-      accommodationCost: 100,
-      bookingFee: calculateBookingFee(100),
+      accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -231,8 +237,9 @@ async function main() {
       token: 'jayAndBecky',
       guestType: 'OnSite',
       inviteCode: '4yhb',
-      accommodationCost: 100,
-      bookingFee: calculateBookingFee(100),
+      accommodationCost: 30000,
+      bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -248,7 +255,7 @@ async function main() {
             firstName: 'Becky',
             lastName: '',
             room: { connect: { id: farmhouse.rooms[2].id } },
-            relation: 'Bridesmade'
+            relation: 'Bridesmaid'
           }
         ]
       }
@@ -261,8 +268,9 @@ async function main() {
       token: 'tomAndToni',
       guestType: 'OnSite',
       inviteCode: '8fg9',
-      accommodationCost: 100,
-      bookingFee: calculateBookingFee(100),
+      accommodationCost: 22000,
+      bookingFee: calculateBookingFee(22000),
+      totalCost: getTotalCost(22000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -285,7 +293,7 @@ async function main() {
             lastName: 'Speakman',
             isBaby: true,
             room: { connect: { id: farmhouse.rooms[3].id } },
-             relation: 'Friend of the Couples Baby'
+             relation: 'Friend of the Couple'
           }
         ]
       }
@@ -300,6 +308,7 @@ async function main() {
       inviteCode: '2jiu',
       accommodationCost: 22000,
       bookingFee: calculateBookingFee(22000),
+      totalCost: getTotalCost(22000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -330,6 +339,7 @@ async function main() {
       inviteCode: 'x6mp',
       accommodationCost: 26000,
       bookingFee: calculateBookingFee(26000),
+      totalCost: getTotalCost(26000),
       cabin: {
         connect: { id: longhouse.id }
       },
@@ -360,6 +370,7 @@ async function main() {
       inviteCode: 'ygh3',
       accommodationCost: 26000,
       bookingFee: calculateBookingFee(26000),
+      totalCost: getTotalCost(26000),
       cabin: {
         connect: { id: longhouse.id }
       },
@@ -369,7 +380,7 @@ async function main() {
             firstName: 'Sean',
             lastName: 'Boardman',
             room: { connect: { id: longhouse.rooms[3].id } },
-             relation: 'Groomsmen'
+             relation: 'Groomsman'
           },
           {
             firstName: 'Kim',
@@ -390,6 +401,7 @@ async function main() {
       inviteCode: '5msi',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -414,6 +426,7 @@ async function main() {
       inviteCode: '5i2j',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -438,6 +451,7 @@ async function main() {
       inviteCode: '78hg',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -462,6 +476,7 @@ async function main() {
       inviteCode: 'nm1p',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -486,6 +501,7 @@ async function main() {
       inviteCode: '8anw',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -510,6 +526,7 @@ async function main() {
       inviteCode: '2q8h',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -534,6 +551,7 @@ async function main() {
       inviteCode: '7aj8',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -558,6 +576,7 @@ async function main() {
       inviteCode: '7q3n',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -582,6 +601,7 @@ async function main() {
       inviteCode: '9a67',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: farmhouse.id }
       },
@@ -606,6 +626,7 @@ async function main() {
       inviteCode: 'ma19',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       guests: {
         create: [
           {
@@ -627,6 +648,7 @@ async function main() {
       inviteCode: 'b58x',
       accommodationCost: 26000,
       bookingFee: calculateBookingFee(26000),
+      totalCost: getTotalCost(26000),
       cabin: {
         connect: { id: longhouse.id }
       },
@@ -636,13 +658,13 @@ async function main() {
             firstName: 'Jake',
             lastName: 'Wright',
             room: { connect: { id: longhouse.rooms[1].id } },
-            relation: 'Colleague'
+            relation: 'Friend of the Couple'
           },
           {
             firstName: 'Anthea',
             lastName: '',
             room: { connect: { id: longhouse.rooms[1].id } },
-            relation: 'Colleagues Partner'
+            relation: 'Friend of the Couple'
           }
         ]
       }
@@ -657,6 +679,7 @@ async function main() {
       inviteCode: '9i46',
       accommodationCost: 26000,
       bookingFee: calculateBookingFee(26000),
+      totalCost: getTotalCost(26000),
       cabin: {
         connect: { id: longhouse.id }
       },
@@ -708,6 +731,7 @@ async function main() {
       inviteCode: 'k56p',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -738,6 +762,7 @@ async function main() {
       inviteCode: '4gf5',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -768,6 +793,7 @@ async function main() {
       inviteCode: '7cvt',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -798,6 +824,7 @@ async function main() {
       inviteCode: 'drg4',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -807,7 +834,7 @@ async function main() {
             firstName: 'David',
             lastName: 'Austin',
             room: { connect: { id: benCruachan.rooms[3].id } },
-            relation: 'Family of the Groom'
+            relation: 'Uncle of the Groom'
           },
         ]
       }
@@ -822,6 +849,7 @@ async function main() {
       inviteCode: '76gj',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -831,7 +859,7 @@ async function main() {
             firstName: 'Steven',
             lastName: 'Austin',
             room: { connect: { id: benCruachan.rooms[3].id } },
-            relation: 'Family of the Groom'
+            relation: 'Uncle of the Groom'
           },
         ]
       }
@@ -846,6 +874,7 @@ async function main() {
       inviteCode: 'c9hl',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: benCruachan.id }
       },
@@ -870,6 +899,7 @@ async function main() {
       inviteCode: '46vy',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: schiehallion.id }
       },
@@ -900,6 +930,7 @@ async function main() {
       inviteCode: 'zv6q',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: schiehallion.id }
       },
@@ -909,13 +940,13 @@ async function main() {
             firstName: 'Eddie',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[1].id } },
-            relation: 'Family of the Bride'
+            relation: 'Uncle of the Bride'
           },
           {
             firstName: 'Maureen',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[1].id } },
-           relation: 'Family of the Bride'
+           relation: 'Auntie of the Bride'
           }
         ]
       }
@@ -933,7 +964,7 @@ async function main() {
           {
             firstName: 'Kevin',
             lastName: '',
-            relation: 'Family of the Bride'
+            relation: 'Cousin of the Bride'
           },
           {
             firstName: 'Lynn',
@@ -953,6 +984,7 @@ async function main() {
       inviteCode: 'j8s4',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: schiehallion.id }
       },
@@ -962,7 +994,7 @@ async function main() {
             firstName: 'Cieran',
             lastName: '',
             room: { connect: { id: schiehallion.rooms[2].id } },
-            relation: 'Family of the Bride'
+            relation: 'Cousin of the Bride'
           },
           {
             firstName: 'Chloe',
@@ -983,6 +1015,7 @@ async function main() {
       inviteCode: 'k8z3',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: schiehallion.id }
       },
@@ -1013,6 +1046,7 @@ async function main() {
       inviteCode: 'f57n',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: benDrummond.id }
       },
@@ -1043,6 +1077,7 @@ async function main() {
       inviteCode: 'b8pl',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: benDrummond.id }
       },
@@ -1052,7 +1087,7 @@ async function main() {
             firstName: 'Ross',
             lastName: 'Mitchell',
             room: { connect: { id: benDrummond.rooms[1].id } },
-            relation: 'Family of the Bride'
+            relation: 'Groomsman'
           },
           {
             firstName: 'Nicci',
@@ -1065,21 +1100,21 @@ async function main() {
             lastName: 'Mitchell',
             isChild: true,
             room: { connect: { id: benDrummond.rooms[2].id } },
-            relation: 'Family of the Bride'
+            relation: 'Usher'
           },
           {
             firstName: 'Jenson',
             lastName: 'Mitchell',
             isChild: true,
             room: { connect: { id: benDrummond.rooms[2].id } },
-            relation: 'Family of the Bride'
+            relation: 'Usher'
           },
           {
             firstName: 'Skye',
             lastName: 'Mitchell',
             isChild: true,
             room: { connect: { id: benDrummond.rooms[2].id } },
-            relation: 'Family of the Bride'
+            relation: 'Flower Girl'
           }
         ]
       }
@@ -1094,6 +1129,7 @@ async function main() {
       inviteCode: 'z16f',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: benLawers.id }
       },
@@ -1109,7 +1145,7 @@ async function main() {
             firstName: 'Vicky',
             lastName: '',
             room: { connect: { id: benLawers.rooms[0].id } },
-            relation: 'Family of the Bride'
+            relation: 'Cousin of the Bride'
           },
           {
             firstName: 'Mimi-Rose',
@@ -1145,6 +1181,7 @@ async function main() {
       inviteCode: '1829',
       accommodationCost: 2000,
       bookingFee: calculateBookingFee(2000),
+      totalCost: getTotalCost(2000),
       cabin: {
         connect: { id: benLawers.id }
       },
@@ -1152,8 +1189,9 @@ async function main() {
         create: [
           {
             firstName: 'Billy',
+            room: { connect: { id: benLawers.rooms[3].id } },
             lastName: '',
-            relation: 'Family of the Bride'
+            relation: 'Uncle of the Bride'
           }
         ]
       }
@@ -1169,6 +1207,7 @@ async function main() {
       inviteCode: '9pag',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: benLawers.id }
       },
@@ -1178,13 +1217,13 @@ async function main() {
             firstName: 'William',
             lastName: '',
             room: { connect: { id: benLawers.rooms[1].id } },
-            relation: 'Family of the Bride'
+            relation: 'Cousin of the Bride'
           },
           {
             firstName: 'Shona',
             lastName: '',
             room: { connect: { id: benLawers.rooms[1].id } },
-            relation: 'Family of the Bride'
+            relation: 'Cousin of the Bride'
           },
           {
             firstName: 'Luca',
@@ -1213,6 +1252,7 @@ async function main() {
       inviteCode: 'c57x',
       accommodationCost: 22000,
       bookingFee: calculateBookingFee(22000),
+      totalCost: getTotalCost(22000),
       cabin: {
         connect: { id: cottage.id }
       },
@@ -1243,6 +1283,7 @@ async function main() {
       inviteCode: 'q4mg',
       accommodationCost: 11000,
       bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
       cabin: {
         connect: { id: cottage.id }
       },
@@ -1267,6 +1308,7 @@ async function main() {
       inviteCode: 'z61b',
       accommodationCost: 30000,
       bookingFee: calculateBookingFee(30000),
+      totalCost: getTotalCost(30000),
       cabin: {
         connect: { id: cottage.id }
       },
@@ -1276,13 +1318,13 @@ async function main() {
             firstName: 'Steve',
             lastName: 'Morgan',
             room: { connect: { id: cottage.rooms[1].id } },
-            relation: 'Family of the Groom'
+            relation: 'Uncle of the Groom'
           },
           {
             firstName: 'Linda',
             lastName: 'Morgan',
             room: { connect: { id: cottage.rooms[1].id } },
-            relation: 'Family of the Groom'
+            relation: 'Auntie of the Groom'
           }
         ]
       }
@@ -1397,16 +1439,16 @@ async function main() {
     }
   });
 
-  const partnerAndMaxine = await prisma.GuestParty.create({
+  const AndyAndMaxine = await prisma.GuestParty.create({
     data: {
-      partyName: 'Partner & Maxine',
-      token: 'partnerAndMaxine',
+      partyName: 'Andy & Maxine',
+      token: 'AndyAndMaxine',
       guestType: 'AccommodationNotOffered',
       inviteCode: 'lsy7',
       guests: {
         create: [
           {
-            firstName: 'Partner',
+            firstName: 'Andy',
             lastName: '',
           },
           {
@@ -1483,7 +1525,7 @@ async function main() {
 
   const lisaAndAndy = await prisma.GuestParty.create({
     data: {
-      partyName: 'Lisa & Andy',
+      partyName: 'Lisa, Andy & Max',
       token: 'listAndAndy',
       guestType: 'AccommodationNotOffered',
       inviteCode: 'qzx5',
@@ -1547,7 +1589,7 @@ async function main() {
 
   const mattAndAndrea = await prisma.GuestParty.create({
     data: {
-      partyName: 'Matt & Andrea',
+      partyName: 'Matt, Andrea & Family',
       token: 'mattAndAndrea',
       guestType: 'AccommodationNotOffered',
       inviteCode: '1k2n',

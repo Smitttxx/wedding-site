@@ -10,7 +10,8 @@
     "build": "prisma generate && next build",
     "vercel:build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "scan": "next dev & npx react-scan@latest localhost:3000"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
