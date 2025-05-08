@@ -228,9 +228,9 @@ export default function GuestPage() {
             {party.guests.some(g => g.isChild || g.isBaby) && (
               <GoldInfoBox icon={faChild}>
                 {party.guests.filter(g => g.isChild || g.isBaby).length === 1 ? (
-                  <>We see a little one is joining — yay! Kids are warmly invited and will be looked after by lovely wedding nannies on the big day.</>
+                  <>We see a little one is joining — yay! Kids are warmly invited and can be looked after, if you wish after by lovely wedding nannies on the big day.</>
                 ) : (
-                  <>We see little ones are joining — yay! Children are warmly invited and will be looked after by lovely wedding nannies on the big day.</>
+                  <>We see little ones are joining — yay! Children are warmly invited and can be looked after by lovely wedding nannies on the big day.</>
                 )}
               </GoldInfoBox>
             )}
