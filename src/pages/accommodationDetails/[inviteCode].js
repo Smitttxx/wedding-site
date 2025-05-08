@@ -333,8 +333,7 @@ export default function AccommodationDetailsPage() {
                         {/* Baby Note */}
                           <br/>
                         {hasBaby && (
-                          <GoldInfoBox icon={faBaby}>
-                            We&apos;re excited to welcome your little one! Please note, travel cots aren&apos;t provided — feel free to bring your own.
+                          <GoldInfoBox icon={faBaby}>]are not provided — feel free to bring your own.
                           </GoldInfoBox>
                         )}
                       </>
