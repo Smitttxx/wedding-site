@@ -43,12 +43,12 @@ export default function ThankYouPage() {
             <Paragraph>Loading your gift details...</Paragraph>
           ) : purchase ? (
             <Paragraph>
-              Thank you so much, <strong>{purchase.name}</strong>, for your generous gift: <strong>{
+              Thank you so much, <strong>{purchase.name}</strong>, for your generous gift of: <strong>{
                 purchase.gift.name === 'Custom Gift'
                   ? `£${(purchase.gift.amount / 100).toFixed(2)}`
                   : purchase.gift.name
               }</strong>!<br />
-              {purchase.message && <span>Your message: "{purchase.message}"<br /></span>}
+              {purchase.message && <span>Your message: <strong>{purchase.message}</strong><br /></span>}
               We&apos;re truly touched by your thoughtfulness and can&apos;t wait to create these special memories together.
             </Paragraph>
           ) : (
