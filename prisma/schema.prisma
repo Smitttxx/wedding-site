@@ -101,7 +101,7 @@ model Gift {
 }
 
 model GiftPurchase {
-  id              Int      @id @default(autoincrement())
+  id              String   @id
   giftId          Int      // Reference to the original gift
   gift            Gift     @relation(fields: [giftId], references: [id])
   name            String   // Name of the person giving the gift

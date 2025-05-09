@@ -1,8 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import {Label} from "./Label";
+import {Input} from "./Input";
+import {Textarea} from "./TextArea";
+import {Button} from "./Button";
+import {StyledCardElement} from "./CardElement";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -43,68 +48,6 @@ const Form = styled.form`
   gap: 1rem;
 `;
 
-const Label = styled.label`
-  font-weight: bold;
-  display: block;
-  margin-bottom: 0.5rem;
-  color: ${props => props.theme.colors.text};
-`;
-
-const Input = styled.input`
-  padding: 0.75rem;
-  border: 1px solid ${props => props.theme.colors.accent};
-  border-radius: ${props => props.theme.borderRadius};
-  width: 100%;
-  font-size: 1rem;
-`;
-
-const TextArea = styled.textarea`
-  padding: 0.75rem;
-  border: 1px solid ${props => props.theme.colors.accent};
-  border-radius: ${props => props.theme.borderRadius};
-  width: 100%;
-  font-size: 1rem;
-  min-height: 100px;
-  resize: vertical;
-`;
-
-const StyledCardElement = styled(CardElement)`
-  padding: 0.75rem;
-  border: 1px solid ${props => props.theme.colors.accent};
-  border-radius: ${props => props.theme.borderRadius};
-  background-color: #fff;
-  font-size: 1rem;
-  color: ${props => props.theme.colors.text};
-  transition: border 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: ${props => props.theme.colors.primary};
-  }
-`;
-
-const Button = styled.button`
-  margin-top: 1.5rem;
-  padding: 0.75rem 1.25rem;
-  background: ${props => props.theme.colors.primary};
-  color: white;
-  border: none;
-  border-radius: ${props => props.theme.borderRadius};
-  font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-  font-size: 1rem;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background: ${props => props.theme.colors.primaryDark};
-  }
-
-  &:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-  }
-`;
 
 export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret }) {
   const [name, setName] = useState('');
@@ -138,7 +81,7 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
         console.error('Payment failed:', result.error);
       } else if (result.paymentIntent.status === 'succeeded') {
         // Save the gift details
-        await axios.post('/api/save-gift', {
+        const saveRes = await axios.post('/api/save-gift', {
           name,
           message,
           giftId: gift.id,
@@ -146,7 +89,7 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
           paymentIntentId: result.paymentIntent.id,
         });
         onClose();
-        router.push('/gifts/thank-you');
+        router.push(`/gifts/thank-you?purchaseId=${saveRes.data.purchaseId}`);
       }
     } catch (error) {
       console.error('Error processing payment:', error);
@@ -178,8 +121,9 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
           </div>
 
           <div>
-            <Label htmlFor="message">Message (optional):</Label>
-            <TextArea
+            <Label htmlFor="message">Message to the Bride and Groom:</Label>
+            <Textarea
+              required
               id="message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}

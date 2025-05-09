@@ -7,11 +7,9 @@ import CheckoutForm from './CheckoutForm';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
-function PaymentStatusHandler({ gift, amount, isProcessing, setIsProcessing, hasSaved, setHasSaved }) {
+function PaymentStatusHandler({ gift, amount, setIsProcessing, hasSaved }) {
   const stripe = useStripe();
   const router = useRouter();
-
-  const { giftId, paymentIntentId } = router.query;
 
   useEffect(() => {
     const clientSecret = new URLSearchParams(window.location.search).get('payment_intent_client_secret');

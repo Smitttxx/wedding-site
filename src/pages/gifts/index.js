@@ -3,15 +3,19 @@ import Layout from '../../components/Layout';
 import NavBar from '../../components/NavBar';
 import {Page} from '@/components/Page';
 import {SectionHeading} from '@/components/Section';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Elements, useStripe, CardElement, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import GiftModal from '../../components/GiftModal';
-import GiftSection from '../../components/GiftSection';
+import {Input} from "@/components/Input";
+import {Textarea} from "@/components/TextArea";
+import {StyledCardElement} from "@/components/CardElement";
+import {Button} from "@/components/Button";
+import {Label} from "@/components/Label";
+import {ButtonLink} from "../../components/ButtonLink";
+import GiftCard from '../../components/GiftCard';
 
 const Paragraph = styled.p`
   font-size: 1.1rem;
@@ -27,51 +31,6 @@ const GiftCardGrid = styled.div`
   gap: 2rem;
   justify-content: center;
   margin-top: 2rem;
-`;
-
-const GiftCard = styled.div`
-  background: white;
-  border: 2px solid ${props => props.theme.colors.accent};
-  border-radius: 12px;
-  padding: 1rem;
-  text-align: center;
-  width: 250px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-`;
-
-const GiftImage = styled(Image)`
-  border-radius: 8px;
-`;
-
-const GiftTitle = styled.h4`
-  margin: 0.75rem 0 0.5rem;
-  font-family: ${props => props.theme.fonts.heading};
-  color: ${props => props.theme.colors.primary};
-`;
-
-const GiftDescription = styled.p`
-  font-size: 0.95rem;
-  color: ${props => props.theme.colors.text};
-`;
-
-const ButtonLink = styled(Link)`
-  display: inline-block;
-  margin-top: 2rem;
-  padding: 0.75rem 1.5rem;
-  background: ${props => props.theme.colors.primary};
-  color: white;
-  border: none;
-  border-radius: ${props => props.theme.borderRadius};
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  width: 100%;
-
-  &:hover {
-    background: ${props => props.theme.colors.primaryDark};
-  }
 `;
 
 const FormContainer = styled.div`
@@ -119,126 +78,19 @@ const Form = styled.form`
   font-family: ${({ theme }) => theme.fonts.base};
 `;
 
-const Input = styled.input`
-  padding: 0.75rem;
-  border: 1px solid ${({ theme }) => theme.colors.accent};
-  border-radius: ${({ theme }) => theme.borderRadius};
-  font-size: 1rem;
-  width: 100%;
-  font-family: ${({ theme }) => theme.fonts.base};
-  transition: all 0.3s ease;
-  background: white;
-  box-shadow: inset 0 1px 3px rgba(191, 161, 78, 0.1);
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 
-      0 0 0 2px rgba(191, 161, 78, 0.1),
-      inset 0 1px 3px rgba(191, 161, 78, 0.1);
-  }
-
-  &:disabled {
-    background: ${({ theme }) => theme.colors.background};
-    cursor: not-allowed;
-  }
-`;
-
-const TextArea = styled.textarea`
-  padding: 0.75rem;
-  border: 1px solid ${({ theme }) => theme.colors.accent};
-  border-radius: ${({ theme }) => theme.borderRadius};
-  font-size: 1rem;
-  width: 100%;
-  font-family: ${({ theme }) => theme.fonts.base};
-  transition: all 0.3s ease;
-  resize: vertical;
-  min-height: 100px;
-  background: white;
-  box-shadow: inset 0 1px 3px rgba(191, 161, 78, 0.1);
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 
-      0 0 0 2px rgba(191, 161, 78, 0.1),
-      inset 0 1px 3px rgba(191, 161, 78, 0.1);
-  }
-
-  &:disabled {
-    background: ${({ theme }) => theme.colors.background};
-    cursor: not-allowed;
-  }
-`;
-
-const Label = styled.label`
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  color: ${({ theme }) => theme.colors.primary};
-  font-family: ${({ theme }) => theme.fonts.ui};
-  font-size: 1.1rem;
-  text-shadow: 1px 1px 2px rgba(191, 161, 78, 0.1);
-`;
-
-const StyledCardElement = styled(CardElement)`
-  padding: 0.75rem;
-  border: 1px solid ${({ theme }) => theme.colors.accent};
-  border-radius: ${({ theme }) => theme.borderRadius};
-  background-color: white;
-  font-size: 1rem;
-  color: ${({ theme }) => theme.colors.text};
-  transition: all 0.3s ease;
-  box-shadow: inset 0 1px 3px rgba(191, 161, 78, 0.1);
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 
-      0 0 0 2px rgba(191, 161, 78, 0.1),
-      inset 0 1px 3px rgba(191, 161, 78, 0.1);
-  }
-`;
-
-const SubmitButton = styled.button`
-  padding: 1rem;
-  background: ${({ theme }) => theme.colors.primary};
-  color: white;
-  border: none;
-  border-radius: ${({ theme }) => theme.borderRadius};
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 1rem;
-  transition: all 0.3s ease;
-
-  &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors.primaryDark};
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(191, 161, 78, 0.2);
-  }
-
-  &:disabled {
-    background: ${({ theme }) => theme.colors.lightError};
-    color: ${({ theme }) => theme.colors.error};
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-`;
-
 const gifts = [
   {
     id: 'cruise',
-    title: 'Cruise Memories',
+    title: 'Honeymoon Memories',
     image: '/cruise.webp',
-    description: 'Help us make waves on our honeymoon cruise — from cocktails at sunset to late-night dance floors.',
+    description: 'Help us make amazing memories on our honeymoon.',
     section: 'TheCruise',
   },
   {
     id: 'garden',
-    title: 'Sully&apos;s Garden',
+    title: "Sully's Garden",
     image: '/garden.jpg',
-    description: 'Our current garden needs a lot of work for it to be safe for Sully. Help us create a magical little garden — a space for running wild, growing veggies, and making mud pies.',
+    description: "Our current garden needs a lot of work for it to be safe for Sully. Help us create a magical little garden — a space for running wild, growing veggies, and making mud pies.",
     section: 'SullysGarden',
   }
 ];
@@ -253,7 +105,6 @@ function CustomGiftForm({ onClose }) {
   });
   const [postcode, setPostcode] = useState('');
   const [loading, setLoading] = useState(false);
-  const [clientSecret, setClientSecret] = useState(null);
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
@@ -301,14 +152,14 @@ function CustomGiftForm({ onClose }) {
         });
 
         // Then save the purchase with the new gift ID
-        await axios.post('/api/save-gift', {
+        const saveRes = await axios.post('/api/save-gift', {
           name: formData.name,
           message: formData.message,
           giftId: giftResponse.data.id,
           amount: parseFloat(formData.amount) * 100,
           paymentIntentId: result.paymentIntent.id,
         });
-        router.push('/gifts/thank-you');
+        router.push(`/gifts/thank-you?purchaseId=${saveRes.data.purchaseId}`);
       }
     } catch (error) {
       console.error('Error processing payment:', error);
@@ -320,8 +171,9 @@ function CustomGiftForm({ onClose }) {
   return (
     <FormContainer>
       <FormTitle>Add Your Personal Touch</FormTitle>
-      <p>Each gift—no matter the size—is a part of the foundation we&apos;re building together. We&apos;re so grateful for your love and kindness.</p>
-      <br/>
+      {"Each gift—no matter the size—is a part of the foundation we're building together. We're so grateful for your love and kindness."}
+      
+        < br />
       <Form onSubmit={handleSubmit}>
         <Input
           type="text"
@@ -331,7 +183,7 @@ function CustomGiftForm({ onClose }) {
           onChange={handleInputChange}
           required
         />
-        <TextArea
+        <Textarea
           name="message"
           placeholder="What would you like us to use this gift for?"
           value={formData.message}
@@ -376,9 +228,9 @@ function CustomGiftForm({ onClose }) {
             required
           />
         </div>
-        <SubmitButton type="submit" disabled={!stripe || loading}>
+        <Button type="submit" disabled={!stripe || loading}>
           {loading ? 'Processing...' : `Gift £${formData.amount || '0.00'}`}
-        </SubmitButton>
+        </Button>
       </Form>
     </FormContainer>
   );
@@ -394,17 +246,20 @@ export default function GiftsPage() {
         <Page>
           <SectionHeading>Gifts</SectionHeading>
           <Paragraph>
-            {"Your presence means the world to us — we&apos;re truly grateful you&apos;re joining us for our big weekend."}
+            {"Your presence means the world to us — we're truly grateful you're joining us for our big weekend."}
           </Paragraph>
           <Paragraph>
             We are lucky to already have a home (and our dream kitchen!), so instead of traditional gifts, we would love for you to help us create memories. If you feel moved to gift something, we have created a few options below.
           </Paragraph>
           <GiftCardGrid>
             {gifts.map((gift) => (
-              <GiftCard key={gift.id}>
-                <GiftTitle>{gift.title}</GiftTitle>
-                <GiftImage src={gift.image} width={220} height={150} alt={gift.title} />
-                <GiftDescription>{gift.description}</GiftDescription>
+              <GiftCard
+                key={gift.id}
+                title={gift.title}
+                image={gift.image}
+                amount={gift.amount}
+                description={gift.description}
+              >
                 <ButtonLink href={`/gifts/${gift.id}`}>
                   View {gift.title} Gifts
                 </ButtonLink>

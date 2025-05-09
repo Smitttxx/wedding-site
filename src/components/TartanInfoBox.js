@@ -13,14 +13,13 @@ export const TartanInfoBox = styled.div`
 
   padding: 1rem 1rem;
   margin: 1rem auto;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   text-align: center;
   font-family: ${props => props.theme.fonts.heading};
   color: ${props => props.theme.colors.background};
-  font-weight: bold;
 
   span {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: ${props => props.theme.colors.accent};
     font-weight: 600;
     margin: 0 0.4rem;

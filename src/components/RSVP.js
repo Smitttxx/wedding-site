@@ -44,8 +44,8 @@ const Ribbon = styled.div`
   top: -1rem;
   left: 1rem;
   z-index: 10;
-  background-color: ${props => props.theme.colors.primary};
-  color: #fff;
+  background-color: ${props => props.theme.colors.accent};
+  color: ${props => props.theme.colors.primary};
   font-weight: 600;
   font-size: 0.9rem;
   padding: 0.5rem 2.5rem 0.5rem 1.5rem;

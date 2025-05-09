@@ -158,8 +158,8 @@ export default function HomePage() {
             <SectionHeading>The Big Day</SectionHeading>
             <Snapshot src="/indoor-wedding.jpeg" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
             <Paragraph>
-              {"We&apos;ve planned the day to flow naturally, with plenty of time for celebration, laughter, and relaxed moments together. "}
-              {" Here&apos;s what to expect from the big day — from welcome drinks to the final song."}
+              {"We've planned the day to flow naturally, with plenty of time for celebration, laughter, and relaxed moments together. "}
+              {" Here's what to expect from the big day — from welcome drinks to the final song."}
             </Paragraph>
             <SectionHeading>Order of the Day</SectionHeading>
             <WeddingTimeline />
@@ -189,7 +189,7 @@ export default function HomePage() {
             <Snapshot src="/cruise.webp" alt="Gifts" width={700} height={400} layout="responsive"
             />
             <Paragraph>
-              {"Your presence is the best gift. But if you&apos;d like to contribute, we&apos;ve set up a page for you to view our wishes."}
+              {"Your presence is the best gift. But if you'd like to contribute, we've set up a page for you to view our wishes."}
             </Paragraph>
             <RSVPButton href="/gifts">Go to Gifts Page →</RSVPButton>
           </AnimatedSection>

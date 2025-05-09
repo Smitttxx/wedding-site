@@ -1,14 +1,8 @@
-import styled from 'styled-components';
 import ToggleRadioGroup from "./ToggleRadioGroup";
 import {Section, SectionHeading} from "./Section";
-
-const Label = styled.p`
-  font-family: ${props => props.theme.fonts.heading};
-  font-weight: bold;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-  color: ${props => props.theme.colors.primaryDark};
-`;
+import {Label} from "./Label";
+import {List} from "./List";
+import {DescriptionText} from "./DescriptionText";
 
 export default function AccommodationOptions({
   guestType,
@@ -21,7 +15,7 @@ export default function AccommodationOptions({
       <Section>
         <SectionHeading>Accommodation</SectionHeading>
         <Label>You’ve got the VIP treatment — we’ve reserved a cozy on-site room just for you.</Label>
-        <Label>Will you be staying with us at the venue?</Label>
+        <DescriptionText>Will you be staying with us at the venue?</DescriptionText>
         <ToggleRadioGroup
           name="accommodation"
           value={accommodationOption}
@@ -49,6 +43,17 @@ export default function AccommodationOptions({
         <Label>
           The venue is currently fully booked, but we will let you know if any spaces become available.
         </Label>
+        <DescriptionText>
+        There are many lovely places to stay in the nearby towns just a short drive from the venue:
+                  <List>
+                    <li>
+                      <strong>Kenmore:</strong> approximately <strong>5</strong> minutes by car
+                    </li>
+                    <li>
+                      <strong>Aberfeldy:</strong> approximately <strong>15</strong> minutes by car
+                    </li>
+          </List>
+          </DescriptionText>
       </Section>
     );
   }

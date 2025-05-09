@@ -33,22 +33,9 @@ import {
 import AccommodationConfirmationToggle from "@/components/AccommodationConfirmationToggle";
 import LoadingIndicator from "@/components/LoadingOverlay";
 import BusOption from "@/components/BusOption";
-
-const Button = styled.button`
-  margin-top: 1.5rem;
-  padding: 0.75rem 1.5rem;
-  background: ${props => props.theme.colors.primary};
-  color: white;
-  border-radius: ${props => props.theme.borderRadius};
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  max-width: 400px;
-  &:hover {
-    background: ${props => props.theme.colors.primaryDark};
-  }
-`;
+import {Button} from "@/components/Button";
+import {Divider} from "@/components/Divider";
+import {List} from "@/components/List";
 
 const DownloadLink = styled.a`
   display: inline-block;
@@ -66,48 +53,9 @@ const DownloadLink = styled.a`
   }
 `;
 
-const Divider = styled.div`
-  border-top: 1px dashed ${props => props.theme.colors.accent};
-  margin: 0.6rem 0;
-`;
-
-const List = styled.ul`
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  align-items: center;
-
-  li {
-    font-size: 1rem;
-    color: ${props => props.theme.colors.text};
-    border-bottom: 1px dashed ${props => props.theme.colors.primary};
-    padding: 0.25rem 0;
-    width: 100%;
-    max-width: 300px;
-    text-align: center;
-  }
-
-  span {
-    color: ${props => props.theme.colors.accent};
-    font-style: italic;
-    font-size: 0.9rem;
-    font-weight: bold;
-  }
-`;
-
 const Text = styled.p`
   color: ${props => props.theme.colors.text};
   margin-top: 1rem;
-`;
-
-const SectionButtons = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-  margin-top: 2.5rem;
 `;
 
 const GuestBox = styled.div`
@@ -170,7 +118,7 @@ export default function AccommodationDetailsPage() {
         <Layout>
           <Page>
             <LoadingIndicator 
-              title="🏠 Loading..."
+              title="Loading..."
               subtitle="Getting your accommodation details ready"
               fullPage={true}
             />
@@ -211,7 +159,7 @@ export default function AccommodationDetailsPage() {
     ?.flatMap(room => room.guests)
     ?.filter(g => !partyGuestIds.has(g.id));
 
-  const cost = ((party.accommodationCost + (party.bookingFee || 0)) / 100).toFixed(2);
+  const cost = (party.totalCost / 100).toFixed(2);
 
   return (
     <Fragment>
@@ -290,8 +238,7 @@ export default function AccommodationDetailsPage() {
                   return (
                     <Section key={room.id}>
                       {/* Room Name */}
-                      <SectionHeading>{room.name}</SectionHeading>
-                      <Divider />
+                      <SectionHeading>{room.name} Details</SectionHeading>
 
                       {/* Room Info */}
                       <InfoBlock>
@@ -333,7 +280,8 @@ export default function AccommodationDetailsPage() {
                         {/* Baby Note */}
                           <br/>
                         {hasBaby && (
-                          <GoldInfoBox icon={faBaby}>]are not provided — feel free to bring your own.
+                          <GoldInfoBox icon={faBaby}>
+                            Travel cots are not provided — please feel free to bring your own.
                           </GoldInfoBox>
                         )}
                       </>

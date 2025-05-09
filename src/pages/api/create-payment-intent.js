@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   }
 
   // Calculate total amount (accommodation + booking fee)
-  const totalAmount = party.accommodationCost + (party.bookingFee || 0);
+  const totalAmount = party.totalCost;
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: totalAmount,

@@ -2,20 +2,13 @@
 
 import { Section, SectionHeading } from './Section';
 import ToggleRadioGroup from './ToggleRadioGroup';
-import styled from 'styled-components';
-import Warning from './Warning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoneyBillWave, faBus, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import {GoldInfoBox} from "./GoldInfoBox";
 import {Fragment} from "react";
+import {Note} from "./Note";
 
-const Note = styled.p`
-  font-size: 0.95rem;
-  color: ${props => props.theme.colors.text};
-  margin-bottom: 1.25rem;
-`;
-
-export default function AccommodationConfirmationToggle({ confirmed, setConfirmed, error }) {
+export default function AccommodationConfirmationToggle({ confirmed, setConfirmed }) {
   return (
     <Section>
       <SectionHeading>Final Confirmation</SectionHeading>
@@ -58,7 +51,6 @@ export default function AccommodationConfirmationToggle({ confirmed, setConfirme
         </GoldInfoBox>
         </Fragment>
       )}
-      {error && <Warning>Please confirm your accommodation choice.</Warning>}
     </Section>
   );
 }

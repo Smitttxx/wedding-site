@@ -20,6 +20,7 @@ import { RedInfoBox } from '@/components/RedInfoBox';
 import { faChild, faBed, faFire, faBus, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 import { Page } from '@/components/Page';
 import { TartanInfoBox } from '@/components/TartanInfoBox';
+import {Button} from "@/components/Button";
 
 const RSVPWrapper = styled.div`
   display: flex;
@@ -32,23 +33,6 @@ const RSVPWrapper = styled.div`
 const RefContainer = styled.div`
   padding: 1px;
   text-align: center;
-`;
-
-const Button = styled.button`
-  margin-top: 2rem;
-  padding: 0.75rem 1.5rem;
-  width: 100%;
-  background: ${props => props.theme.colors.primary};
-  color: white;
-  font-weight: bold;
-  font-size: 1rem;
-  border-radius: ${props => props.theme.borderRadius};
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    background: ${props => props.theme.colors.primaryDark};
-  }
 `;
 
 export default function GuestPage() {

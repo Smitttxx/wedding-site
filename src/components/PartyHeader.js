@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {Label} from "./Label";
 
 const Container = styled.div`
   text-align: center;
@@ -22,11 +23,6 @@ const GuestNames = styled.h1`
 
 const RoomSection = styled.div`
   margin-top: 1rem;
-`;
-
-const Label = styled.p`
-  font-weight: bold;
-  margin-bottom: 0.25rem;
 `;
 
 export default function PartyHeader({ party }) {
