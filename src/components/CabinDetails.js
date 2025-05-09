@@ -6,9 +6,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
   faHome, faBed, faUsers, faHotTubPerson
 } from '@fortawesome/free-solid-svg-icons';
-
-faHotTubPerson
 import {InfoBlock} from "./InfoBlock";
+
 const MediaWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -25,35 +24,6 @@ const MediaWrapper = styled.div`
 
 const Snapshot = styled(Image)`
   border-radius: 12px;
-`;
-
-const Details = styled.div`
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  font-family: ${props => props.theme.fonts.base};
-  font-size: 1.1rem;
-  color: ${props => props.theme.colors.text};
-
-  div {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-
-    svg {
-      color: ${props => props.theme.colors.accent};
-    }
-
-    strong {
-      font-weight: 600;
-      color: ${props => props.theme.colors.primary};
-    }
-  }
 `;
 
 

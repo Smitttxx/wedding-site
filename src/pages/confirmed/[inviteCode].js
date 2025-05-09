@@ -7,6 +7,9 @@ import {Page} from "@/components/Page";
 import {Fragment, useEffect, useState} from 'react';
 import axios from 'axios';
 import NavBar from "@/components/NavBar";
+import {DescriptionText} from "@/components/DescriptionText";
+import {Divider} from "@/components/Divider";
+import {Label} from "@/components/Label";
 
 const Message = styled.p`
   font-size: 1.25rem;
@@ -112,19 +115,22 @@ export default function ConfirmedPage() {
         <Page>
         <SectionHeading>
   {hasAttendingGuest
-    ? `Thanks for RSVPing, ${party.guests.map(g => g.firstName).join(' & ')}`
-    : `We&apos;ll Miss You, ${party.guests.map(g => g.firstName).join(' & ')}`}
+    ? `Thanks for your RSVP, ${party.guests.map(g => g.firstName).join(' & ')}`
+    : `We'll Miss You, ${party.guests.map(g => g.firstName).join(' & ')}`}
 </SectionHeading>
 
 
           {hasAttendingGuest ? (
             party.guestType === 'AccommodationNotOffered' ? (
               <>
-                <Message>
+                <Divider />
+                <Label>
                   We&apos;re so glad you&apos;ll be joining us to celebrate our big day in the Scottish Highlands!
-                </Message>
-                <div>
+                </Label>
+                <br/>
+                <DescriptionText>
                   There are many lovely places to stay in the nearby towns just a short drive from the venue:
+                  <br/><br/>
                   <List>
                     <li>
                       <strong>Kenmore:</strong> approximately <strong>5</strong> minutes by car
@@ -133,38 +139,42 @@ export default function ConfirmedPage() {
                       <strong>Aberfeldy:</strong> approximately <strong>15</strong> minutes by car
                     </li>
                   </List>
-                  <br/>
-                  <p>
+                  <br />
+                  </DescriptionText>
+                  <DescriptionText>
                     A <strong>guest bus</strong> will run from the venue to both towns
                     after the wedding at <strong>11:30pm,</strong> so you can relax and enjoy the celebration.
-                  </p>
-                </div>
+                  </DescriptionText>
               </>
             ) : (
-              <>
-                <Message>
+                <>
+                  <Divider />
+                  <Label>
                   We&apos;re so glad you&apos;ll be joining us to celebrate our big day in the Scottish Highlands!
-                  <br /><br />
+                  </Label>
+                  <br/>
+                <DescriptionText>
                   You&apos;ve let us know you&apos;ll be arranging your own accommodation — thank you!
                   We&apos;ll keep you posted with travel tips and party updates.
-                </Message>
+                </DescriptionText>
                 <div>
                   <br/>
-                  <p>
-                    A <strong>guest bus</strong> will run from the venue to <strong>Aberfeldy and Kenmore</strong>
+                  <DescriptionText>
+                    A <strong>guest bus</strong> will run from the venue to <strong>Aberfeldy and Kenmore </strong>
                     after the wedding at <strong>11:30pm,</strong> so you can relax and enjoy the celebration.
-                  </p>
+                  </DescriptionText>
                 </div>
               </>
             )
           ) : (
-            <>
-              <Message>
+              <>
+                                  <Divider />
+              <Label>
                 We&apos;re really sorry you won&apos;t be able to join us — but thank you so much for letting us know.
-              </Message>
-              <Note>
+              </Label>
+              <DescriptionText>
                 If your plans change, please don&apos;t hesitate to get in touch. We&apos;d love to celebrate with you if you&apos;re able to make it!
-              </Note>
+              </DescriptionText>
             </>
           )}
         </Page>

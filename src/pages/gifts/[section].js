@@ -1,6 +1,6 @@
 // pages/gifts/[section].tsx
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '@/components/Layout';
 import NavBar from '@/components/NavBar';
@@ -11,6 +11,7 @@ import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import GiftModal from '@/components/GiftModal';
+import LoadingIndicator from "@/components/LoadingOverlay";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
@@ -48,14 +49,29 @@ export default function DynamicGiftSectionPage() {
 
   const isSupportedSection = section === 'garden' || section === 'cruise';
 
+
+  if (loading) {
+    return (
+      <Fragment>
+        <NavBar />
+        <Layout>
+          <Page>
+            <LoadingIndicator
+              subtitle="Fetching our gift ideas"
+            />
+          </Page>
+        </Layout>
+      </Fragment>
+    );
+  }
+
   return (
     <>
       <NavBar />
       <Layout>
         <Page>
           <SectionHeading>{readableTitle}</SectionHeading>
-          {loading ? <p>Loading gifts...</p> : (
-            isSupportedSection ? (
+          {isSupportedSection ? (
               <>
                 <GiftSection 
                   gifts={gifts} 
@@ -85,7 +101,7 @@ export default function DynamicGiftSectionPage() {
             ) : (
               <p style={{textAlign: 'center', marginTop: '2rem'}}>This gift section is not available.</p>
             )
-          )}
+          }
         </Page>
       </Layout>
     </>

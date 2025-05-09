@@ -8,6 +8,7 @@ const Group = styled.div`
 `;
 
 const RadioLabel = styled.label`
+	font-family: ${props => props.theme.fonts.base};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,9 +27,7 @@ const RadioLabel = styled.label`
     props.checked
       ? props.theme.colors.textOnPrimary || '#ffffff'
       : props.theme.colors.primaryDark};
-  font-family: ${props => props.theme.fonts.ui};
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.2rem;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: ${props =>

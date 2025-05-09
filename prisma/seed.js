@@ -130,7 +130,7 @@ async function main() {
       name: 'Ben Lawers',
       videoUrl: "https://youtube.com/embed/ti_-jLmQrII",
       imageFileName: 'benLawers.jpg',
-      capacity: 9,
+      capacity: 10,
       roomCount: 3,
       hotTub: "Heated on request — advance notice required",
       checkIn: "4pm",
@@ -140,7 +140,7 @@ async function main() {
           { name: 'Room 1', roomType: 'Double/Twin', capacity: 2, enSuite: true },
           { name: 'Room 2', roomType: 'Double/Twin', capacity: 2, enSuite: false },
           {name: 'Room 3', roomType: 'Double Bunk', capacity: 4, enSuite: false},
-          { name: 'Room 4', roomType: 'Sofabed', capacity: 1, enSuite: false }
+          { name: 'Room 4', roomType: 'Sofabed x2', capacity: 2, enSuite: false }
         ]
       }
     },
@@ -264,7 +264,7 @@ async function main() {
 
   const tomAndToni = await prisma.GuestParty.create({
     data: {
-      partyName: 'Tom & Toni',
+      partyName: 'Tom, Toni & Renly',
       token: 'tomAndToni',
       guestType: 'OnSite',
       inviteCode: '8fg9',
@@ -355,7 +355,7 @@ async function main() {
             firstName: 'Puja',
             lastName: 'Biswas',
             room: { connect: { id: longhouse.rooms[0].id } },
-             relation: 'Friend of the Couples Partner'
+             relation: 'Friend of the Couple'
           }
         ]
       }
@@ -459,7 +459,7 @@ async function main() {
         create: [
           {
             firstName: 'Natasha',
-            lastName: '',
+            lastName: 'Hill',
             room: { connect: { id: farmhouse.rooms[5].id } },
              relation: 'Friend of the Couple'
           }
@@ -509,31 +509,6 @@ async function main() {
         create: [
           {
             firstName: 'Patrick',
-            lastName: '',
-            relation: 'Friend of the Couple',
-            room: { connect: { id: farmhouse.rooms[4].id } },
-          },
-        ]
-      }
-    }
-  });
-
-  const lauren = await prisma.GuestParty.create({
-    data: {
-      partyName: 'Lauren',
-      token: 'lauren',
-      guestType: 'OnSite',
-      inviteCode: '2q8h',
-      accommodationCost: 11000,
-      bookingFee: calculateBookingFee(11000),
-      totalCost: getTotalCost(11000),
-      cabin: {
-        connect: { id: farmhouse.id }
-      },
-      guests: {
-        create: [
-          {
-            firstName: 'Lauren',
             lastName: '',
             relation: 'Friend of the Couple',
             room: { connect: { id: farmhouse.rooms[4].id } },
@@ -662,7 +637,7 @@ async function main() {
           },
           {
             firstName: 'Anthea',
-            lastName: '',
+            lastName: 'Harris',
             room: { connect: { id: longhouse.rooms[1].id } },
             relation: 'Friend of the Couple'
           }
@@ -895,26 +870,18 @@ async function main() {
     data: {
       partyName: 'George & Rebecca',
       token: 'georgeAndRebecca',
-      guestType: 'OnSite',
+      guestType: 'AccommodationNotOffered',
       inviteCode: '46vy',
-      accommodationCost: 30000,
-      bookingFee: calculateBookingFee(30000),
-      totalCost: getTotalCost(30000),
-      cabin: {
-        connect: { id: schiehallion.id }
-      },
       guests: {
         create: [
           {
             firstName: 'George',
             lastName: '',
-            room: { connect: { id: schiehallion.rooms[0].id } },
             relation: 'Godfather of the Bride'
           },
           {
             firstName: 'Rebecca',
             lastName: '',
-            room: { connect: { id: schiehallion.rooms[0].id } },
             relation: 'Godmother of the Bride'
           }
         ]
@@ -993,13 +960,13 @@ async function main() {
           {
             firstName: 'Cieran',
             lastName: '',
-            room: { connect: { id: schiehallion.rooms[2].id } },
+            room: { connect: { id: schiehallion.rooms[3].id } },
             relation: 'Cousin of the Bride'
           },
           {
             firstName: 'Chloe',
             lastName: '',
-            room: { connect: { id: schiehallion.rooms[2].id } },
+            room: { connect: { id: schiehallion.rooms[3].id } },
             relation: 'Family of the Bride'
           }
         ]
@@ -1024,13 +991,13 @@ async function main() {
           {
             firstName: 'John',
             lastName: 'Scott',
-            room: { connect: { id: schiehallion.rooms[3].id } },
+            room: { connect: { id: schiehallion.rooms[0].id } },
             relation: 'Family of the Groom'
           },
           {
             firstName: 'Andrea',
             lastName: 'Scott',
-            room: { connect: { id: schiehallion.rooms[3].id } },
+            room: { connect: { id: schiehallion.rooms[0].id } },
             relation: 'Family of the Groom'
           }
         ]
@@ -1071,7 +1038,7 @@ async function main() {
 
   const rossAndNicci = await prisma.GuestParty.create({
     data: {
-      partyName: 'Ross & Nicci',
+      partyName: 'Ross, Nicci & Family',
       token: 'rossAndNicci',
       guestType: 'OnSite',
       inviteCode: 'b8pl',
@@ -1123,7 +1090,7 @@ async function main() {
 
   const ryanAndVicky = await prisma.GuestParty.create({
     data: {
-      partyName: 'Ryan & Vicky',
+      partyName: 'Ryan, Vicky & Family',
       token: 'ryanAndVicky',
       guestType: 'OnSite',
       inviteCode: 'z16f',
@@ -1198,10 +1165,35 @@ async function main() {
     }
   });
 
+  const bill = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Bill',
+      token: 'bill',
+      guestType: 'OnSite',
+      inviteCode: '2p8u',
+      accommodationCost: 2000,
+      bookingFee: calculateBookingFee(2000),
+      totalCost: getTotalCost(2000),
+      cabin: {
+        connect: { id: benLawers.id }
+      },
+      guests: {
+        create: [
+          {
+            firstName: 'Bill',
+            room: { connect: { id: benLawers.rooms[3].id } },
+            lastName: '',
+            relation: 'Granda of the Bride'
+          }
+        ]
+      }
+    }
+  });
+
 
   const williamAndShona = await prisma.GuestParty.create({
     data: {
-      partyName: 'William & Shona',
+      partyName: 'William, Shona & Family',
       token: 'williamAndShona',
       guestType: 'OnSite',
       inviteCode: '9pag',
@@ -1354,38 +1346,75 @@ async function main() {
     }
   });
 
-  const bazAndMary = await prisma.GuestParty.create({
+  const chloe = await prisma.GuestParty.create({
     data: {
-      partyName: 'Baz & Mary',
-      token: 'bazAndMary',
-      guestType: 'AccommodationNotOffered',
-      inviteCode: 'm93h',
+      partyName: 'Chloe',
+      token: 'chloe',
+      guestType: 'OnSite',
+      inviteCode: '7qm6',
+      accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
+      cabin: {
+        connect: { id: schiehallion.id }
+      },
       guests: {
         create: [
           {
-            firstName: 'Baz',
-            lastName: '',
-          },
-          {
-            firstName: 'Mary',
-            lastName: 'Whitnall',
+            firstName: 'Chloe',
+            lastName: 'Homewood',
+            relation: 'Friend of the Couple',
+            room: { connect: { id: schiehallion.rooms[2].id } },
           },
         ]
       }
     }
   });
 
-  const sarah = await prisma.GuestParty.create({
+  const holly = await prisma.GuestParty.create({
     data: {
-      partyName: 'Sarah',
-      token: 'sarah',
-      guestType: 'AccommodationNotOffered',
-      inviteCode: 'e5u8',
+      partyName: 'Holly',
+      token: 'holly',
+      guestType: 'OnSite',
+      inviteCode: '8pvb',
+      accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
+      cabin: {
+        connect: { id: schiehallion.id }
+      },
       guests: {
         create: [
           {
-            firstName: 'Sarah',
-            lastName: 'Whitnall',
+            firstName: 'Holly',
+            lastName: 'Weilding',
+            relation: 'Friend of the Couple',
+            room: { connect: { id: schiehallion.rooms[2].id } },
+          },
+        ]
+      }
+    }
+  });
+
+  const lauren = await prisma.GuestParty.create({
+    data: {
+      partyName: 'Lauren',
+      token: 'lauren',
+      guestType: 'OnSite',
+      inviteCode: '2q8h',
+      accommodationCost: 11000,
+      bookingFee: calculateBookingFee(11000),
+      totalCost: getTotalCost(11000),
+      cabin: {
+        connect: { id: schiehallion.id }
+      },
+      guests: {
+        create: [
+          {
+            firstName: 'Lauren',
+            lastName: '',
+            relation: 'Friend of the Couple',
+            room: { connect: { id: schiehallion.rooms[2].id } },
           },
         ]
       }
@@ -1394,7 +1423,7 @@ async function main() {
 
   const jamieAndTabitha = await prisma.GuestParty.create({
     data: {
-      partyName: 'Jamie & Tabitha',
+      partyName: 'Jamie, Tabitha & Hermione',
       token: 'jamieAndTabitha',
       guestType: 'AccommodationNotOffered',
       inviteCode: 'rtv4',
@@ -1765,14 +1794,6 @@ async function main() {
           "amount": 8500,
           "quantity": 2,
           "imagePath": "/santorini-sunset.jpg"
-        },
-        {
-          "section": "TheCruise",
-          "name": "Bodrum Turkish Bath Experience",
-          "description": "Traditional Hammam spa experience in Bodrum.",
-          "amount": 5000,
-          "quantity": 2,
-          "imagePath": "/bodrum-spa.jpg"
         },
         {
           "section": "TheCruise",

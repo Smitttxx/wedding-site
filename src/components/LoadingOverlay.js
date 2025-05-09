@@ -1,4 +1,4 @@
-import {Fragment} from "react";
+import {Fragment, useRef, useEffect} from "react";
 import styled, { keyframes } from 'styled-components';
 
 const fade = keyframes`
@@ -7,7 +7,7 @@ const fade = keyframes`
   100% { opacity: 0.3; transform: scale(0.95); }
 `;
 
-const Cheers = styled.div`
+const Title = styled.div`
   display: inline-block;
   font-size: 2rem;
   animation: ${fade} 1.6s ease-in-out infinite;
@@ -23,13 +23,21 @@ const SubText = styled.p`
 export default function LoadingIndicator({ 
   title = "🥂 Slàinte mhath…", 
   subtitle = "Just checking your invite — hang tight!",
-  fullPage = false 
 }) {
+  const loadingRef = useRef(null);
+
+  useEffect(() => {
+    if (loadingRef.current) {
+      loadingRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, []);
 
   return (
     <Fragment>
-        <Cheers>{title}</Cheers>
+      <div ref={loadingRef}>
+        <Title>{title}</Title>
         <SubText>{subtitle}</SubText>
+      </div>
     </Fragment>
   );
 }

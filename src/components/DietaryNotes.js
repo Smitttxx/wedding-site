@@ -1,45 +1,17 @@
-import styled from 'styled-components';
 import { Section, SectionHeading } from "./Section";
-
-const Label = styled.label`
-  font-family: ${props => props.theme.fonts.heading};
-  font-weight: bold;
-  font-size: 1rem;
-  display: block;
-  margin-bottom: 0.5rem;
-  color: ${props => props.theme.colors.primaryDark};
-`;
-
-const Description = styled.p`
-  font-family: ${props => props.theme.fonts.base};
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  color: #333;
-  text-align: center;
-  color: ${props => props.theme.colors.primaryDark};
-`;
-
-const Textarea = styled.textarea`
-  width: 100%;
-  min-height: 100px;
-  padding: 1rem;
-  font-size: 1rem;
-  font-family: ${props => props.theme.fonts.base};
-  border: 1px solid #ccc;
-  border-radius: ${props => props.theme.borderRadius};
-  background: #fff;
-  color: #000;
-  resize: vertical;
-`;
+import {Label} from "./Label";
+import {Textarea} from "./TextArea";
+import {DescriptionText} from "./DescriptionText";
+import {Note} from "./Note";
 
 export default function DietaryNotes({ dietary, setDietary }) {
   return (
     <Section>
 		  <SectionHeading>{"What to expect at the wedding breakfast?"}</SectionHeading>
-      <Description>
+      <DescriptionText>
         {"A served wedding buffet bursting with choice, think proper flavour from the Texas smoker, think barbecued Scotch leg of lamb, Aberdeen Angus hanger steak, East Neuk salt cured smoked salmon... that kind of vibe. If you’ve got any dietary needs or allergies, just let us know below."}
-      </Description>
-      <Label>Dietary requirements or allergies:</Label>
+      </DescriptionText>
+      <Note>Dietary requirements or allergies:</Note>
       <Textarea
         placeholder="e.g. Vegetarian, gluten free, no nuts..."
         value={dietary}

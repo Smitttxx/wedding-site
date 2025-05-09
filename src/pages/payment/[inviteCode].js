@@ -77,10 +77,10 @@ export default function PaymentPage() {
         const data = res.data;
         setParty(data);
 
-        if (data.accommodationCost && !data.paid) {
+        if (data.totalCost && !data.paid) {
           const intentRes = await axios.post('/api/create-payment-intent', {
             guestId: data.id,
-            amount: data.accommodationCost,
+            amount: data.totalCost,
           });
           setClientSecret(intentRes.data.clientSecret);
         }
@@ -110,8 +110,8 @@ export default function PaymentPage() {
         <Layout>
           <Page>
             <LoadingIndicator 
-              title="💳 Processing..."
-              subtitle="Setting up your payment details"
+              title="Processing..."
+              subtitle="Fetching your payment details"
             />
           </Page>
         </Layout>
@@ -140,13 +140,9 @@ export default function PaymentPage() {
     );
   }
 
-  const accommodationCost = party.accommodationCost || 0;
-  const bookingFee = party.bookingFee || 0;
-  const total = accommodationCost + bookingFee;
-  const cost = (accommodationCost / 100).toFixed(2);
-  const fee = (bookingFee / 100).toFixed(2);
-  const totalDisplay = (total / 100).toFixed(2);
-  const adultCount = party.guests.filter(g => !g.isChild && !g.isBaby).length;
+  const totalCost = party.totalCost;
+  const accommodationCost = (totalCost / 100).toFixed(2);
+  const attendingAdults = party.guests.filter(g => !g.isChild && !g.isBaby && g.rsvp === 'Yes').length;
 
   const appearance = {
     theme: 'stripe',
@@ -171,11 +167,11 @@ export default function PaymentPage() {
               <InfoBlock>
                 <div>
                   <FontAwesomeIcon icon={faReceipt} />{' '}
-                  <strong>You&apos;ve paid:</strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{totalDisplay} total for 2 nights
+                  <strong>You&apos;ve paid:</strong><span style={{color: theme.colors.accent, fontSize: "1.3em"}}> £</span>{accommodationCost} total for 2 nights
                 </div>
                 <div>
                   <FontAwesomeIcon icon={faUsers} />{' '}
-                  <strong>Adults:</strong> {adultCount} {adultCount === 1 ? 'adult' : 'adults'}
+                  <strong>Adults:</strong> {attendingAdults} {attendingAdults === 1 ? 'adult' : 'adults'}
                 </div>
 
                 {party.guests.some(g => g.isChild || g.isBaby) && (
@@ -208,7 +204,7 @@ export default function PaymentPage() {
             <Section>
               <SectionHeading>Payment Failed</SectionHeading>
               <Text>The total cost is 
-              <span style={{color: theme.colors.accent, marginLeft: '0.25rem'}}>£</span><strong>{totalDisplay}</strong>
+              <span style={{color: theme.colors.accent, marginLeft: '0.25rem'}}>£</span><strong>{accommodationCost}</strong>
                   {" "}for 2 nights.</Text>
               {party.guests.some(g => g.isChild || g.isBaby) && (
                 <Text><strong>Children and babies stay free</strong>.</Text>
@@ -221,7 +217,7 @@ export default function PaymentPage() {
                   <CheckoutForm
                     partyId={party.id}
                     clientSecret={clientSecret}
-                    amount={total}
+                    amount={totalCost}
                     inviteCode={inviteCode}
                   />
                 </Elements>
@@ -237,7 +233,7 @@ export default function PaymentPage() {
             <Section>
               <SectionHeading>Payment</SectionHeading>
               <Text>The total cost is <strong>                <span style={{color: theme.colors.accent, marginLeft: '0.25rem'}}>£</span>
-              {totalDisplay}</strong> for 2 nights.</Text>
+              {accommodationCost}</strong> for 2 nights.</Text>
               {party.guests.some(g => g.isChild || g.isBaby) && (
                 <Text><strong>Children and babies stay free</strong>.</Text>
               )}
@@ -252,7 +248,7 @@ export default function PaymentPage() {
                 <CheckoutForm
                   partyId={party.id}
                   clientSecret={clientSecret}
-                  amount={total}
+                  amount={totalCost}
                   inviteCode={inviteCode}
                 />
               </Elements>
