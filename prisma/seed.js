@@ -1826,7 +1826,31 @@ async function main() {
           "amount": 3500,
           "quantity": 2,
           "imagePath": "/olive-oil.jpg"
-        }
+      },
+      {
+        "section": "TheCruise",
+        "name": "Athens: Acropolis, Parthenon & Acropolis Museum Guided Tour",
+        "description": "See and learn about the most significant monument in Greece on a group tour or more intimate private experience. Visit the new Acropolis Museum and marvel at findings from this archaeological site.",
+        "amount": 4228,
+        "quantity": 2,
+        "imagePath": "/athens-1.jpg"
+      },
+      {
+        "section": "TheCruise",
+        "name": "Athens: Hydra, Poros, and Aegina Day Cruise with Lunch",
+        "description": "Discover the islands of Hydra, Poros, and Aegina on a full-day cruise from Athens. Enjoy views of the Greek coast from the open deck of a cruise ship and savor a buffet lunch on board.",
+        "amount": 11326,
+        "quantity": 2,
+        "imagePath": "/athens-2.jpg"
+      },
+      {
+        "section": "TheCruise",
+        "name": "Athens: Greek Spirit Masterclass under the Acropolis",
+        "description": "Enjoy an unforgettable evening under the magnificent view of the Acropolis with a journey through Greek spirits and their aromas.",
+        "amount": 6595,
+        "quantity": 2,
+        "imagePath": "/athens-3.jpg"
+      }
     ]
   });
 
