@@ -170,7 +170,7 @@ function CustomGiftForm({ onClose }) {
 
   return (
     <FormContainer>
-      <FormTitle>Add Your Personal Touch</FormTitle>
+      <FormTitle>Something else in mind? Customise your own personal gift for the Bride and Groom</FormTitle>
       {"Each gift—no matter the size—is a part of the foundation we're building together. We're so grateful for your love and kindness."}
       
         < br />
