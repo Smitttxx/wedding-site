@@ -55,6 +55,8 @@ export default function GuestPage() {
   const fridayRef = useRef(null);
   const busRef = useRef(null);
 
+  const allSaidNo = formData.every(g => g.rsvp === 'No');
+
   const fetchParty = async () => {
     try {
       const res = await axios.get(`/api/invite/${inviteCode}`);
@@ -267,7 +269,7 @@ export default function GuestPage() {
           )}
 
           <Button onClick={handleSave}>
-            {accommodationPreference === 'onsite'
+            {!allSaidNo && accommodationPreference === 'onsite'
               ? 'Save RSVP & Go to Accommodation Details'
               : 'Save RSVP'}
           </Button>
