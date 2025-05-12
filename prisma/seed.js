@@ -175,9 +175,9 @@ async function main() {
       token: 'joeAndLaura',
       guestType: 'OnSite',
       inviteCode: 'jir6',
-      accommodationCost: 30000,
-      bookingFee: calculateBookingFee(30000),
-      totalCost: getTotalCost(30000),
+      accommodationCost: 300,
+      bookingFee: calculateBookingFee(300),
+      totalCost: getTotalCost(300),
       cabin: {
         connect: { id: farmhouse.id }
       },

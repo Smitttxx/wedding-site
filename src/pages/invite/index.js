@@ -35,7 +35,7 @@ const Input = styled.input`
     background-blend-mode: lighten;
     outline: none; /* Optional: removes default blue border */
     outline: 2px solid ${props => props.theme.colors.accent};
-    color: ${props => props.theme.colors.primary};
+    color: ${props => props.theme.colors.accent};
     font-weight: bold;
     text-transform: uppercase;
   }
