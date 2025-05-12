@@ -1775,14 +1775,22 @@ async function main() {
           "section": "TheCruise",
           "name": "£50 Bar Tab",
           "description": "Prepaid £50 Bar Tab , used for onboard beverages.",
-          "amount": 4000,
+          "amount": 5000,
           "quantity": 5,
           "imagePath": "/virgin-bar-tab.avif"
-        },
+      },
+      {
+        "section": "TheCruise",
+        "name": "£20 Bar Tab",
+        "description": "Prepaid £20 Bar Tab , used for onboard beverages.",
+        "amount": 2000,
+        "quantity": 5,
+        "imagePath": "/virgin-bar-tab.avif"
+      },
         {
           "section": "TheCruise",
           "name": "£100 Bar Tab",
-          "description": "Prepaid £125 Bar Tab, which includes a £25 bonus on our sailing",
+          "description": "Prepaid £100 Bar Tab",
           "amount": 10000,
           "quantity": 3,
           "imagePath": "/virgin-bar-tab.avif"
@@ -1815,7 +1823,7 @@ async function main() {
           "section": "TheCruise",
           "name": "Kotor Bay Boat Tour",
           "description": "Scenic boat ride exploring the stunning Bay of Kotor.",
-          "amount": 5500,
+          "amount": 7500,
           "quantity": 2,
           "imagePath": "/kotor-bay-boat-tour-10.webp"
         },

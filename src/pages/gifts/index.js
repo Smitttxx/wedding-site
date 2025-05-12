@@ -16,6 +16,8 @@ import {Button} from "@/components/Button";
 import {Label} from "@/components/Label";
 import {ButtonLink} from "../../components/ButtonLink";
 import GiftCard from '../../components/GiftCard';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import {RedInfoBox} from "@/components/RedInfoBox";
 
 const Paragraph = styled.p`
   font-size: 1.1rem;
@@ -36,7 +38,7 @@ const GiftCardGrid = styled.div`
 const FormContainer = styled.div`
   max-width: 600px;
   margin: 3rem auto;
-  padding: 2.5rem;
+  padding: 0.8rem;
   background: ${({ theme }) => theme.colors.lightAccent};
   border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: 
@@ -78,6 +80,33 @@ const Form = styled.form`
   font-family: ${({ theme }) => theme.fonts.base};
 `;
 
+const CardDetailsContainer = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+      "card card"
+      "expiry cvv";
+  }
+`;
+
+const CardField = styled.div`
+  padding: 0.75rem;
+  border: 1px solid ${({ theme }) => theme.colors.accent};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  background: white;
+
+  @media (max-width: 768px) {
+    &:nth-child(1) { grid-area: card; }
+    &:nth-child(2) { grid-area: expiry; }
+    &:nth-child(3) { grid-area: cvv; }
+  }
+`;
+
 const gifts = [
   {
     id: 'cruise',
@@ -105,6 +134,8 @@ function CustomGiftForm({ onClose }) {
   });
   const [postcode, setPostcode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
@@ -121,6 +152,7 @@ function CustomGiftForm({ onClose }) {
     e.preventDefault();
     if (!stripe || !elements) return;
     setLoading(true);
+    setPaymentError(false);
 
     try {
       // Create payment intent
@@ -141,8 +173,10 @@ function CustomGiftForm({ onClose }) {
       });
 
       if (result.error) {
+        setPaymentError(true);
         console.error('Payment failed:', result.error);
       } else if (result.paymentIntent.status === 'succeeded') {
+        setPaymentSuccess(true);
         // First create the custom gift
         const giftResponse = await axios.post('/api/create-custom-gift', {
           name: 'Custom Gift',
@@ -162,6 +196,7 @@ function CustomGiftForm({ onClose }) {
         router.push(`/gifts/thank-you?purchaseId=${saveRes.data.purchaseId}`);
       }
     } catch (error) {
+      setPaymentError(true);
       console.error('Error processing payment:', error);
     } finally {
       setLoading(false);
@@ -172,8 +207,7 @@ function CustomGiftForm({ onClose }) {
     <FormContainer>
       <FormTitle>Something else in mind? Customise your own personal gift for the Bride and Groom</FormTitle>
       {"Each gift—no matter the size—is a part of the foundation we're building together. We're so grateful for your love and kindness."}
-      
-        < br />
+      < br />
       <Form onSubmit={handleSubmit}>
         <Input
           type="text"
@@ -228,8 +262,13 @@ function CustomGiftForm({ onClose }) {
             required
           />
         </div>
-        <Button type="submit" disabled={!stripe || loading}>
-          {loading ? 'Processing...' : `Gift £${formData.amount || '0.00'}`}
+        {paymentError && (
+          <RedInfoBox icon={faTimesCircle}>
+            Payment failed. Please check your card details and try again.
+          </RedInfoBox>
+        )}
+        <Button type="submit" disabled={!stripe || loading || paymentSuccess}>
+          {loading || paymentSuccess ? 'Processing...' : `Gift £${formData.amount || '0.00'}`}
         </Button>
       </Form>
     </FormContainer>

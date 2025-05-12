@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import axios from 'axios';
@@ -8,6 +8,8 @@ import {Input} from "./Input";
 import {Textarea} from "./TextArea";
 import {Button} from "./Button";
 import {StyledCardElement} from "./CardElement";
+import {RedInfoBox} from "./RedInfoBox";
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -18,17 +20,21 @@ const ModalOverlay = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  align-items: flex-start;
+  z-index: 2000;
+  overflow-y: auto;
 `;
 
 const ModalContent = styled.div`
   background: white;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 12px;
   width: 90%;
   max-width: 500px;
   position: relative;
+  margin: 4rem 0;
+  max-height: 90vh;
+  overflow-y: auto;
 `;
 
 const CloseButton = styled.button`
@@ -48,15 +54,54 @@ const Form = styled.form`
   gap: 1rem;
 `;
 
+const CardDetailsContainer = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+      "card card"
+      "expiry cvv";
+  }
+`;
+
+const CardField = styled.div`
+  padding: 0.75rem;
+  border: 1px solid ${({ theme }) => theme.colors.accent};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  background: white;
+
+  @media (max-width: 768px) {
+    &:nth-child(1) { grid-area: card; }
+    &:nth-child(2) { grid-area: expiry; }
+    &:nth-child(3) { grid-area: cvv; }
+  }
+`;
 
 export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret }) {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
   const [postcode, setPostcode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -64,6 +109,7 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
     e.preventDefault();
     if (!stripe || !elements) return;
     setLoading(true);
+    setPaymentError(false);
 
     try {
       const result = await stripe.confirmCardPayment(clientSecret, {
@@ -78,9 +124,10 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
       });
 
       if (result.error) {
+        setPaymentError(true);
         console.error('Payment failed:', result.error);
       } else if (result.paymentIntent.status === 'succeeded') {
-        // Save the gift details
+        setPaymentSuccess(true);
         const saveRes = await axios.post('/api/save-gift', {
           name,
           message,
@@ -92,6 +139,7 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
         router.push(`/gifts/thank-you?purchaseId=${saveRes.data.purchaseId}`);
       }
     } catch (error) {
+      setPaymentError(true);
       console.error('Error processing payment:', error);
     } finally {
       setLoading(false);
@@ -160,7 +208,13 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
             />
           </div>
 
-          <Button type="submit" disabled={!stripe || loading}>
+          {paymentError && (
+            <RedInfoBox icon={faTimesCircle}>
+              Oops, something went wrong. Would you like to try again?
+            </RedInfoBox>
+          )}
+
+          <Button type="submit" disabled={!stripe || loading || paymentSuccess}>
             {loading ? 'Processing...' : `Gift £${(amount / 100).toFixed(2)}`}
           </Button>
         </Form>
