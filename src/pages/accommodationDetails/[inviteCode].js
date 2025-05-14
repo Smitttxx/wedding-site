@@ -185,7 +185,8 @@ export default function AccommodationDetailsPage() {
             <InfoBlock>
               <strong>
                 Payment received, thank you!<br />
-                You have paid <span style={{color: theme.colors.accent, fontSize: "1.1em"}}>£{cost}</span> for your accommodation<br />
+                  You have paid <span style={{color: theme.colors.accent, fontSize: "1.1em"}}>£{cost}</span> for your accommodation<br />
+                  Your booking reference is <span style={{color: theme.colors.accent, fontSize: "1.1em"}}>{party.bookingReference.toUpperCase()}</span><br />
               </strong>
             </InfoBlock>
           }

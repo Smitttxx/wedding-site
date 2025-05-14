@@ -202,8 +202,8 @@ async function main() {
 
   const sonnyAndBecca = await prisma.GuestParty.create({
     data: {
-      partyName: 'Sonny & Becca',
-      token: 'sonnyAndBecca',
+      partyName: 'Sonny & Rebecca',
+      token: 'sonnyAndRebecca',
       guestType: 'OnSite',
       inviteCode: '7h7k',
       accommodationCost: 30000,
@@ -221,7 +221,7 @@ async function main() {
             relation: 'Best Man'
           },
           {
-            firstName: 'Becca',
+            firstName: 'Rebecca',
             lastName: 'Roberts',
             room: { connect: { id: farmhouse.rooms[1].id } },
             relation: 'Maid of Honour'
@@ -233,8 +233,8 @@ async function main() {
 
   const jayAndBecky = await prisma.GuestParty.create({
     data: {
-      partyName: 'Jay & Becky',
-      token: 'jayAndBecky',
+      partyName: 'James & Rebecca',
+      token: 'jamesAndRebecca',
       guestType: 'OnSite',
       inviteCode: '4yhb',
       accommodationCost: 30000,
@@ -246,14 +246,14 @@ async function main() {
       guests: {
         create: [
           {
-            firstName: 'Jay',
-            lastName: '',
+            firstName: 'James',
+            lastName: 'Cupit',
             room: { connect: { id: farmhouse.rooms[2].id } },
             relation: 'Friend of the Couple'
           },
           {
-            firstName: 'Becky',
-            lastName: '',
+            firstName: 'Rebecca',
+            lastName: 'Hearne',
             room: { connect: { id: farmhouse.rooms[2].id } },
             relation: 'Bridesmaid'
           }
@@ -264,8 +264,8 @@ async function main() {
 
   const tomAndToni = await prisma.GuestParty.create({
     data: {
-      partyName: 'Tom, Toni & Renly',
-      token: 'tomAndToni',
+      partyName: 'Tomm, Toni & Renly',
+      token: 'tommAndToni',
       guestType: 'OnSite',
       inviteCode: '8fg9',
       accommodationCost: 22000,
@@ -277,14 +277,14 @@ async function main() {
       guests: {
         create: [
           {
-            firstName: 'Tom',
+            firstName: 'Tomm',
             lastName: 'Speakman',
             room: { connect: { id: farmhouse.rooms[3].id } },
              relation: 'Friend of the Couple'
           },
           {
             firstName: 'Toni',
-            lastName: 'Abblitt',
+            lastName: 'Ablitt',
             room: { connect: { id: farmhouse.rooms[3].id } },
              relation: 'Friend of the Couple'
           },
@@ -322,7 +322,7 @@ async function main() {
           },
           {
             firstName: 'Ellie',
-            lastName: 'Van',
+            lastName: 'Vann',
             room: { connect: { id: farmhouse.rooms[3].id } },
              relation: 'Bridesmaid'
           }
@@ -384,7 +384,7 @@ async function main() {
           },
           {
             firstName: 'Kim',
-            lastName: '',
+            lastName: 'Greatrex',
             room: { connect: { id: longhouse.rooms[3].id } },
              relation: 'Friend of the Couple'
           }
@@ -484,7 +484,7 @@ async function main() {
         create: [
           {
             firstName: 'Barry',
-            lastName: '',
+            lastName: 'Kennedy',
             room: { connect: { id: farmhouse.rooms[5].id } },
              relation: 'Friend of the Couple'
           },
@@ -534,7 +534,7 @@ async function main() {
         create: [
           {
             firstName: 'Connor',
-            lastName: '',
+            lastName: 'Hurley',
             relation: 'Friend of the Couple',
             room: { connect: { id: farmhouse.rooms[4].id } },
           },
@@ -559,7 +559,7 @@ async function main() {
         create: [
           {
             firstName: 'Brian',
-            lastName: '',
+            lastName: 'Hurley',
             relation: 'Friend of the Couple',
             room: { connect: { id: farmhouse.rooms[4].id } },
           },
@@ -584,7 +584,7 @@ async function main() {
         create: [
           {
             firstName: 'Gary',
-            lastName: '',
+            lastName: 'Weldon',
             relation: 'Friend of the Couple',
             room: { connect: { id: cottage.rooms[2].id } },
           },
@@ -595,8 +595,8 @@ async function main() {
 
   const matt = await prisma.GuestParty.create({
     data: {
-      partyName: 'Matt',
-      token: 'matt',
+      partyName: 'Matthew',
+      token: 'matthew',
       guestType: 'OnSite',
       inviteCode: 'ma19',
       accommodationCost: 11000,
@@ -605,8 +605,8 @@ async function main() {
       guests: {
         create: [
           {
-            firstName: 'Matt',
-            lastName: '',
+            firstName: 'Matthew',
+            lastName: 'Sturgess',
             relation: 'Friend of the Couple',
             room: { connect: { id: cottage.rooms[2].id } },
           },
@@ -687,11 +687,11 @@ async function main() {
         create: [
           {
             firstName: 'Pete',
-            lastName: '',
+            lastName: 'Smith',
           },
           {
             firstName: 'Cynthia',
-            lastName: '',
+            lastName: 'Smith',
           }
         ]
       }
@@ -876,12 +876,12 @@ async function main() {
         create: [
           {
             firstName: 'George',
-            lastName: '',
+            lastName: 'Kirkland',
             relation: 'Godfather of the Bride'
           },
           {
             firstName: 'Rebecca',
-            lastName: '',
+            lastName: 'Kirkland',
             relation: 'Godmother of the Bride'
           }
         ]
@@ -905,13 +905,13 @@ async function main() {
         create: [
           {
             firstName: 'Eddie',
-            lastName: '',
+            lastName: 'Connelly',
             room: { connect: { id: schiehallion.rooms[1].id } },
             relation: 'Uncle of the Bride'
           },
           {
             firstName: 'Maureen',
-            lastName: '',
+            lastName: 'Connelly',
             room: { connect: { id: schiehallion.rooms[1].id } },
            relation: 'Auntie of the Bride'
           }
@@ -930,12 +930,12 @@ async function main() {
         create: [
           {
             firstName: 'Kevin',
-            lastName: '',
+            lastName: 'Connelly',
             relation: 'Cousin of the Bride'
           },
           {
             firstName: 'Lynn',
-            lastName: '',
+            lastName: 'Henderson',
             relation: 'Family of the Bride'
           }
         ]
@@ -959,13 +959,13 @@ async function main() {
         create: [
           {
             firstName: 'Cieran',
-            lastName: '',
+            lastName: 'Connelly',
             room: { connect: { id: schiehallion.rooms[3].id } },
             relation: 'Cousin of the Bride'
           },
           {
             firstName: 'Chloe',
-            lastName: '',
+            lastName: 'Bryce',
             room: { connect: { id: schiehallion.rooms[3].id } },
             relation: 'Family of the Bride'
           }
@@ -1090,7 +1090,7 @@ async function main() {
 
   const ryanAndVicky = await prisma.GuestParty.create({
     data: {
-      partyName: 'Ryan, Vicky & Family',
+      partyName: 'Ryan, Victoria & Family',
       token: 'ryanAndVicky',
       guestType: 'OnSite',
       inviteCode: 'z16f',
@@ -1109,7 +1109,7 @@ async function main() {
             relation: 'Family of the Bride'
           },
           {
-            firstName: 'Vicky',
+            firstName: 'Victoria',
             lastName: '',
             room: { connect: { id: benLawers.rooms[0].id } },
             relation: 'Cousin of the Bride'
@@ -1157,7 +1157,7 @@ async function main() {
           {
             firstName: 'Billy',
             room: { connect: { id: benLawers.rooms[3].id } },
-            lastName: '',
+            lastName: 'Smith',
             relation: 'Uncle of the Bride'
           }
         ]
@@ -1182,7 +1182,7 @@ async function main() {
           {
             firstName: 'Bill',
             room: { connect: { id: benLawers.rooms[3].id } },
-            lastName: '',
+            lastName: 'Smith',
             relation: 'Granda of the Bride'
           }
         ]
@@ -1207,26 +1207,26 @@ async function main() {
         create: [
           {
             firstName: 'William',
-            lastName: '',
+            lastName: 'Smith',
             room: { connect: { id: benLawers.rooms[1].id } },
             relation: 'Cousin of the Bride'
           },
           {
             firstName: 'Shona',
-            lastName: '',
+            lastName: 'Smith',
             room: { connect: { id: benLawers.rooms[1].id } },
             relation: 'Cousin of the Bride'
           },
           {
             firstName: 'Luca',
-            lastName: '',
+            lastName: 'Smith',
             isChild: true,
             relation: 'Family of the Bride',
             room: { connect: { id: benLawers.rooms[2].id } }
           },
           {
             firstName: 'Holly',
-            lastName: '',
+            lastName: 'Smith',
             isChild: true,
             relation: 'Family of the Bride',
             room: { connect: { id: benLawers.rooms[2].id } }
@@ -1252,13 +1252,13 @@ async function main() {
         create: [
           {
             firstName: 'Kenny',
-            lastName: '',
+            lastName: 'Culham',
             room: { connect: { id: cottage.rooms[0].id } },
             relation: 'Friend of the Couple'
           },
           {
             firstName: 'Una',
-            lastName: '',
+            lastName: 'Culham',
             room: { connect: { id: cottage.rooms[0].id } },
             relation: 'Friend of the Couple'
           }
@@ -1283,7 +1283,7 @@ async function main() {
         create: [
           {
             firstName: 'Una',
-            lastName: '',
+            lastName: 'McKay',
             room: { connect: { id: cottage.rooms[0].id } },
             relation: 'Brides Guardian Angel Growing Up'
           },
@@ -1412,7 +1412,7 @@ async function main() {
         create: [
           {
             firstName: 'Lauren',
-            lastName: '',
+            lastName: 'O Reilly',
             relation: 'Friend of the Couple',
             room: { connect: { id: schiehallion.rooms[2].id } },
           },
@@ -1457,11 +1457,11 @@ async function main() {
         create: [
           {
             firstName: 'Ian',
-            lastName: '',
+            lastName: 'Hemmings',
           },
           {
             firstName: 'Sylvia',
-            lastName: '',
+            lastName: 'Hemmings',
           },
         ]
       }
