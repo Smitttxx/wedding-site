@@ -5,7 +5,7 @@ import {Page} from '@/components/Page';
 import {SectionHeading} from '@/components/Section';
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements, useStripe, CardElement, useElements } from '@stripe/react-stripe-js';
+import { Elements, useStripe, CardNumberElement, CardExpiryElement, CardCvcElement, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import GiftModal from '../../components/GiftModal';
@@ -107,6 +107,15 @@ const CardField = styled.div`
   }
 `;
 
+const LoadingMessage = styled.div`
+  background: ${({ theme }) => theme.colors.lightAccent};
+  padding: 1rem;
+  border-radius: ${({ theme }) => theme.borderRadius};
+  margin: 1rem 0;
+  text-align: center;
+  border: 1px solid ${({ theme }) => theme.colors.accent};
+`;
+
 const gifts = [
   {
     id: 'cruise',
@@ -163,7 +172,7 @@ function CustomGiftForm({ onClose }) {
 
       const result = await stripe.confirmCardPayment(response.data.clientSecret, {
         payment_method: {
-          card: elements.getElement(CardElement),
+          card: elements.getElement(CardNumberElement),
           billing_details: {
             address: {
               postal_code: postcode,
@@ -236,21 +245,56 @@ function CustomGiftForm({ onClose }) {
         />
         <div>
           <Label htmlFor="card-element">Card Details:</Label>
-          <StyledCardElement
-            id="card-element"
-            options={{
-              hidePostalCode: true,
-              style: {
-                base: {
-                  fontSize: '16px',
-                  color: '#000',
-                  '::placeholder': {
-                    color: '#aab7c4',
+          <CardDetailsContainer>
+            <CardField>
+              <CardNumberElement
+                id="card-number"
+                options={{
+                  style: {
+                    base: {
+                      fontSize: '16px',
+                      color: '#000',
+                      '::placeholder': {
+                        color: '#aab7c4',
+                      },
+                    },
                   },
-                },
-              },
-            }}
-          />
+                }}
+              />
+            </CardField>
+            <CardField>
+              <CardExpiryElement
+                id="card-expiry"
+                options={{
+                  style: {
+                    base: {
+                      fontSize: '16px',
+                      color: '#000',
+                      '::placeholder': {
+                        color: '#aab7c4',
+                      },
+                    },
+                  },
+                }}
+              />
+            </CardField>
+            <CardField>
+              <CardCvcElement
+                id="card-cvc"
+                options={{
+                  style: {
+                    base: {
+                      fontSize: '16px',
+                      color: '#000',
+                      '::placeholder': {
+                        color: '#aab7c4',
+                      },
+                    },
+                  },
+                }}
+              />
+            </CardField>
+          </CardDetailsContainer>
         </div>
         <div>
           <Label htmlFor="postcode">Billing Postcode:</Label>
@@ -262,13 +306,19 @@ function CustomGiftForm({ onClose }) {
             required
           />
         </div>
+        {loading && (
+          <LoadingMessage>
+            <p>Please do not refresh the page or close this window while we process your payment.</p>
+            <p>If you have been charged, your gift has been received and this will update automatically.</p>
+          </LoadingMessage>
+        )}
         {paymentError && (
           <RedInfoBox icon={faTimesCircle}>
             Payment failed. Please check your card details and try again.
           </RedInfoBox>
         )}
         <Button type="submit" disabled={!stripe || loading || paymentSuccess}>
-          {loading || paymentSuccess ? 'Processing...' : `Gift £${formData.amount || '0.00'}`}
+          {loading || paymentSuccess ? 'Processing...' : `Gift £${formData.amount ? parseFloat(formData.amount).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}`}
         </Button>
       </Form>
     </FormContainer>
