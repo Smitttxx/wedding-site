@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import {Label} from "./Label";
@@ -81,6 +81,15 @@ const CardField = styled.div`
   }
 `;
 
+const LoadingMessage = styled.div`
+  background: ${({ theme }) => theme.colors.lightAccent};
+  padding: 1rem;
+  border-radius: ${({ theme }) => theme.borderRadius};
+  margin: 1rem 0;
+  text-align: center;
+  border: 1px solid ${({ theme }) => theme.colors.accent};
+`;
+
 export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret }) {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
@@ -114,7 +123,7 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
     try {
       const result = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: elements.getElement(CardElement),
+          card: elements.getElement(CardNumberElement),
           billing_details: {
             address: {
               postal_code: postcode,
@@ -180,21 +189,56 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
 
           <div>
             <Label htmlFor="card-element">Card Details:</Label>
-            <StyledCardElement
-              id="card-element"
-              options={{
-                hidePostalCode: true,
-                style: {
-                  base: {
-                    fontSize: '16px',
-                    color: '#000',
-                    '::placeholder': {
-                      color: '#aab7c4',
+            <CardDetailsContainer>
+              <CardField>
+                <CardNumberElement
+                  id="card-number"
+                  options={{
+                    style: {
+                      base: {
+                        fontSize: '16px',
+                        color: '#000',
+                        '::placeholder': {
+                          color: '#aab7c4',
+                        },
+                      },
                     },
-                  },
-                },
-              }}
-            />
+                  }}
+                />
+              </CardField>
+              <CardField>
+                <CardExpiryElement
+                  id="card-expiry"
+                  options={{
+                    style: {
+                      base: {
+                        fontSize: '16px',
+                        color: '#000',
+                        '::placeholder': {
+                          color: '#aab7c4',
+                        },
+                      },
+                    },
+                  }}
+                />
+              </CardField>
+              <CardField>
+                <CardCvcElement
+                  id="card-cvc"
+                  options={{
+                    style: {
+                      base: {
+                        fontSize: '16px',
+                        color: '#000',
+                        '::placeholder': {
+                          color: '#aab7c4',
+                        },
+                      },
+                    },
+                  }}
+                />
+              </CardField>
+            </CardDetailsContainer>
           </div>
 
           <div>
@@ -207,6 +251,13 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
               required
             />
           </div>
+
+          {loading && (
+            <LoadingMessage>
+              <p>Please do not refresh the page or close this window while we process your payment.</p>
+              <p>If you have been charged, your gift has been received and this will update automatically.</p>
+            </LoadingMessage>
+          )}
 
           {paymentError && (
             <RedInfoBox icon={faTimesCircle}>

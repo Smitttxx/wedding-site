@@ -4,7 +4,7 @@ import {useRouter} from 'next/router';
 import {useEffect, useState, Fragment} from 'react';
 import axios from 'axios';
 import {loadStripe} from '@stripe/stripe-js';
-import {Elements} from '@stripe/react-stripe-js';
+import {Elements, CardNumberElement, CardExpiryElement, CardCvcElement} from '@stripe/react-stripe-js';
 import styled from 'styled-components';
 import Layout from '@/components/Layout';
 import NavBar from '@/components/NavBar';
@@ -53,6 +53,15 @@ const BookingRef = styled.strong`
   font-weight: bold;
   color: ${props => props.theme.colors.accent};
   font-family: ${props => props.theme.fonts.base};
+`;
+
+const LoadingMessage = styled.div`
+  background: ${({ theme }) => theme.colors.lightAccent};
+  padding: 1rem;
+  border-radius: ${({ theme }) => theme.borderRadius};
+  margin: 1rem 0;
+  text-align: center;
+  border: 1px solid ${({ theme }) => theme.colors.accent};
 `;
 
 export default function PaymentPage() {
