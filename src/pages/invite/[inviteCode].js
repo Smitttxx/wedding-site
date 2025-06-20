@@ -208,7 +208,7 @@ export default function GuestPage() {
           <Section ref={rsvpRef}>
             <SectionHeading>RSVP</SectionHeading>
             <TartanInfoBox>
-                Please RSVP for all guests by June 13th 2025.
+                Please RSVP for all guests by July 13th 2025.
             </TartanInfoBox>
             <br/>
             {party.guests.some(g => g.isChild || g.isBaby) && (
