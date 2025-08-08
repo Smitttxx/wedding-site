@@ -796,7 +796,7 @@ const PersonalMessageSubtext = styled.div`
 export default function PhotoUpload() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [uploadComplete, setUploadComplete] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [uploadedBy, setUploadedBy] = useState('');
   const [status, setStatus] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -917,7 +917,7 @@ export default function PhotoUpload() {
     }
 
     setUploading(true);
-    setUploadComplete(false);
+    setShowSuccessModal(false);
     setUploadProgress({ current: 0, total: selectedFiles.length });
 
     let successCount = 0;
@@ -969,7 +969,6 @@ export default function PhotoUpload() {
     }
 
     setUploading(false);
-    setUploadComplete(true);
 
     if (successCount === selectedFiles.length) {
       setSelectedFiles([]);
@@ -978,10 +977,13 @@ export default function PhotoUpload() {
         fileInputRef.current.value = '';
       }
       setStatus({ type: 'success', message: 'All photos shared successfully.' });
+      setShowSuccessModal(true);
     } else if (successCount > 0) {
       setStatus({ type: 'error', message: `${selectedFiles.length - successCount} file(s) failed to upload.` });
+      setShowSuccessModal(false);
     } else {
       setStatus({ type: 'error', message: 'No files were uploaded. Please check file types and try again.' });
+      setShowSuccessModal(false);
     }
   };
 
@@ -1085,7 +1087,7 @@ export default function PhotoUpload() {
                   <FontAwesomeIcon icon={faCloudUploadAlt} />
                 </UploadIcon>
                 <UploadText>Tap here to select your photos</UploadText>
-                <UploadSubtext>Supports HEIC, JPEG, PNG, WebP, AVIF, GIF and more (max 10MB each)</UploadSubtext>
+                <UploadSubtext>Supports HEIC, JPG/JPEG, PNG, WebP, AVIF, GIF and more (max 10MB each)</UploadSubtext>
                 {selectedFiles.length > 0 && (
                   <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '8px' }}>
                     <FontAwesomeIcon icon={faCheck} style={{ color: '#28a745', marginRight: '0.5rem' }} />
@@ -1097,7 +1099,7 @@ export default function PhotoUpload() {
               <FileInput
                 ref={fileInputRef}
                 type="file"
-                accept="image/*,.heic,.heif,.heics,.avif,.jfif"
+                accept="image/*,.jpg,.jpeg,.heic,.heif,.heics,.avif,.jfif"
                 multiple
                 onChange={handleFileSelect}
               />
@@ -1170,8 +1172,8 @@ export default function PhotoUpload() {
         </Page>
       </Layout>
 
-      {/* Success Modal */}
-      {uploadComplete && (
+      {/* Success Modal (only if all uploads succeeded) */}
+      {showSuccessModal && (
         <UploadModal>
           <ModalContent>
             <ModalIcon>
