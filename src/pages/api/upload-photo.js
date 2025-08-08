@@ -2,43 +2,7 @@ import { put } from '@vercel/blob';
 import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
-
-// Simple file-based storage for photo metadata (no database changes)
-const PHOTOS_FILE = path.join(process.cwd(), 'data', 'photos.json');
-
-// Ensure data directory exists
-const ensureDataDir = () => {
-  const dataDir = path.dirname(PHOTOS_FILE);
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-};
-
-// Read photos from JSON file
-const readPhotos = () => {
-  ensureDataDir();
-  if (!fs.existsSync(PHOTOS_FILE)) {
-    return [];
-  }
-  try {
-    const data = fs.readFileSync(PHOTOS_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (error) {
-    console.error('Error reading photos file:', error);
-    return [];
-  }
-};
-
-// Write photos to JSON file
-const writePhotos = (photos) => {
-  ensureDataDir();
-  try {
-    fs.writeFileSync(PHOTOS_FILE, JSON.stringify(photos, null, 2));
-  } catch (error) {
-    console.error('Error writing photos file:', error);
-    throw error;
-  }
-};
+import prisma from '../../lib/prisma';
 
 export const config = {
   api: {
@@ -84,19 +48,16 @@ export default async function handler(req, res) {
     // Clean up temporary file
     fs.unlinkSync(file.filepath);
 
-    // Create photo metadata
-    const photo = {
-      id: `photo-${Date.now()}-${Math.random().toString(36).substring(7)}`,
-      filename: filename,
-      url: blob.url,
-      uploadedBy: uploadedBy,
-      uploadedAt: new Date().toISOString(),
-    };
-
-    // Read existing photos and add new one
-    const photos = readPhotos();
-    photos.push(photo);
-    writePhotos(photos);
+    // Save photo metadata to database
+    const photo = await prisma.photo.create({
+      data: {
+        filename: filename,
+        url: blob.url,
+        uploadedBy: uploadedBy,
+        approved: true,
+        deleted: false,
+      },
+    });
 
     res.status(200).json({ 
       success: true, 

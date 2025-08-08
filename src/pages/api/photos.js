@@ -1,31 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-
-// Simple file-based storage for photo metadata (no database changes)
-const PHOTOS_FILE = path.join(process.cwd(), 'data', 'photos.json');
-
-// Ensure data directory exists
-const ensureDataDir = () => {
-  const dataDir = path.dirname(PHOTOS_FILE);
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-};
-
-// Read photos from JSON file
-const readPhotos = () => {
-  ensureDataDir();
-  if (!fs.existsSync(PHOTOS_FILE)) {
-    return [];
-  }
-  try {
-    const data = fs.readFileSync(PHOTOS_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (error) {
-    console.error('Error reading photos file:', error);
-    return [];
-  }
-};
+import prisma from '../../lib/prisma';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -37,19 +10,33 @@ export default async function handler(req, res) {
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
     
-    // Read all photos and sort by upload date (newest first)
-    const allPhotos = readPhotos();
-    const sortedPhotos = allPhotos.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+    // Get total count of approved, non-deleted photos
+    const totalPhotos = await prisma.photo.count({
+      where: {
+        approved: true,
+        deleted: false,
+      },
+    });
 
     // Calculate pagination
-    const totalPhotos = sortedPhotos.length;
     const totalPages = Math.ceil(totalPhotos / limitNum);
-    const startIndex = (pageNum - 1) * limitNum;
-    const endIndex = startIndex + limitNum;
-    const paginatedPhotos = sortedPhotos.slice(startIndex, endIndex);
+    const skip = (pageNum - 1) * limitNum;
+
+    // Get paginated photos
+    const photos = await prisma.photo.findMany({
+      where: {
+        approved: true,
+        deleted: false,
+      },
+      orderBy: {
+        uploadedAt: 'desc', // Newest first
+      },
+      skip: skip,
+      take: limitNum,
+    });
 
     res.status(200).json({ 
-      photos: paginatedPhotos,
+      photos: photos,
       pagination: {
         currentPage: pageNum,
         totalPages: totalPages,
