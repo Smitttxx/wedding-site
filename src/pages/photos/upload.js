@@ -573,6 +573,57 @@ const UploadInstructions = styled.div`
   border-left: 4px solid #2196f3;
 `;
 
+const PersonalMessage = styled.div`
+  background: linear-gradient(135deg, #d4af37 0%, #228b22 50%, #228b22 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin: 1.5rem 0;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '💚';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 2rem;
+    opacity: 0.4;
+  }
+
+  &::after {
+    content: '💚';
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    font-size: 2rem;
+    opacity: 0.4;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 1.1rem;
+    padding: 2rem;
+  }
+`;
+
+const PersonalMessageText = styled.div`
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+`;
+
+const PersonalMessageSubtext = styled.div`
+  font-size: 0.9rem;
+  opacity: 0.95;
+  font-style: italic;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+`;
+
 export default function PhotoUpload() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -774,6 +825,16 @@ export default function PhotoUpload() {
             </MobileHeader>
 
             <UploadContainer>
+              <PersonalMessage>
+                <PersonalMessageText>
+                  💝 It means the world to Joe & Laura 💝
+                </PersonalMessageText>
+                <PersonalMessageSubtext>
+                  Every photo you share shows them their special day through your eyes - 
+                  capturing moments they might have missed and memories they'll treasure forever!
+                </PersonalMessageSubtext>
+              </PersonalMessage>
+
               <UploadInstructions>
                 <strong>📱 Mobile Tips:</strong><br/>
                 • Tap the upload area to select photos<br/>
