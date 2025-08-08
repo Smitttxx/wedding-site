@@ -590,6 +590,8 @@ export default function PhotoGallery({ isAdmin = false }) {
     return pages;
   };
 
+  const isGifUrl = (url) => /\.gif(\?|$)/i.test(url || '');
+
   return (
     <>
       <GalleryContainer>
@@ -656,7 +658,8 @@ export default function PhotoGallery({ isAdmin = false }) {
                       fill
                       style={{ objectFit: 'cover' }}
                       sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                      priority={photos.indexOf(photo) < 6} // Prioritize first 6 images
+                      priority={photos.indexOf(photo) < 6}
+                      unoptimized={isGifUrl(photo.url)}
                     />
                     {isAdmin && (
                       <DeleteButton 
@@ -714,6 +717,7 @@ export default function PhotoGallery({ isAdmin = false }) {
                 height: 'auto'
               }}
               priority
+              unoptimized={isGifUrl(selectedPhoto.url)}
             />
           </ModalImageWrapper>
 

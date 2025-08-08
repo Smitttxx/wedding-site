@@ -803,6 +803,8 @@ export default function PhotoUpload() {
   const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 });
   const fileInputRef = useRef();
 
+  const resetStatus = () => setStatus(null);
+
   // Helper: determine if a file is an image we support (handles HEIC/HEIF by extension as some browsers leave type blank)
   const isSupportedImage = (file) => {
     const name = (file.name || '').toLowerCase();
@@ -861,30 +863,38 @@ export default function PhotoUpload() {
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragOver(false);
+    resetStatus();
     const files = Array.from(e.dataTransfer.files);
     addFiles(files);
   };
 
   const handleFileSelect = (e) => {
+    resetStatus();
     const files = Array.from(e.target.files);
     addFiles(files);
   };
 
+  const handleClickUploadArea = () => {
+    resetStatus();
+    fileInputRef.current?.click();
+  };
+
   const addFiles = (files) => {
+    resetStatus();
     const supported = files.filter(isSupportedImage);
     const tooLarge = supported.filter(file => file.size > 10 * 1024 * 1024);
     const validFiles = supported.filter(file => file.size <= 10 * 1024 * 1024);
 
     if (supported.length !== files.length) {
-      setStatus({ type: 'error', message: 'Some files were skipped - file type not supported.' });
+      setStatus({ type: 'error', message: 'Some files were skipped — file type not supported.' });
     }
 
     if (tooLarge.length > 0) {
-      setStatus({ type: 'error', message: 'Some files were skipped - maximum file size is 10MB.' });
+      setStatus({ type: 'error', message: 'Some files were skipped — file too big (max 10MB).' });
     }
 
     if (validFiles.length === 0 && files.length > 0) {
-      setStatus({ type: 'error', message: 'No supported images found. Supported: HEIC/HEIF, JPEG, PNG, WebP, AVIF, GIF, BMP, TIFF (max 10MB each).' });
+      setStatus({ type: 'error', message: 'No supported images found. Supported: HEIC/HEIF, JPG/JPEG, PNG, WebP, AVIF, GIF, BMP, TIFF (max 10MB each).' });
       return;
     }
 
@@ -892,10 +902,12 @@ export default function PhotoUpload() {
   };
 
   const removeFile = (index) => {
+    resetStatus();
     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const clearAllFiles = () => {
+    resetStatus();
     setSelectedFiles([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -916,53 +928,71 @@ export default function PhotoUpload() {
       return;
     }
 
+    resetStatus();
     setUploading(true);
     setShowSuccessModal(false);
     setUploadProgress({ current: 0, total: selectedFiles.length });
 
     let successCount = 0;
-    let errorCount = 0;
 
     for (let i = 0; i < selectedFiles.length; i++) {
       let file = selectedFiles[i];
 
+      // Convert HEIC/HEIF on client if needed
       try {
-        // Convert HEIC/HEIF files to JPEG before upload
         file = await convertIfNeeded(file);
       } catch (err) {
-        errorCount++;
         setStatus({ type: 'error', message: 'Failed file type not supported (HEIC conversion failed).' });
         setUploadProgress({ current: i + 1, total: selectedFiles.length });
         continue;
       }
 
       try {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('uploadedBy', uploadedBy);
-
-        const response = await fetch('/api/upload-photo', {
+        // 1) Ask server for a signed upload URL
+        const sigRes = await fetch('/api/blob-upload-url', {
           method: 'POST',
-          body: formData,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: file.name, contentType: file.type || 'application/octet-stream', size: file.size }),
         });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          successCount++;
-        } else {
-          errorCount++;
-          console.error(`Failed to upload ${file.name}:`, result.error);
-          if (result?.error?.toLowerCase()?.includes('type')) {
-            setStatus({ type: 'error', message: 'Failed file type not supported.' });
-          } else {
-            setStatus({ type: 'error', message: 'Upload failed for one or more files.' });
-          }
+        if (!sigRes.ok) {
+          const err = await sigRes.json().catch(() => ({}));
+          const message = sigRes.status === 413 ? 'File too big (max 10MB).' : (err.error || 'Could not start upload.');
+          setStatus({ type: 'error', message });
+          setUploadProgress({ current: i + 1, total: selectedFiles.length });
+          continue;
         }
-      } catch (error) {
-        errorCount++;
-        console.error(`Error uploading ${file.name}:`, error);
-        setStatus({ type: 'error', message: 'Upload failed for one or more files.' });
+        const { uploadUrl } = await sigRes.json();
+
+        // 2) PUT the file directly to Blob
+        const putRes = await fetch(uploadUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': file.type || 'application/octet-stream' },
+          body: file,
+        });
+        if (!putRes.ok) {
+          setStatus({ type: 'error', message: 'Upload failed while sending to storage.' });
+          setUploadProgress({ current: i + 1, total: selectedFiles.length });
+          continue;
+        }
+        const location = putRes.headers.get('Location');
+        const url = location || (await putRes.text());
+
+        // 3) Save metadata
+        const metaRes = await fetch('/api/save-photo-metadata', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, filename: file.name, uploadedBy }),
+        });
+        if (!metaRes.ok) {
+          setStatus({ type: 'error', message: 'Upload succeeded, but saving failed.' });
+          setUploadProgress({ current: i + 1, total: selectedFiles.length });
+          continue;
+        }
+
+        successCount++;
+      } catch (err) {
+        console.error('Direct upload error:', err);
+        setStatus({ type: 'error', message: 'Unexpected upload error.' });
       }
 
       setUploadProgress({ current: i + 1, total: selectedFiles.length });
@@ -1081,7 +1111,7 @@ export default function PhotoUpload() {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
+                onClick={handleClickUploadArea}
               >
                 <UploadIcon>
                   <FontAwesomeIcon icon={faCloudUploadAlt} />
