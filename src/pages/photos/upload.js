@@ -944,7 +944,7 @@ export default function PhotoUpload() {
               <SectionHeading>Share Your Photos</SectionHeading>
               
               <TartanInfoBox>
-                Every photo you share shows them their special day through your eyes - capturing moments they might have missed and memories they'll treasure forever!
+                Every photo you share shows them their special day through your eyes - capturing moments they might have missed and memories they&apos;ll treasure forever!
               </TartanInfoBox>
 
               <UploadContainer>
@@ -955,7 +955,7 @@ export default function PhotoUpload() {
                   <UploadingTitle>Sharing your photos...</UploadingTitle>
                   <UploadingWarning>
                     <FontAwesomeIcon icon={faWarning} style={{ marginRight: '0.5rem' }} />
-                    Please don't refresh or leave this page while your photos are uploading
+                    Please don&apos;t refresh or leave this page while your photos are uploading
                   </UploadingWarning>
                   
                   <ModalProgress>
@@ -997,7 +997,7 @@ export default function PhotoUpload() {
                 </PersonalMessageText>
                 <PersonalMessageSubtext>
                   Every photo you share shows them their special day through your eyes - 
-                  capturing moments they might have missed and memories they'll treasure forever!
+                  capturing moments they might have missed and memories they&apos;ll treasure forever!
                 </PersonalMessageSubtext>
               </PersonalMessage>
 
