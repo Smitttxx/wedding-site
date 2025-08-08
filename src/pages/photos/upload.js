@@ -803,6 +803,32 @@ export default function PhotoUpload() {
   const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 });
   const fileInputRef = useRef();
 
+  // Helper: determine if a file is an image we support (handles HEIC/HEIF by extension as some browsers leave type blank)
+  const isSupportedImage = (file) => {
+    const name = (file.name || '').toLowerCase();
+    const type = file.type || '';
+    const byMime = type.startsWith('image/');
+    const byExt = /(\.heic|\.heif|\.heics|\.avif|\.webp|\.jpg|\.jpeg|\.jfif|\.png|\.gif|\.bmp|\.tif|\.tiff)$/i.test(name);
+    return byMime || byExt;
+  };
+
+  // Helper: convert HEIC/HEIF to JPEG for compatibility
+  const convertIfNeeded = async (file) => {
+    const name = (file.name || '').toLowerCase();
+    const type = file.type || '';
+    const isHeic = type.includes('heic') || type.includes('heif') || /(\.heic|\.heif|\.heics)$/i.test(name);
+    if (!isHeic) return file;
+    try {
+      const heic2any = (await import('heic2any')).default;
+      const convertedBlob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.9 });
+      const newName = name.replace(/\.(heic|heif|heics)$/i, '.jpg');
+      return new File([convertedBlob], newName, { type: 'image/jpeg' });
+    } catch (e) {
+      console.error('HEIC conversion failed:', e);
+      throw new Error('Failed to convert HEIC/HEIF');
+    }
+  };
+
   // Prevent page leave during upload
   useEffect(() => {
     const handleBeforeUnload = (e) => {
@@ -845,19 +871,24 @@ export default function PhotoUpload() {
   };
 
   const addFiles = (files) => {
-    const imageFiles = files.filter(file => file.type.startsWith('image/'));
-    const validFiles = imageFiles.filter(file => file.size <= 10 * 1024 * 1024);
-    
-    if (imageFiles.length !== files.length) {
-      setStatus({ type: 'error', message: 'Some files were skipped - only image files are allowed.' });
+    const supported = files.filter(isSupportedImage);
+    const tooLarge = supported.filter(file => file.size > 10 * 1024 * 1024);
+    const validFiles = supported.filter(file => file.size <= 10 * 1024 * 1024);
+
+    if (supported.length !== files.length) {
+      setStatus({ type: 'error', message: 'Some files were skipped - file type not supported.' });
     }
-    
-    if (validFiles.length !== imageFiles.length) {
+
+    if (tooLarge.length > 0) {
       setStatus({ type: 'error', message: 'Some files were skipped - maximum file size is 10MB.' });
     }
 
+    if (validFiles.length === 0 && files.length > 0) {
+      setStatus({ type: 'error', message: 'No supported images found. Supported: HEIC/HEIF, JPEG, PNG, WebP, AVIF, GIF, BMP, TIFF (max 10MB each).' });
+      return;
+    }
+
     setSelectedFiles(prev => [...prev, ...validFiles]);
-    setStatus(null);
   };
 
   const removeFile = (index) => {
@@ -893,8 +924,18 @@ export default function PhotoUpload() {
     let errorCount = 0;
 
     for (let i = 0; i < selectedFiles.length; i++) {
-      const file = selectedFiles[i];
-      
+      let file = selectedFiles[i];
+
+      try {
+        // Convert HEIC/HEIF files to JPEG before upload
+        file = await convertIfNeeded(file);
+      } catch (err) {
+        errorCount++;
+        setStatus({ type: 'error', message: 'Failed file type not supported (HEIC conversion failed).' });
+        setUploadProgress({ current: i + 1, total: selectedFiles.length });
+        continue;
+      }
+
       try {
         const formData = new FormData();
         formData.append('file', file);
@@ -912,10 +953,16 @@ export default function PhotoUpload() {
         } else {
           errorCount++;
           console.error(`Failed to upload ${file.name}:`, result.error);
+          if (result?.error?.toLowerCase()?.includes('type')) {
+            setStatus({ type: 'error', message: 'Failed file type not supported.' });
+          } else {
+            setStatus({ type: 'error', message: 'Upload failed for one or more files.' });
+          }
         }
       } catch (error) {
         errorCount++;
         console.error(`Error uploading ${file.name}:`, error);
+        setStatus({ type: 'error', message: 'Upload failed for one or more files.' });
       }
 
       setUploadProgress({ current: i + 1, total: selectedFiles.length });
@@ -930,6 +977,11 @@ export default function PhotoUpload() {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
+      setStatus({ type: 'success', message: 'All photos shared successfully.' });
+    } else if (successCount > 0) {
+      setStatus({ type: 'error', message: `${selectedFiles.length - successCount} file(s) failed to upload.` });
+    } else {
+      setStatus({ type: 'error', message: 'No files were uploaded. Please check file types and try again.' });
     }
   };
 
@@ -1033,7 +1085,7 @@ export default function PhotoUpload() {
                   <FontAwesomeIcon icon={faCloudUploadAlt} />
                 </UploadIcon>
                 <UploadText>Tap here to select your photos</UploadText>
-                <UploadSubtext>Supports multiple JPEG, PNG, and other image formats (max 10MB each)</UploadSubtext>
+                <UploadSubtext>Supports HEIC, JPEG, PNG, WebP, AVIF, GIF and more (max 10MB each)</UploadSubtext>
                 {selectedFiles.length > 0 && (
                   <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '8px' }}>
                     <FontAwesomeIcon icon={faCheck} style={{ color: '#28a745', marginRight: '0.5rem' }} />
@@ -1045,7 +1097,7 @@ export default function PhotoUpload() {
               <FileInput
                 ref={fileInputRef}
                 type="file"
-                accept="image/*"
+                accept="image/*,.heic,.heif,.heics,.avif,.jfif"
                 multiple
                 onChange={handleFileSelect}
               />

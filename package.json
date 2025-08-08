@@ -26,6 +26,7 @@
     "date-fns": "^2.30.0",
     "formidable": "^3.5.4",
     "framer-motion": "^10.16.4",
+    "heic2any": "^0.0.4",
     "next": "14.0.3",
     "react": "^18.2.0",
     "react-confetti": "^6.1.0",
