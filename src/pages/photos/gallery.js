@@ -348,7 +348,7 @@ export default function PhotoGallery() {
             <SectionHeading>Wedding Photos</SectionHeading>
             
             <TartanInfoBox>
-              📸 Relive the magic of Laura & Joe's special day through your shared memories!
+              📸 Relive the magic of Laura & Joe&apos;s special day through your shared memories!
             </TartanInfoBox>
 
             <GalleryContainer>

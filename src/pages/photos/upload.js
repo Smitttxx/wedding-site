@@ -388,7 +388,7 @@ export default function PhotoUpload() {
             <SectionHeading>Share Your Photos</SectionHeading>
             
             <TartanInfoBox>
-              📸 Help us capture every moment of Laura & Joe's special day!
+              📸 Help us capture every moment of Laura & Joe&apos;s special day!
             </TartanInfoBox>
 
             <div style={{ textAlign: 'center'}}>
