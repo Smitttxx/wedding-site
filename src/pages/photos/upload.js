@@ -7,12 +7,12 @@ import { Page } from '../../components/Page';
 import { Section, SectionHeading } from '../../components/Section';
 import { TartanInfoBox } from '../../components/TartanInfoBox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCloudUploadAlt, faCamera, faSpinner, faCheckCircle, faExclamationTriangle, faTimes, faWarning, faImages, faCheck, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faCloudUploadAlt, faCamera, faSpinner, faCheckCircle, faExclamationTriangle, faTimes, faWarning, faImages, faCheck, faHeart, faChurch } from '@fortawesome/free-solid-svg-icons';
 
 const UploadContainer = styled.div`
   max-width: 100%;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.5rem;
   
   @media (min-width: 768px) {
     max-width: 600px;
@@ -23,13 +23,13 @@ const UploadContainer = styled.div`
 const UploadArea = styled.div`
   border: 3px dashed ${props => props.isDragOver ? props.theme.colors.primary : props.theme.colors.accent};
   border-radius: 16px;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem;
   text-align: center;
   background: ${props => props.isDragOver ? 'rgba(0, 0, 0, 0.05)' : 'transparent'};
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
-  min-height: 200px;
+  min-height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -52,28 +52,30 @@ const UploadArea = styled.div`
 `;
 
 const UploadIcon = styled.div`
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: ${props => props.theme.colors.accent};
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   
   @media (min-width: 768px) {
     font-size: 3rem;
+    margin-bottom: 1rem;
   }
 `;
 
 const UploadText = styled.p`
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: ${props => props.theme.colors.text};
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   font-weight: 600;
   
   @media (min-width: 768px) {
     font-size: 1.2rem;
+    margin-bottom: 0.5rem;
   }
 `;
 
 const UploadSubtext = styled.p`
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: ${props => props.theme.colors.textLight || '#666'};
   line-height: 1.4;
   
@@ -180,14 +182,30 @@ const NameInput = styled.input`
 
 const GalleryLink = styled(Link)`
   display: inline-block;
-  margin-top: 1rem;
-  color: ${props => props.theme.colors.primary};
+  margin-top: 0.5rem;
+  color: white;
   text-decoration: none;
   font-weight: bold;
   font-size: 1rem;
+  background: ${props => props.theme.colors.primary};
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   
   &:hover {
-    text-decoration: underline;
+    background: ${props => props.theme.colors.primaryDark};
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  @media (min-width: 768px) {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
   }
 `;
 
@@ -214,25 +232,6 @@ const SelectedFilesTitle = styled.h4`
   margin: 0;
   font-size: 1rem;
   color: ${props => props.theme.colors.text};
-`;
-
-const ClearAllButton = styled.button`
-  background: #6c757d;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  min-height: 40px;
-
-  &:hover {
-    background: #5a6268;
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
 `;
 
 const SelectedFile = styled.div`
@@ -297,9 +296,13 @@ const RemoveButton = styled.button`
 
 const EmptyState = styled.div`
   text-align: center;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem;
   color: ${props => props.theme.colors.textLight || '#666'};
   font-style: italic;
+
+  @media (min-width: 768px) {
+    padding: 2rem 1rem;
+  }
 `;
 
 const UploadProgress = styled.div`
@@ -428,10 +431,23 @@ const SuccessButton = styled(Link)`
 const UploadingInterface = styled.div`
   text-align: center;
   padding: 2rem 1rem;
-  background: #f8f9fa;
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
   border: 2px solid ${props => props.theme.colors.primary};
   margin: 2rem 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: ${props => props.theme.colors.primary};
+  }
 `;
 
 const UploadingIcon = styled.div`
@@ -444,63 +460,102 @@ const UploadingTitle = styled.h3`
   color: ${props => props.theme.colors.text};
   margin-bottom: 1rem;
   font-size: 1.5rem;
+  font-weight: 600;
 `;
 
 const UploadingWarning = styled.div`
-  background: #fff3cd;
+  background: rgba(255, 193, 7, 0.1);
   color: #856404;
   padding: 1rem;
   border-radius: 12px;
-  border: 1px solid #ffeaa7;
+  border: 1px solid rgba(255, 193, 7, 0.3);
   margin: 1rem 0;
-  font-weight: bold;
-  font-size: 1.1rem;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.4;
 `;
 
 // New mobile-friendly components
 const FilesSelectedBanner = styled.div`
   background: ${props => props.theme.colors.primary};
   color: white;
-  padding: 1rem;
+  padding: 0.75rem;
   border-radius: 12px;
-  margin: 1rem 0;
+  margin: 0.75rem 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-weight: bold;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  @media (min-width: 768px) {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
 `;
 
 const FilesSelectedText = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
+
+  @media (min-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const FilesSelectedCount = styled.span`
   background: rgba(255, 255, 255, 0.2);
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 20px;
-  font-size: 1rem;
+  font-size: 0.9rem;
+
+  @media (min-width: 768px) {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
 `;
 
 const UploadSection = styled.div`
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
   border: 2px solid ${props => props.theme.colors.primary};
   border-radius: 16px;
-  padding: 1.5rem;
-  margin: 1rem 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  margin: 0.75rem 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: ${props => props.theme.colors.primary};
+  }
+
+  @media (min-width: 768px) {
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
 `;
 
 const UploadSectionTitle = styled.h3`
-  color: ${props => props.theme.colors.text};
+  color: ${props => props.theme.colors.primary};
   margin-bottom: 1rem;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-weight: 700;
+
+  @media (min-width: 768px) {
+    margin-bottom: 1.25rem;
+    font-size: 1.3rem;
+  }
 `;
 
 const SelectedFilesPreview = styled.div`
@@ -508,120 +563,234 @@ const SelectedFilesPreview = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 0.75rem;
   margin: 1rem 0;
-  max-height: 200px;
+  max-height: 180px;
   overflow-y: auto;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+    max-height: 200px;
+  }
 `;
 
 const FilePreviewItem = styled.div`
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
+  background: white;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
   padding: 0.75rem;
   text-align: center;
   font-size: 0.8rem;
   position: relative;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    border-color: ${props => props.theme.colors.primary};
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 768px) {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
 `;
 
 const FilePreviewName = styled.div`
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+  color: ${props => props.theme.colors.text};
 `;
 
 const FilePreviewSize = styled.div`
   color: #6c757d;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 500;
 `;
 
 const FilePreviewRemove = styled.button`
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: -8px;
+  right: -8px;
   background: #dc3545;
   color: white;
   border: none;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   font-size: 0.8rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #c82333;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+const ActionButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.25rem;
+  gap: 0.75rem;
+
+  @media (min-width: 768px) {
+    margin-top: 1.5rem;
+    gap: 1rem;
+  }
+`;
+
+const ClearAllButton = styled.button`
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 48px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+
+  &:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  @media (min-width: 768px) {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+`;
+
+const ShareButton = styled.button`
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  border: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  flex: 1;
+
+  &:hover {
+    background: ${props => props.theme.colors.primaryDark};
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  @media (min-width: 768px) {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
 `;
 
 const MobileHeader = styled.div`
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  
+  @media (min-width: 768px) {
+    margin-bottom: 1.5rem;
+  }
 `;
 
 const WeddingEmoji = styled.div`
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+  
+  @media (min-width: 768px) {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const UploadInstructions = styled.div`
-  background: #e3f2fd;
-  color: #1565c0;
-  padding: 1rem;
-  border-radius: 12px;
-  margin: 1rem 0;
-  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: ${props => props.theme.colors.text};
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin: 0.75rem 0;
+  font-size: 0.85rem;
   line-height: 1.4;
-  border-left: 4px solid #2196f3;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+
+  @media (min-width: 768px) {
+    padding: 1rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
 `;
 
 const PersonalMessage = styled.div`
-  background: linear-gradient(135deg, #d4af37 0%, #228b22 50%, #228b22 100%);
-  color: white;
-  padding: 1.5rem;
-  border-radius: 16px;
-  margin: 1.5rem 0;
   text-align: center;
+  padding: 1rem;
+  margin: 1rem 0;
   font-size: 1rem;
   line-height: 1.5;
-  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '💚';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    font-size: 2rem;
-    opacity: 0.4;
-  }
-
-  &::after {
-    content: '💚';
-    position: absolute;
-    bottom: -10px;
-    right: -10px;
-    font-size: 2rem;
-    opacity: 0.4;
-  }
+  color: ${props => props.theme.colors.text};
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
 
   @media (min-width: 768px) {
     font-size: 1.1rem;
     padding: 2rem;
+    margin: 1.5rem 0;
   }
 `;
 
 const PersonalMessageText = styled.div`
   font-weight: 600;
   margin-bottom: 0.5rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: ${props => props.theme.colors.primary};
 `;
 
 const PersonalMessageSubtext = styled.div`
   font-size: 0.9rem;
-  opacity: 0.95;
+  opacity: 0.8;
   font-style: italic;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 `;
 
 export default function PhotoUpload() {
@@ -775,7 +944,7 @@ export default function PhotoUpload() {
               <SectionHeading>Share Your Photos</SectionHeading>
               
               <TartanInfoBox>
-                📸 Help us capture every moment of Laura & Joe&apos;s special day!
+                Every photo you share shows them their special day through your eyes - capturing moments they might have missed and memories they'll treasure forever!
               </TartanInfoBox>
 
               <UploadContainer>
@@ -783,9 +952,10 @@ export default function PhotoUpload() {
                   <UploadingIcon>
                     <FontAwesomeIcon icon={faSpinner} spin />
                   </UploadingIcon>
-                  <UploadingTitle>Uploading Your Photos...</UploadingTitle>
+                  <UploadingTitle>Sharing your photos...</UploadingTitle>
                   <UploadingWarning>
-                    ⚠️ DO NOT REFRESH OR LEAVE THIS PAGE OR YOUR PHOTOS WON&apos;T BE UPLOADED!
+                    <FontAwesomeIcon icon={faWarning} style={{ marginRight: '0.5rem' }} />
+                    Please don't refresh or leave this page while your photos are uploading
                   </UploadingWarning>
                   
                   <ModalProgress>
@@ -793,7 +963,7 @@ export default function PhotoUpload() {
                       <ModalProgressFill progress={(uploadProgress.current / uploadProgress.total) * 100} />
                     </ModalProgressBar>
                     <ModalProgressText>
-                      {uploadProgress.current} of {uploadProgress.total} photos uploaded
+                      {uploadProgress.current} of {uploadProgress.total} photos shared
                     </ModalProgressText>
                   </ModalProgress>
                 </UploadingInterface>
@@ -810,24 +980,20 @@ export default function PhotoUpload() {
       <NavBar />
       <Layout>
         <Page>
+          <SectionHeading>Share Your Photos</SectionHeading>
           <Section>
-            <SectionHeading>Share Your Photos</SectionHeading>
-            
-            <TartanInfoBox>
-              📸 Help us capture every moment of Laura & Joe&apos;s special day!
-            </TartanInfoBox>
-
-            <MobileHeader>
-              <WeddingEmoji>💒</WeddingEmoji>
-              <GalleryLink href="/photos/gallery">
-                View All Photos →
-              </GalleryLink>
-            </MobileHeader>
-
+          <MobileHeader>
+           
+           <GalleryLink href="/photos/gallery">
+            View All Uploaded Photos →
+           </GalleryLink>
+         </MobileHeader>
             <UploadContainer>
               <PersonalMessage>
                 <PersonalMessageText>
-                  💝 It means the world to Joe & Laura 💝
+                  <FontAwesomeIcon icon={faHeart} style={{ marginRight: '0.5rem', color: '#d4af37' }} />
+                  It means the world to Joe & Laura
+                  <FontAwesomeIcon icon={faHeart} style={{ marginLeft: '0.5rem', color: '#d4af37' }} />
                 </PersonalMessageText>
                 <PersonalMessageSubtext>
                   Every photo you share shows them their special day through your eyes - 
@@ -836,11 +1002,24 @@ export default function PhotoUpload() {
               </PersonalMessage>
 
               <UploadInstructions>
-                <strong>📱 Mobile Tips:</strong><br/>
+                <strong><FontAwesomeIcon icon={faCamera} style={{ color: '#d4af37' }} /> Mobile Tips:</strong><br/>
                 • Tap the upload area to select photos<br/>
                 • You can select multiple photos at once<br/>
-                • Photos will be shared instantly with everyone!
+                • Photos will be shared with everyone once uploaded!
               </UploadInstructions>
+
+              <div>
+                <label htmlFor="uploadedBy" style={{ fontSize: '0.9rem', fontWeight: '500', marginBottom: '0.25rem', display: 'block' }}>
+                  Your name (optional):
+                </label>
+                <NameInput
+                  id="uploadedBy"
+                  type="text"
+                  placeholder="Enter your name to credit your photos"
+                  value={uploadedBy}
+                  onChange={(e) => setUploadedBy(e.target.value)}
+                />
+              </div>
 
               <UploadArea
                 isDragOver={isDragOver}
@@ -904,27 +1083,15 @@ export default function PhotoUpload() {
                     ))}
                   </SelectedFilesPreview>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', gap: '0.5rem' }}>
-                    <button 
-                      onClick={clearAllFiles}
-                      style={{ 
-                        background: '#6c757d', 
-                        color: 'white', 
-                        border: 'none', 
-                        padding: '0.75rem 1rem', 
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        fontSize: '0.9rem',
-                        minHeight: '48px'
-                      }}
-                    >
+                  <ActionButtonsContainer>
+                    <ClearAllButton onClick={clearAllFiles}>
                       Clear All
-                    </button>
-                    <Button onClick={uploadAllFiles}>
+                    </ClearAllButton>
+                    <ShareButton onClick={uploadAllFiles}>
                       <FontAwesomeIcon icon={faHeart} />
                       Share {selectedFiles.length} Photo{selectedFiles.length !== 1 ? 's' : ''}
-                    </Button>
-                  </div>
+                    </ShareButton>
+                  </ActionButtonsContainer>
                 </UploadSection>
               )}
 
@@ -933,20 +1100,6 @@ export default function PhotoUpload() {
                   No photos selected. Tap the upload area above to add photos.
                 </EmptyState>
               )}
-
-              <div>
-                <label htmlFor="uploadedBy" style={{ fontSize: '1rem', fontWeight: '500', marginBottom: '0.5rem', display: 'block' }}>
-                  Your name (optional):
-                </label>
-                <NameInput
-                  id="uploadedBy"
-                  type="text"
-                  placeholder="Enter your name to credit your photos"
-                  value={uploadedBy}
-                  onChange={(e) => setUploadedBy(e.target.value)}
-                />
-              </div>
-
               {status && (
                 <StatusMessage className={status.type}>
                   <FontAwesomeIcon 
@@ -972,8 +1125,8 @@ export default function PhotoUpload() {
             <ModalIcon>
               <FontAwesomeIcon icon={faCheckCircle} />
             </ModalIcon>
-            <ModalTitle>Photos Shared! 🎉</ModalTitle>
-            <p>Your photos have been successfully shared with everyone at the wedding!</p>
+            <ModalTitle>Photos Shared!</ModalTitle>
+            <p>Your photos have been successfully shared!</p>
             <SuccessButton href="/photos/gallery">
               <FontAwesomeIcon icon={faImages} style={{ marginRight: '0.5rem' }} />
               View All Photos

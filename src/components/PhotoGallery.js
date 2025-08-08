@@ -3,12 +3,12 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faUser, faCalendar, faSpinner, faUpload, faChevronLeft, faChevronRight, faTrash, faTimes, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faUser, faCalendar, faSpinner, faUpload, faChevronLeft, faChevronRight, faTrash, faTimes, faHeart, faImages } from '@fortawesome/free-solid-svg-icons';
 
 const GalleryContainer = styled.div`
   max-width: 100%;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.5rem;
   
   @media (min-width: 768px) {
     max-width: 1200px;
@@ -19,8 +19,8 @@ const GalleryContainer = styled.div`
 const PhotoGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
-  margin: 1rem 0;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
   
   @media (min-width: 768px) {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -66,7 +66,7 @@ const PhotoImage = styled.div`
 `;
 
 const PhotoInfo = styled.div`
-  padding: 0.75rem;
+  padding: 0.5rem;
   
   @media (min-width: 768px) {
     padding: 1rem;
@@ -77,7 +77,7 @@ const PhotoMeta = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: ${props => props.theme.colors.textLight || '#666'};
   margin-bottom: 0.25rem;
   
@@ -171,8 +171,8 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 3rem 1rem;
-  font-size: 1.1rem;
+  padding: 2rem 0.5rem;
+  font-size: 1rem;
   color: ${props => props.theme.colors.textLight || '#666'};
   
   @media (min-width: 768px) {
@@ -183,7 +183,7 @@ const LoadingContainer = styled.div`
 
 const EmptyState = styled.div`
   text-align: center;
-  padding: 2rem 1rem;
+  padding: 1.5rem 0.5rem;
   color: ${props => props.theme.colors.textLight || '#666'};
   
   @media (min-width: 768px) {
@@ -192,12 +192,13 @@ const EmptyState = styled.div`
 `;
 
 const EmptyIcon = styled.div`
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: ${props => props.theme.colors.accent};
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   
   @media (min-width: 768px) {
     font-size: 4rem;
+    margin-bottom: 1rem;
   }
 `;
 
@@ -280,7 +281,7 @@ const PaginationContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
   flex-wrap: wrap;
   
   @media (min-width: 768px) {
@@ -293,13 +294,13 @@ const PaginationButton = styled.button`
   background: ${props => props.active ? props.theme.colors.primary : 'white'};
   color: ${props => props.active ? 'white' : props.theme.colors.text};
   border: 2px solid ${props => props.theme.colors.primary};
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 0.8rem;
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-width: 44px;
-  font-size: 1rem;
+  min-width: 40px;
+  font-size: 0.9rem;
 
   &:hover {
     background: ${props => props.active ? props.theme.colors.primaryDark : props.theme.colors.primary};
@@ -327,8 +328,8 @@ const PaginationButton = styled.button`
 const PaginationInfo = styled.div`
   text-align: center;
   color: ${props => props.theme.colors.textLight || '#666'};
-  font-size: 0.9rem;
-  margin: 1rem 0;
+  font-size: 0.85rem;
+  margin: 0.75rem 0;
   
   @media (min-width: 768px) {
     font-size: 0.9rem;
@@ -376,98 +377,62 @@ const ModalInstructions = styled.div`
 
 const MobileOptimizedHeader = styled.div`
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   
   @media (min-width: 768px) {
     margin-bottom: 2rem;
   }
 `;
 
-const QuickUploadButton = styled(Link)`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: ${props => props.theme.colors.accent};
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  margin: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-
-  &:hover {
-    background: ${props => props.theme.colors.primary};
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-`;
-
 const PhotoCount = styled.div`
-  background: ${props => props.theme.colors.primary};
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  color: ${props => props.theme.colors.text};
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
   font-weight: bold;
   font-size: 0.9rem;
-  margin: 1rem 0;
+  margin: 0.75rem 0;
   display: inline-block;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  text-align: center;
+  min-width: 180px;
+  
+  @media (min-width: 768px) {
+    min-width: 250px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    margin: 1rem 0;
+  }
 `;
 
 const PersonalMessage = styled.div`
-  background: linear-gradient(135deg, #d4af37 0%, #228b22 50%, #228b22 100%);
-  color: white;
-  padding: 1.5rem;
-  border-radius: 16px;
-  margin: 1.5rem 0;
   text-align: center;
+  padding: 1rem;
+  margin: 1rem 0;
   font-size: 1rem;
   line-height: 1.5;
-  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '💚';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    font-size: 2rem;
-    opacity: 0.4;
-  }
-
-  &::after {
-    content: '💚';
-    position: absolute;
-    bottom: -10px;
-    right: -10px;
-    font-size: 2rem;
-    opacity: 0.4;
-  }
+  color: ${props => props.theme.colors.text};
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
 
   @media (min-width: 768px) {
     font-size: 1.1rem;
     padding: 2rem;
+    margin: 1.5rem 0;
   }
 `;
 
 const PersonalMessageText = styled.div`
   font-weight: 600;
   margin-bottom: 0.5rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: ${props => props.theme.colors.primary};
 `;
 
 const PersonalMessageSubtext = styled.div`
   font-size: 0.9rem;
-  opacity: 0.95;
+  opacity: 0.8;
   font-style: italic;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 `;
 
 export default function PhotoGallery({ isAdmin = false }) {
@@ -637,33 +602,17 @@ export default function PhotoGallery({ isAdmin = false }) {
         <MobileOptimizedHeader>
           <UploadButton href="/photos/upload">
             <FontAwesomeIcon icon={faUpload} />
-            📸 Share Your Photos
+            <FontAwesomeIcon icon={faImages} />
+            Quick Upload
           </UploadButton>
           
           {photos.length > 0 && (
             <PhotoCount>
-              <FontAwesomeIcon icon={faHeart} style={{ marginRight: '0.5rem' }} />
+              <FontAwesomeIcon icon={faHeart} style={{ marginRight: '0.5rem', color: '#d4af37' }} />
               {pagination.totalPhotos} Memories Shared
             </PhotoCount>
           )}
-          
-          <QuickUploadButton href="/photos/upload">
-            <FontAwesomeIcon icon={faCamera} />
-            Quick Upload
-          </QuickUploadButton>
         </MobileOptimizedHeader>
-
-        {photos.length > 0 && (
-          <PersonalMessage>
-            <PersonalMessageText>
-              💝 Joe & Laura are so grateful 💝
-            </PersonalMessageText>
-            <PersonalMessageSubtext>
-              Thank you for capturing their special day from your unique perspective - 
-              every photo tells a story they'll cherish for a lifetime!
-            </PersonalMessageSubtext>
-          </PersonalMessage>
-        )}
 
         {loading && (
           <LoadingContainer>

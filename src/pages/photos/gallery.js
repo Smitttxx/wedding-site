@@ -11,12 +11,12 @@ export default function PhotoGalleryPage() {
       <NavBar />
       <Layout>
         <Page>
+            <SectionHeading>Our Wedding Photos</SectionHeading>
           <Section>
-            <SectionHeading>Wedding Photos</SectionHeading>
             
             <TartanInfoBox>
-              📸 Relive the magic of Laura & Joe&apos;s special day through your shared memories!
-            </TartanInfoBox>
+            Thank you for capturing Joe and Laura's special day from your unique perspective - 
+            every photo tells a story they'll cherish for a lifetime!            </TartanInfoBox>
 
             <PhotoGallery isAdmin={false} />
           </Section>
