@@ -15,8 +15,8 @@ export default function PhotoGalleryPage() {
           <Section>
             
             <TartanInfoBox>
-            Thank you for capturing Joe and Laura's special day from your unique perspective - 
-            every photo tells a story they'll cherish for a lifetime!            </TartanInfoBox>
+            Thank you for capturing Joe and Laura&apos;s special day from your unique perspective - 
+            every photo tells a story they&apos;ll cherish for a lifetime!            </TartanInfoBox>
 
             <PhotoGallery isAdmin={false} />
           </Section>
