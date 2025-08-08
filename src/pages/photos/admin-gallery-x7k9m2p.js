@@ -13,11 +13,6 @@ export default function AdminPhotoGalleryPage() {
         <Page>
           <Section>
             <SectionHeading>Admin Photo Gallery</SectionHeading>
-            
-            <TartanInfoBox>
-              📸 Relive the magic of Laura & Joe&apos;s special day through your shared memories!
-            </TartanInfoBox>
-
             <PhotoGallery isAdmin={true} />
           </Section>
         </Page>
