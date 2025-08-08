@@ -7,23 +7,33 @@ import { Page } from '../../components/Page';
 import { Section, SectionHeading } from '../../components/Section';
 import { TartanInfoBox } from '../../components/TartanInfoBox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCloudUploadAlt, faCamera, faSpinner, faCheckCircle, faExclamationTriangle, faTimes, faWarning, faImages, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCloudUploadAlt, faCamera, faSpinner, faCheckCircle, faExclamationTriangle, faTimes, faWarning, faImages, faCheck, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 const UploadContainer = styled.div`
-  max-width: 600px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
+  
+  @media (min-width: 768px) {
+    max-width: 600px;
+    padding: 2rem;
+  }
 `;
 
 const UploadArea = styled.div`
   border: 3px dashed ${props => props.isDragOver ? props.theme.colors.primary : props.theme.colors.accent};
-  border-radius: 12px;
-  padding: 3rem 2rem;
+  border-radius: 16px;
+  padding: 2rem 1rem;
   text-align: center;
   background: ${props => props.isDragOver ? 'rgba(0, 0, 0, 0.05)' : 'transparent'};
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     border-color: ${props => props.theme.colors.primary};
@@ -34,23 +44,42 @@ const UploadArea = styled.div`
     border-color: ${props.theme.colors.primary};
     background: rgba(0, 0, 0, 0.02);
   `}
+
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
+    min-height: 250px;
+  }
 `;
 
 const UploadIcon = styled.div`
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: ${props => props.theme.colors.accent};
   margin-bottom: 1rem;
+  
+  @media (min-width: 768px) {
+    font-size: 3rem;
+  }
 `;
 
 const UploadText = styled.p`
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: ${props => props.theme.colors.text};
   margin-bottom: 0.5rem;
+  font-weight: 600;
+  
+  @media (min-width: 768px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const UploadSubtext = styled.p`
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: ${props => props.theme.colors.textLight || '#666'};
+  line-height: 1.4;
+  
+  @media (min-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const FileInput = styled.input`
@@ -61,32 +90,51 @@ const Button = styled.button`
   background: ${props => props.theme.colors.primary};
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
   margin: 1rem 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 
   &:hover {
     background: ${props => props.theme.colors.primaryDark};
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 
   &:disabled {
     background: #ccc;
     cursor: not-allowed;
+    transform: none;
+  }
+
+  @media (min-width: 768px) {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    min-height: auto;
   }
 `;
 
 const StatusMessage = styled.div`
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   margin: 1rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-weight: 500;
+  font-size: 1rem;
 
   &.success {
     background: #d4edda;
@@ -105,19 +153,28 @@ const StatusMessage = styled.div`
     color: #0c5460;
     border: 1px solid #bee5eb;
   }
+
+  @media (min-width: 768px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const NameInput = styled.input`
   width: 100%;
-  padding: 0.75rem;
+  padding: 1rem;
   border: 2px solid ${props => props.theme.colors.accent};
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 1rem;
   margin: 1rem 0;
   
   &:focus {
     outline: none;
     border-color: ${props => props.theme.colors.primary};
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 768px) {
+    padding: 0.75rem;
   }
 `;
 
@@ -127,6 +184,7 @@ const GalleryLink = styled(Link)`
   color: ${props => props.theme.colors.primary};
   text-decoration: none;
   font-weight: bold;
+  font-size: 1rem;
   
   &:hover {
     text-decoration: underline;
@@ -137,7 +195,7 @@ const SelectedFilesContainer = styled.div`
   margin: 1rem 0;
   padding: 1rem;
   background: #f8f9fa;
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid #e9ecef;
   max-height: 300px;
   overflow-y: auto;
@@ -162,13 +220,18 @@ const ClearAllButton = styled.button`
   background: #6c757d;
   color: white;
   border: none;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
   cursor: pointer;
+  min-height: 40px;
 
   &:hover {
     background: #5a6268;
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
 
@@ -176,10 +239,10 @@ const SelectedFile = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
-  margin: 0.25rem 0;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
   background: white;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 1px solid #dee2e6;
 `;
 
@@ -214,9 +277,9 @@ const RemoveButton = styled.button`
   color: white;
   border: none;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 0.8rem;
+  width: 32px;
+  height: 32px;
+  font-size: 0.9rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -226,11 +289,15 @@ const RemoveButton = styled.button`
   &:hover {
     background: #c82333;
   }
+
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 
 const EmptyState = styled.div`
   text-align: center;
-  padding: 2rem;
+  padding: 2rem 1rem;
   color: ${props => props.theme.colors.textLight || '#666'};
   font-style: italic;
 `;
@@ -241,9 +308,9 @@ const UploadProgress = styled.div`
 
 const ProgressBar = styled.div`
   width: 100%;
-  height: 8px;
+  height: 12px;
   background: #e9ecef;
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
   margin: 0.5rem 0;
 `;
@@ -256,9 +323,10 @@ const ProgressFill = styled.div`
 `;
 
 const ProgressText = styled.div`
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: ${props => props.theme.colors.textLight || '#666'};
   text-align: center;
+  font-weight: 500;
 `;
 
 // Upload Modal Styles
@@ -268,7 +336,7 @@ const UploadModal = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -277,7 +345,7 @@ const UploadModal = styled.div`
 
 const ModalContent = styled.div`
   background: white;
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 2rem;
   max-width: 500px;
   width: 90%;
@@ -338,23 +406,30 @@ const SuccessButton = styled(Link)`
   display: inline-block;
   background: ${props => props.theme.colors.primary};
   color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  padding: 1rem 2rem;
+  border-radius: 12px;
   text-decoration: none;
   font-weight: bold;
   margin-top: 1rem;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
   &:hover {
     background: ${props => props.theme.colors.primaryDark};
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 `;
 
 const UploadingInterface = styled.div`
   text-align: center;
-  padding: 3rem 2rem;
+  padding: 2rem 1rem;
   background: #f8f9fa;
-  border-radius: 12px;
+  border-radius: 16px;
   border: 2px solid ${props => props.theme.colors.primary};
   margin: 2rem 0;
 `;
@@ -375,7 +450,7 @@ const UploadingWarning = styled.div`
   background: #fff3cd;
   color: #856404;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid #ffeaa7;
   margin: 1rem 0;
   font-weight: bold;
@@ -387,32 +462,33 @@ const FilesSelectedBanner = styled.div`
   background: ${props => props.theme.colors.primary};
   color: white;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   margin: 1rem 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-weight: bold;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 `;
 
 const FilesSelectedText = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: 1rem;
 `;
 
 const FilesSelectedCount = styled.span`
   background: rgba(255, 255, 255, 0.2);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 1rem;
 `;
 
 const UploadSection = styled.div`
   background: white;
   border: 2px solid ${props => props.theme.colors.primary};
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1.5rem;
   margin: 1rem 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -430,7 +506,7 @@ const UploadSectionTitle = styled.h3`
 const SelectedFilesPreview = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 0.5rem;
+  gap: 0.75rem;
   margin: 1rem 0;
   max-height: 200px;
   overflow-y: auto;
@@ -439,8 +515,8 @@ const SelectedFilesPreview = styled.div`
 const FilePreviewItem = styled.div`
   background: #f8f9fa;
   border: 1px solid #dee2e6;
-  border-radius: 6px;
-  padding: 0.5rem;
+  border-radius: 8px;
+  padding: 0.75rem;
   text-align: center;
   font-size: 0.8rem;
   position: relative;
@@ -467,13 +543,34 @@ const FilePreviewRemove = styled.button`
   color: white;
   border: none;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  font-size: 0.7rem;
+  width: 24px;
+  height: 24px;
+  font-size: 0.8rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const MobileHeader = styled.div`
+  text-align: center;
+  margin-bottom: 1.5rem;
+`;
+
+const WeddingEmoji = styled.div`
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+`;
+
+const UploadInstructions = styled.div`
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 1rem;
+  border-radius: 12px;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  border-left: 4px solid #2196f3;
 `;
 
 export default function PhotoUpload() {
@@ -669,13 +766,21 @@ export default function PhotoUpload() {
               📸 Help us capture every moment of Laura & Joe&apos;s special day!
             </TartanInfoBox>
 
-            <div style={{ textAlign: 'center'}}>
+            <MobileHeader>
+              <WeddingEmoji>💒</WeddingEmoji>
               <GalleryLink href="/photos/gallery">
                 View All Photos →
               </GalleryLink>
-            </div>
+            </MobileHeader>
 
             <UploadContainer>
+              <UploadInstructions>
+                <strong>📱 Mobile Tips:</strong><br/>
+                • Tap the upload area to select photos<br/>
+                • You can select multiple photos at once<br/>
+                • Photos will be shared instantly with everyone!
+              </UploadInstructions>
+
               <UploadArea
                 isDragOver={isDragOver}
                 hasFiles={selectedFiles.length > 0}
@@ -687,10 +792,10 @@ export default function PhotoUpload() {
                 <UploadIcon>
                   <FontAwesomeIcon icon={faCloudUploadAlt} />
                 </UploadIcon>
-                <UploadText>Drop your photos here or click to select</UploadText>
+                <UploadText>Tap here to select your photos</UploadText>
                 <UploadSubtext>Supports multiple JPEG, PNG, and other image formats (max 10MB each)</UploadSubtext>
                 {selectedFiles.length > 0 && (
-                  <div style={{ marginTop: '1rem', padding: '0.5rem', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '4px' }}>
+                  <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '8px' }}>
                     <FontAwesomeIcon icon={faCheck} style={{ color: '#28a745', marginRight: '0.5rem' }} />
                     {selectedFiles.length} photo{selectedFiles.length !== 1 ? 's' : ''} selected
                   </div>
@@ -723,7 +828,7 @@ export default function PhotoUpload() {
                 <UploadSection>
                   <UploadSectionTitle>
                     <FontAwesomeIcon icon={faCamera} />
-                    Ready to Upload
+                    Ready to Share
                   </UploadSectionTitle>
                   
                   <SelectedFilesPreview>
@@ -738,22 +843,25 @@ export default function PhotoUpload() {
                     ))}
                   </SelectedFilesPreview>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', gap: '0.5rem' }}>
                     <button 
                       onClick={clearAllFiles}
                       style={{ 
                         background: '#6c757d', 
                         color: 'white', 
                         border: 'none', 
-                        padding: '0.5rem 1rem', 
-                        borderRadius: '4px',
-                        cursor: 'pointer'
+                        padding: '0.75rem 1rem', 
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        minHeight: '48px'
                       }}
                     >
                       Clear All
                     </button>
                     <Button onClick={uploadAllFiles}>
-                      Upload {selectedFiles.length} Photo{selectedFiles.length !== 1 ? 's' : ''}
+                      <FontAwesomeIcon icon={faHeart} />
+                      Share {selectedFiles.length} Photo{selectedFiles.length !== 1 ? 's' : ''}
                     </Button>
                   </div>
                 </UploadSection>
@@ -761,12 +869,14 @@ export default function PhotoUpload() {
 
               {selectedFiles.length === 0 && (
                 <EmptyState>
-                  No photos selected. Drag and drop or click to add photos.
+                  No photos selected. Tap the upload area above to add photos.
                 </EmptyState>
               )}
 
               <div>
-                <label htmlFor="uploadedBy">Your name (optional):</label>
+                <label htmlFor="uploadedBy" style={{ fontSize: '1rem', fontWeight: '500', marginBottom: '0.5rem', display: 'block' }}>
+                  Your name (optional):
+                </label>
                 <NameInput
                   id="uploadedBy"
                   type="text"
@@ -801,8 +911,8 @@ export default function PhotoUpload() {
             <ModalIcon>
               <FontAwesomeIcon icon={faCheckCircle} />
             </ModalIcon>
-            <ModalTitle>Upload Complete! 🎉</ModalTitle>
-            <p>Your photos have been successfully uploaded to the wedding gallery!</p>
+            <ModalTitle>Photos Shared! 🎉</ModalTitle>
+            <p>Your photos have been successfully shared with everyone at the wedding!</p>
             <SuccessButton href="/photos/gallery">
               <FontAwesomeIcon icon={faImages} style={{ marginRight: '0.5rem' }} />
               View All Photos
