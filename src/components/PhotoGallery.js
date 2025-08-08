@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faUser, faCalendar, faSpinner, faUpload, faChevronLeft, faChevronRight, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faUser, faCalendar, faSpinner, faUpload, faChevronLeft, faChevronRight, faTrash, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const GalleryContainer = styled.div`
   max-width: 1200px;
@@ -135,27 +135,57 @@ const Modal = styled.div`
   align-items: center;
   z-index: 1000;
   cursor: pointer;
+  padding: 1rem;
+  box-sizing: border-box;
 `;
 
 const ModalImage = styled.div`
   position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ModalClose = styled.button`
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
   background: rgba(0, 0, 0, 0.7);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 1.2rem;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
   cursor: pointer;
   z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  @media (max-width: 768px) {
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+`;
+
+const ModalImageWrapper = styled.div`
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const PaginationContainer = styled.div`
@@ -209,6 +239,26 @@ const AdminNotice = styled.div`
   font-weight: bold;
 `;
 
+const ModalInstructions = styled.div`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  z-index: 1001;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    bottom: 10px;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+`;
+
 export default function PhotoGallery({ isAdmin = false }) {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -227,6 +277,25 @@ export default function PhotoGallery({ isAdmin = false }) {
   useEffect(() => {
     fetchPhotos(1);
   }, []);
+
+  // Close modal on escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && selectedPhoto) {
+        setSelectedPhoto(null);
+      }
+    };
+
+    if (selectedPhoto) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedPhoto]);
 
   const fetchPhotos = async (page = 1) => {
     try {
@@ -442,16 +511,30 @@ export default function PhotoGallery({ isAdmin = false }) {
 
       {selectedPhoto && (
         <Modal onClick={() => setSelectedPhoto(null)}>
-          <ModalClose onClick={() => setSelectedPhoto(null)}>×</ModalClose>
-          <ModalImage onClick={(e) => e.stopPropagation()}>
+          <ModalClose onClick={() => setSelectedPhoto(null)}>
+            <FontAwesomeIcon icon={faTimes} />
+          </ModalClose>
+          
+          <ModalImageWrapper onClick={(e) => e.stopPropagation()}>
             <Image
               src={selectedPhoto.url}
               alt="Wedding photo"
               width={800}
               height={600}
-              style={{ objectFit: 'contain' }}
+              style={{ 
+                objectFit: 'contain',
+                maxWidth: '100%',
+                maxHeight: '100%',
+                width: 'auto',
+                height: 'auto'
+              }}
+              priority
             />
-          </ModalImage>
+          </ModalImageWrapper>
+
+          <ModalInstructions>
+            Tap outside or press ESC to close
+          </ModalInstructions>
         </Modal>
       )}
     </>
