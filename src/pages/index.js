@@ -73,8 +73,19 @@ const ExcitedMessage = styled.p`
 const Countdown = () => {
   const weddingDate = new Date('2025-09-13');
   const today = new Date();
+  // Set time to start of day to avoid timezone issues
+  today.setHours(0, 0, 0, 0);
+  weddingDate.setHours(0, 0, 0, 0);
   const days = differenceInDays(weddingDate, today);
-  return <>{days}</>;
+  if (days === 0) {
+    return <><span>Today</span>Today is the big day!</>;
+  } else if (days === 1) {
+    return <><span>Tomorrow</span> is the big day!</>;
+  } else if (days < 0) {
+    return <>Congratulations to the new <span>Mr & Mrs Austin!</span></>;
+  } else {
+    return <>Only <span>{days}</span> days until the big day!</>;
+  }
 };
 
 export default function HomePage() {
@@ -90,7 +101,7 @@ export default function HomePage() {
             It&apos;s going to be the best weekend of our lives — and we&apos;re so happy you&apos;ll be part of it. Let&apos;s celebrate, laugh, cry, dance (a lot), and make some magical memories together. ✨
           </ExcitedMessage>
           <TartanInfoBox>
-            Only <span><Countdown /></span> days until the big day!
+            <Countdown />
           </TartanInfoBox>
 
 
