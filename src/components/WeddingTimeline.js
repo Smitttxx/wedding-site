@@ -178,7 +178,7 @@ export default function WeddingTimeline() {
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faUsers} />
-          <Time>20:00</Time>
+          <Time>19:30</Time>
         </IconWrapper>
         <TextBlock>
           <Label>Cèilidh</Label>
@@ -187,7 +187,7 @@ export default function WeddingTimeline() {
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faHamburger} />
-          <Time>20:30</Time>
+          <Time>20:15</Time>
         </IconWrapper>
         <TextBlock>
           <Label>Evening buffet</Label>
@@ -196,7 +196,7 @@ export default function WeddingTimeline() {
       <TimelineItem>
         <IconWrapper>
           <FontAwesomeIcon icon={faMusic} />
-          <Time>21:15</Time>
+          <Time>21:00</Time>
         </IconWrapper>
         <TextBlock>
           <Label>Band Second Set Starts</Label>
