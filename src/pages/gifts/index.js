@@ -164,10 +164,12 @@ function CustomGiftForm({ onClose }) {
     setPaymentError(false);
 
     try {
-      // Create payment intent
+      // Create payment intent with form data
       const response = await axios.post('/api/create-gift-payment-intent', {
         amount: parseFloat(formData.amount) * 100,
-        giftId: 'custom'
+        giftId: 'custom',
+        name: formData.name,
+        message: formData.message
       });
 
       const result = await stripe.confirmCardPayment(response.data.clientSecret, {

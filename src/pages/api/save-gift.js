@@ -33,7 +33,21 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Gift ID is required' });
     }
 
-    // Create the purchase and update the claimed count in a transaction
+    // Check if this purchase already exists (idempotency)
+    if (paymentIntentId) {
+      const existingPurchase = await prisma.giftPurchase.findFirst({
+        where: { paymentIntentId }
+      });
+
+      if (existingPurchase) {
+        return res.status(200).json({ 
+          message: 'Gift already saved', 
+          purchaseId: existingPurchase.id 
+        });
+      }
+    }
+
+    // Create the purchase record (claimed count already incremented during payment intent creation)
     const result = await prisma.$transaction(async (prisma) => {
       const purchaseId = await generateUniquePurchaseId(prisma);
       // Create the purchase record
@@ -45,16 +59,6 @@ export default async function handler(req, res) {
           message: message || null,
           paymentIntentId,
         },
-      });
-
-      // Update the claimed count on the gift
-      await prisma.gift.update({
-        where: { id: parseInt(giftId) },
-        data: {
-          claimed: {
-            increment: 1
-          }
-        }
       });
 
       return purchase;

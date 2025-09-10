@@ -12,18 +12,18 @@ const CardGrid = styled.div`
 
 export default function GiftSection({gifts, onGiftClick}) {
   const handleGiftClick = async (gift) => {
-    try {
-      const response = await axios.post('/api/create-gift-payment-intent', {
-        amount: gift.amount,
-        giftId: gift.id,
-      });
-      onGiftClick({
-        ...gift,
-        clientSecret: response.data.clientSecret
-      });
-    } catch (error) {
-      console.error('Error creating payment intent:', error);
+    // Check availability before opening modal
+    const remaining = gift.quantity ? gift.quantity - gift.claimed : null;
+    const soldOut = remaining !== null && remaining <= 0;
+    
+    if (soldOut) {
+      alert('Sorry, this gift is no longer available. Please refresh the page to see updated availability.');
+      window.location.reload();
+      return;
     }
+    
+    // Just pass the gift to the modal - payment intent will be created when form is submitted
+    onGiftClick(gift);
   };
 
   return (
