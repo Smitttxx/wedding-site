@@ -90,7 +90,7 @@ const LoadingMessage = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.accent};
 `;
 
-export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret }) {
+export default function GiftModal({ isOpen, onClose, gift, amount }) {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
   const [postcode, setPostcode] = useState('');
@@ -121,7 +121,15 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
     setPaymentError(false);
 
     try {
-      const result = await stripe.confirmCardPayment(clientSecret, {
+      // Create a new payment intent with the current form data
+      const paymentIntentResponse = await axios.post('/api/create-gift-payment-intent', {
+        amount: gift.amount,
+        giftId: gift.id,
+        name,
+        message,
+      });
+
+      const result = await stripe.confirmCardPayment(paymentIntentResponse.data.clientSecret, {
         payment_method: {
           card: elements.getElement(CardNumberElement),
           billing_details: {
@@ -150,6 +158,11 @@ export default function GiftModal({ isOpen, onClose, gift, amount, clientSecret 
     } catch (error) {
       setPaymentError(true);
       console.error('Error processing payment:', error);
+      if (error.response?.data?.error === 'GIFT_SOLD_OUT') {
+        alert('Sorry, this gift is no longer available. Please refresh the page to see updated availability.');
+        onClose();
+        window.location.reload();
+      }
     } finally {
       setLoading(false);
     }

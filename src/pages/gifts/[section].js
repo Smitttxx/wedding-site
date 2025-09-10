@@ -82,7 +82,6 @@ export default function DynamicGiftSectionPage() {
                   <Elements 
                     stripe={stripePromise}
                     options={{
-                      clientSecret: selectedGift.clientSecret,
                       appearance: {
                         theme: 'stripe',
                       },
@@ -93,7 +92,6 @@ export default function DynamicGiftSectionPage() {
                       onClose={() => setSelectedGift(null)}
                       gift={selectedGift}
                       amount={selectedGift.amount}
-                      clientSecret={selectedGift.clientSecret}
                     />
                   </Elements>
                 )}
