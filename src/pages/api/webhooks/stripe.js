@@ -46,13 +46,11 @@ async function handlePaymentIntentSucceeded(paymentIntent) {
     const { metadata } = paymentIntent;
     
     // Only process gift payments (they have giftId in metadata)
-    if (!metadata.giftId || metadata.giftId === 'custom') {
+    if (!metadata.giftId) {
       console.log('Skipping non-gift payment:', paymentIntent.id);
       return;
     }
 
-    const giftId = parseInt(metadata.giftId);
-    
     // Check if this purchase already exists
     const existingPurchase = await prisma.giftPurchase.findFirst({
       where: { paymentIntentId: paymentIntent.id }
@@ -63,26 +61,16 @@ async function handlePaymentIntentSucceeded(paymentIntent) {
       return;
     }
 
-    // Create the purchase record (claimed count already incremented during payment intent creation)
-    await prisma.$transaction(async (prisma) => {
-      // Generate unique purchase ID
-      const purchaseId = await generateUniquePurchaseId(prisma);
-      
-      // Create the purchase record
-      await prisma.giftPurchase.create({
-        data: {
-          id: purchaseId,
-          giftId: giftId,
-          name: metadata.buyerName || 'Anonymous',
-          message: metadata.buyerMessage || null,
-          paymentIntentId: paymentIntent.id,
-        },
-      });
-    });
+    // Handle custom gifts differently
+    if (metadata.giftId === 'custom') {
+      await handleCustomGift(paymentIntent, metadata);
+    } else {
+      await handleRegularGift(paymentIntent, metadata);
+    }
 
     console.log('Successfully processed gift purchase via webhook:', {
       paymentIntentId: paymentIntent.id,
-      giftId: giftId,
+      giftId: metadata.giftId,
       buyerName: metadata.buyerName
     });
 
@@ -90,6 +78,54 @@ async function handlePaymentIntentSucceeded(paymentIntent) {
     console.error('Error processing payment intent webhook:', error);
     // Don't throw - we don't want to retry the webhook
   }
+}
+
+async function handleCustomGift(paymentIntent, metadata) {
+  await prisma.$transaction(async (prisma) => {
+    // First create the custom gift
+    const customGift = await prisma.gift.create({
+      data: {
+        name: 'Custom Gift',
+        description: metadata.giftDescription || 'Custom gift from donor',
+        amount: parseInt(metadata.giftAmount),
+        section: 'GeneralGifts',
+        quantity: null, // Custom gifts have no quantity limit
+        claimed: 0,
+      },
+    });
+
+    // Then create the purchase record
+    const purchaseId = await generateUniquePurchaseId(prisma);
+    await prisma.giftPurchase.create({
+      data: {
+        id: purchaseId,
+        giftId: customGift.id,
+        name: metadata.buyerName || 'Anonymous',
+        message: metadata.buyerMessage || null,
+        paymentIntentId: paymentIntent.id,
+      },
+    });
+  });
+}
+
+async function handleRegularGift(paymentIntent, metadata) {
+  const giftId = parseInt(metadata.giftId);
+  
+  await prisma.$transaction(async (prisma) => {
+    // Generate unique purchase ID
+    const purchaseId = await generateUniquePurchaseId(prisma);
+    
+    // Create the purchase record (claimed count already incremented during payment intent creation)
+    await prisma.giftPurchase.create({
+      data: {
+        id: purchaseId,
+        giftId: giftId,
+        name: metadata.buyerName || 'Anonymous',
+        message: metadata.buyerMessage || null,
+        paymentIntentId: paymentIntent.id,
+      },
+    });
+  });
 }
 
 function randomId(length = 4) {
