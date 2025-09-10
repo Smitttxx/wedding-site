@@ -13,7 +13,17 @@ export default async function handler(req, res) {
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+    // Get the raw body from the request
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk.toString();
+    });
+    
+    await new Promise((resolve) => {
+      req.on('end', resolve);
+    });
+
+    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
