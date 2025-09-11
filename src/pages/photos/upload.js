@@ -133,10 +133,13 @@ const StatusMessage = styled.div`
   border-radius: 12px;
   margin: 1rem 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
   font-weight: 500;
   font-size: 1rem;
+  white-space: pre-line;
+  max-height: 300px;
+  overflow-y: auto;
 
   &.success {
     background: #d4edda;
@@ -934,65 +937,75 @@ export default function PhotoUpload() {
     setUploadProgress({ current: 0, total: selectedFiles.length });
 
     let successCount = 0;
+    let failedFiles = [];
+    let errorMessages = [];
 
     for (let i = 0; i < selectedFiles.length; i++) {
       let file = selectedFiles[i];
+      const fileName = file.name;
+      const fileSize = Math.round(file.size / 1024 / 1024 * 100) / 100;
 
       // Convert HEIC/HEIF on client if needed
       try {
         file = await convertIfNeeded(file);
       } catch (err) {
-        setStatus({ type: 'error', message: 'Failed file type not supported (HEIC conversion failed).' });
+        failedFiles.push(fileName);
+        errorMessages.push(`${fileName} (${fileSize}MB): HEIC conversion failed`);
         setUploadProgress({ current: i + 1, total: selectedFiles.length });
         continue;
       }
 
       try {
-        // 1) Ask server for a signed upload URL
-        const sigRes = await fetch('/api/blob-upload-url', {
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Upload file directly to our API
+        const uploadRes = await fetch('/api/blob-upload-url', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ filename: file.name, contentType: file.type || 'application/octet-stream', size: file.size }),
+          body: formData,
         });
-        if (!sigRes.ok) {
-          const err = await sigRes.json().catch(() => ({}));
-          const message = sigRes.status === 413 ? 'File too big (max 10MB).' : (err.error || 'Could not start upload.');
-          setStatus({ type: 'error', message });
+
+        if (!uploadRes.ok) {
+          const err = await uploadRes.json().catch(() => ({}));
+          let errorMsg = err.error || 'Upload failed';
+          let details = err.details || '';
+          
+          // Create detailed error message
+          if (uploadRes.status === 413) {
+            errorMsg = 'File too large';
+            details = `File size (${fileSize}MB) exceeds the 10MB limit`;
+          } else if (uploadRes.status === 415) {
+            errorMsg = 'Invalid file type';
+            details = err.details || 'File type not supported';
+          }
+          
+          failedFiles.push(fileName);
+          errorMessages.push(`${fileName} (${fileSize}MB): ${errorMsg}${details ? ` - ${details}` : ''}`);
           setUploadProgress({ current: i + 1, total: selectedFiles.length });
           continue;
         }
-        const { uploadUrl } = await sigRes.json();
 
-        // 2) PUT the file directly to Blob
-        const putRes = await fetch(uploadUrl, {
-          method: 'PUT',
-          headers: { 'Content-Type': file.type || 'application/octet-stream' },
-          body: file,
-        });
-        if (!putRes.ok) {
-          setStatus({ type: 'error', message: 'Upload failed while sending to storage.' });
-          setUploadProgress({ current: i + 1, total: selectedFiles.length });
-          continue;
-        }
-        const location = putRes.headers.get('Location');
-        const url = location || (await putRes.text());
+        const { url, filename } = await uploadRes.json();
 
-        // 3) Save metadata
+        // Save metadata
         const metaRes = await fetch('/api/save-photo-metadata', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url, filename: file.name, uploadedBy }),
+          body: JSON.stringify({ url, filename, uploadedBy }),
         });
         if (!metaRes.ok) {
-          setStatus({ type: 'error', message: 'Upload succeeded, but saving failed.' });
+          failedFiles.push(fileName);
+          errorMessages.push(`${fileName} (${fileSize}MB): Upload succeeded but saving metadata failed`);
           setUploadProgress({ current: i + 1, total: selectedFiles.length });
           continue;
         }
 
         successCount++;
       } catch (err) {
-        console.error('Direct upload error:', err);
-        setStatus({ type: 'error', message: 'Unexpected upload error.' });
+        console.error('Upload error:', err);
+        failedFiles.push(fileName);
+        errorMessages.push(`${fileName} (${fileSize}MB): Unexpected error - ${err.message}`);
       }
 
       setUploadProgress({ current: i + 1, total: selectedFiles.length });
@@ -1009,10 +1022,25 @@ export default function PhotoUpload() {
       setStatus({ type: 'success', message: 'All photos shared successfully.' });
       setShowSuccessModal(true);
     } else if (successCount > 0) {
-      setStatus({ type: 'error', message: `${selectedFiles.length - successCount} file(s) failed to upload.` });
+      const failedCount = selectedFiles.length - successCount;
+      let message = `Successfully uploaded ${successCount} of ${selectedFiles.length} photos.`;
+      
+      if (failedCount > 0) {
+        message += `\n\nFailed uploads:\n${errorMessages.slice(0, 5).join('\n')}`;
+        if (errorMessages.length > 5) {
+          message += `\n... and ${errorMessages.length - 5} more`;
+        }
+      }
+      
+      setStatus({ type: 'error', message });
       setShowSuccessModal(false);
     } else {
-      setStatus({ type: 'error', message: 'No files were uploaded. Please check file types and try again.' });
+      let message = 'No files were uploaded. Failed uploads:\n';
+      message += errorMessages.slice(0, 10).join('\n');
+      if (errorMessages.length > 10) {
+        message += `\n... and ${errorMessages.length - 10} more`;
+      }
+      setStatus({ type: 'error', message });
       setShowSuccessModal(false);
     }
   };
@@ -1186,15 +1214,19 @@ export default function PhotoUpload() {
               )}
               {status && (
                 <StatusMessage className={status.type}>
-                  <FontAwesomeIcon 
-                    icon={
-                      status.type === 'success' ? faCheckCircle :
-                      status.type === 'error' ? faExclamationTriangle :
-                      faSpinner
-                    }
-                    spin={status.type === 'loading'}
-                  />
-                  {status.message}
+                  <div style={{ flexShrink: 0, marginTop: '0.1rem' }}>
+                    <FontAwesomeIcon 
+                      icon={
+                        status.type === 'success' ? faCheckCircle :
+                        status.type === 'error' ? faExclamationTriangle :
+                        faSpinner
+                      }
+                      spin={status.type === 'loading'}
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    {status.message}
+                  </div>
                 </StatusMessage>
               )}
             </UploadContainer>
