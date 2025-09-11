@@ -805,7 +805,6 @@ const PersonalMessageSubtext = styled.div`
 export default function PhotoUpload() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [uploadedBy, setUploadedBy] = useState('');
   const [status, setStatus] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -821,6 +820,12 @@ export default function PhotoUpload() {
     const byMime = type.startsWith('image/');
     const byExt = /(\.heic|\.heif|\.heics|\.avif|\.webp|\.jpg|\.jpeg|\.jfif|\.png|\.gif|\.bmp|\.tif|\.tiff)$/i.test(name);
     return byMime || byExt;
+  };
+
+  // Helper: check if file size is within Vercel Blob limits
+  const isWithinSizeLimit = (file) => {
+    const maxSize = 4.4 * 1024 * 1024; // 4.4MB (Vercel Blob limit)
+    return file.size <= maxSize;
   };
 
   // Helper: convert HEIC/HEIF to JPEG for compatibility
@@ -840,24 +845,6 @@ export default function PhotoUpload() {
     }
   };
 
-  // Prevent page leave during upload
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      if (uploading) {
-        e.preventDefault();
-        e.returnValue = 'Your photos are still uploading! Are you sure you want to leave?';
-        return e.returnValue;
-      }
-    };
-
-    if (uploading) {
-      window.addEventListener('beforeunload', handleBeforeUnload);
-    }
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [uploading]);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -890,20 +877,26 @@ export default function PhotoUpload() {
 
   const addFiles = (files) => {
     resetStatus();
+    
+    // Filter files by type and size
     const supported = files.filter(isSupportedImage);
-    const tooLarge = supported.filter(file => file.size > 10 * 1024 * 1024);
-    const validFiles = supported.filter(file => file.size <= 10 * 1024 * 1024);
+    const withinSizeLimit = supported.filter(isWithinSizeLimit);
+    const validFiles = withinSizeLimit;
 
-    if (supported.length !== files.length) {
-      setStatus({ type: 'error', message: 'Some files were skipped — file type not supported.' });
+    // Show warnings for filtered files
+    const unsupportedCount = files.length - supported.length;
+    const tooLargeCount = supported.length - withinSizeLimit.length;
+
+    if (unsupportedCount > 0) {
+      setStatus({ type: 'error', message: `${unsupportedCount} file(s) were skipped — file type not supported.` });
     }
 
-    if (tooLarge.length > 0) {
-      setStatus({ type: 'error', message: 'Some files were skipped — file too big (max 10MB).' });
+    if (tooLargeCount > 0) {
+      setStatus({ type: 'error', message: `${tooLargeCount} file(s) were skipped — file too big (max 4.4MB).` });
     }
 
     if (validFiles.length === 0 && files.length > 0) {
-      setStatus({ type: 'error', message: 'No supported images found. Supported: HEIC/HEIF, JPG/JPEG, PNG, WebP, AVIF, GIF, BMP, TIFF (max 10MB each).' });
+      setStatus({ type: 'error', message: 'No supported images found. Supported: HEIC/HEIF, JPG/JPEG, PNG, WebP, AVIF, GIF, BMP, TIFF (max 4.4MB each).' });
       return;
     }
 
@@ -939,7 +932,6 @@ export default function PhotoUpload() {
 
     resetStatus();
     setUploading(true);
-    setShowSuccessModal(false);
     setUploadProgress({ current: 0, total: selectedFiles.length });
 
     let successCount = 0;
@@ -1019,36 +1011,40 @@ export default function PhotoUpload() {
 
     setUploading(false);
 
-    if (successCount === selectedFiles.length) {
-      setSelectedFiles([]);
-      setUploadedBy('');
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-      setStatus({ type: 'success', message: 'All photos shared successfully.' });
-      setShowSuccessModal(true);
-    } else if (successCount > 0) {
-      const failedCount = selectedFiles.length - successCount;
-      let message = `Successfully uploaded ${successCount} of ${selectedFiles.length} photos.`;
-      
-      if (failedCount > 0) {
-        message += `\n\nFailed uploads:\n${errorMessages.slice(0, 5).join('\n')}`;
-        if (errorMessages.length > 5) {
-          message += `\n... and ${errorMessages.length - 5} more`;
-        }
-      }
-      
-      setStatus({ type: 'error', message });
-      setShowSuccessModal(false);
-    } else {
-      let message = 'No files were uploaded. Failed uploads:\n';
-      message += errorMessages.slice(0, 10).join('\n');
-      if (errorMessages.length > 10) {
-        message += `\n... and ${errorMessages.length - 10} more`;
-      }
-      setStatus({ type: 'error', message });
-      setShowSuccessModal(false);
+    // Clear the form
+    setSelectedFiles([]);
+    setUploadedBy('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
+
+    // Prepare redirect URL with results
+    let redirectUrl = '/photos/gallery';
+    let urlParams = new URLSearchParams();
+    
+    if (successCount === selectedFiles.length) {
+      // All successful
+      urlParams.set('upload', 'success');
+      urlParams.set('count', successCount.toString());
+    } else if (successCount > 0) {
+      // Partial success
+      urlParams.set('upload', 'partial');
+      urlParams.set('success', successCount.toString());
+      urlParams.set('total', selectedFiles.length.toString());
+      urlParams.set('failed', (selectedFiles.length - successCount).toString());
+    } else {
+      // All failed
+      urlParams.set('upload', 'failed');
+      urlParams.set('total', selectedFiles.length.toString());
+    }
+
+    // Add error messages if any
+    if (errorMessages.length > 0) {
+      urlParams.set('errors', errorMessages.slice(0, 3).join('|'));
+    }
+
+    // Redirect to gallery with results
+    window.location.href = `${redirectUrl}?${urlParams.toString()}`;
   };
 
   // Show uploading interface when upload is in progress
@@ -1120,9 +1116,10 @@ export default function PhotoUpload() {
               </PersonalMessage>
 
               <UploadInstructions>
-                <strong><FontAwesomeIcon icon={faCamera} style={{ color: '#d4af37' }} /> Mobile Tips:</strong><br/>
+                <strong><FontAwesomeIcon icon={faCamera} style={{ color: '#d4af37' }} /> Upload Tips:</strong><br/>
                 • Tap the upload area to select photos<br/>
                 • You can select multiple photos at once<br/>
+                • Max 4.4MB per photo (Vercel Blob limit)<br/>
                 • Photos will be shared with everyone once uploaded!
               </UploadInstructions>
 
@@ -1151,7 +1148,7 @@ export default function PhotoUpload() {
                   <FontAwesomeIcon icon={faCloudUploadAlt} />
                 </UploadIcon>
                 <UploadText>Tap here to select your photos</UploadText>
-                <UploadSubtext>Supports HEIC, JPG/JPEG, PNG, WebP, AVIF, GIF and more (max 10MB each)</UploadSubtext>
+                <UploadSubtext>Supports HEIC, JPG/JPEG, PNG, WebP, AVIF, GIF and more (max 4.4MB each)</UploadSubtext>
                 {selectedFiles.length > 0 && (
                   <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '8px' }}>
                     <FontAwesomeIcon icon={faCheck} style={{ color: '#28a745', marginRight: '0.5rem' }} />
@@ -1163,7 +1160,7 @@ export default function PhotoUpload() {
               <FileInput
                 ref={fileInputRef}
                 type="file"
-                accept="image/*,.jpg,.jpeg,.heic,.heif,.heics,.avif,.jfif"
+                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/avif,image/bmp,image/tiff,image/tif,.heic,.heif,.heics,.jfif"
                 multiple
                 onChange={handleFileSelect}
               />
@@ -1240,22 +1237,6 @@ export default function PhotoUpload() {
         </Page>
       </Layout>
 
-      {/* Success Modal (only if all uploads succeeded) */}
-      {showSuccessModal && (
-        <UploadModal>
-          <ModalContent>
-            <ModalIcon>
-              <FontAwesomeIcon icon={faCheckCircle} />
-            </ModalIcon>
-            <ModalTitle>Photos Shared!</ModalTitle>
-            <p>Your photos have been successfully shared!</p>
-            <SuccessButton href="/photos/gallery">
-              <FontAwesomeIcon icon={faImages} style={{ marginRight: '0.5rem' }} />
-              View All Photos
-            </SuccessButton>
-          </ModalContent>
-        </UploadModal>
-      )}
     </>
   );
 } 

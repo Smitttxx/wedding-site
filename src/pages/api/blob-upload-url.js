@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     const form = formidable({
       uploadDir: uploadsDir,
       keepExtensions: true,
-      maxFileSize: 10 * 1024 * 1024, // 10MB
+      maxFileSize: 4.4 * 1024 * 1024, // 4.4MB (Vercel Blob limit)
     });
 
     const [fields, files] = await form.parse(req);
