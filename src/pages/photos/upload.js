@@ -788,6 +788,12 @@ const PersonalMessageText = styled.div`
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: ${props => props.theme.colors.primary};
+  
+  svg {
+    font-size: 1rem !important;
+    width: 1rem !important;
+    height: 1rem !important;
+  }
 `;
 
 const PersonalMessageSubtext = styled.div`
