@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
   try {
     const form = formidable({
-      maxFileSize: 10 * 1024 * 1024, // 10MB
+      maxFileSize: 4.4 * 1024 * 1024, // 4.4MB (Vercel Blob limit)
       filter: ({ mimetype, originalFilename }) => {
         const isImage = mimetype && mimetype.startsWith('image/');
         const byExt = /(\.heic|\.heif|\.heics|\.avif|\.webp|\.jpg|\.jpeg|\.jfif|\.png|\.gif|\.bmp|\.tif|\.tiff)$/i.test(originalFilename || '');

@@ -18,6 +18,21 @@ export default async function handler(req, res) {
       },
     });
 
+    // Get unique uploaders count
+    const uniqueUploaders = await prisma.photo.findMany({
+      where: {
+        approved: true,
+        deleted: false,
+        uploadedBy: {
+          not: null,
+        },
+      },
+      select: {
+        uploadedBy: true,
+      },
+      distinct: ['uploadedBy'],
+    });
+
     // Calculate pagination
     const totalPages = Math.ceil(totalPhotos / limitNum);
     const skip = (pageNum - 1) * limitNum;
@@ -44,6 +59,9 @@ export default async function handler(req, res) {
         hasNextPage: pageNum < totalPages,
         hasPrevPage: pageNum > 1,
         limit: limitNum
+      },
+      stats: {
+        uniqueUploaders: uniqueUploaders.length
       }
     });
 
