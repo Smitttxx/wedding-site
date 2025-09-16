@@ -23,9 +23,19 @@ const PhotoGrid = styled.div`
   margin: 0.75rem 0;
   
   @media (min-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     margin: 2rem 0;
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
   }
 `;
 
@@ -37,7 +47,7 @@ const PhotoCard = styled.div`
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
   position: relative;
-  aspect-ratio: 1;
+  height: 200px;
 
   &:hover {
     transform: translateY(-2px);
@@ -49,12 +59,20 @@ const PhotoCard = styled.div`
   }
 
   @media (min-width: 768px) {
-    aspect-ratio: auto;
+    height: 280px;
     
     &:hover {
       transform: translateY(-4px);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     }
+  }
+
+  @media (min-width: 1024px) {
+    height: 350px;
+  }
+
+  @media (min-width: 1200px) {
+    height: 400px;
   }
 `;
 
@@ -794,10 +812,9 @@ export default function PhotoGallery({ isAdmin = false }) {
   const closeModal = () => {
     setSelectedPhoto(null);
     setSelectedPhotoIndex(0);
-    // Pop the state we pushed
-    if (window.history.state?.modal) {
-      window.history.back();
-    }
+    // Just close the modal without any history navigation
+    // This prevents going back to homepage
+    document.body.style.overflow = 'unset';
   };
 
   const navigatePhoto = (direction) => {
