@@ -6,7 +6,9 @@ import Link from 'next/link';
 import {
   faHome,
   faGift,
-  faEnvelopeOpenText,
+  faCamera,
+  faImages,
+  faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 
 const Nav = styled.nav`
@@ -103,11 +105,13 @@ export default function NavBar() {
 
   return (
     <Nav>
-      <HomeLink href="/">Our Forever Starts Here</HomeLink>
+      <HomeLink href="/">Laura & Joe's Wedding Photos</HomeLink>
       <NavLinks open={menuOpen}>
-        <StyledLink href="/"><FontAwesomeIcon icon={faHome} />Home</StyledLink>
-        <StyledLink href="/invite"><FontAwesomeIcon icon={faEnvelopeOpenText} />RSVP</StyledLink>
-        <StyledLink href="/gifts"><FontAwesomeIcon icon={faGift} />Gifts</StyledLink>
+        <StyledLink href="/"><FontAwesomeIcon icon={faHome} style={{ fontSize: '0.9rem' }} />Home</StyledLink>
+        <StyledLink href="https://fotoshare.co/e/vp7GNe0ASxlcB3ebVMGpX" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faCamera} style={{ fontSize: '0.9rem' }} />Photobooth</StyledLink>
+        <StyledLink href="/photos/gallery"><FontAwesomeIcon icon={faImages} style={{ fontSize: '0.9rem' }} />Guest Photos</StyledLink>
+        <StyledLink href="/photos/upload"><FontAwesomeIcon icon={faUpload} style={{ fontSize: '0.9rem' }} />Upload Photos</StyledLink>
+        <StyledLink href="/gifts"><FontAwesomeIcon icon={faGift} style={{ fontSize: '0.9rem' }} />Gifts</StyledLink>
       </NavLinks>
       <MenuToggle onClick={() => setMenuOpen(!menuOpen)}>☰</MenuToggle>
     </Nav>

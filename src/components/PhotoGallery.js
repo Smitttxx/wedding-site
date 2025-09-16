@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faUser, faCalendar, faSpinner, faUpload, faChevronLeft, faChevronRight, faTrash, faTimes, faHeart, faImages } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faUser, faCalendar, faSpinner, faUpload, faChevronLeft, faChevronRight, faTrash, faTimes, faHeart, faImages, faDownload } from '@fortawesome/free-solid-svg-icons';
 
 const GalleryContainer = styled.div`
   max-width: 100%;
@@ -67,9 +67,13 @@ const PhotoImage = styled.div`
 
 const PhotoInfo = styled.div`
   padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   
   @media (min-width: 768px) {
     padding: 1rem;
+    background: white;
+    backdrop-filter: none;
   }
 `;
 
@@ -77,13 +81,16 @@ const PhotoMeta = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.75rem;
-  color: ${props => props.theme.colors.textLight || '#666'};
+  font-size: 0.8rem;
+  color: ${props => props.theme.colors.text || '#333'};
   margin-bottom: 0.25rem;
+  font-weight: 600;
   
   @media (min-width: 768px) {
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: ${props => props.theme.colors.textLight || '#666'};
   }
 `;
 
@@ -212,7 +219,7 @@ const Modal = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 10000;
   cursor: pointer;
   padding: 0.5rem;
   box-sizing: border-box;
@@ -243,7 +250,7 @@ const ModalClose = styled.button`
   height: 48px;
   font-size: 1.3rem;
   cursor: pointer;
-  z-index: 1001;
+  z-index: 10001;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -269,11 +276,14 @@ const ModalClose = styled.button`
 
 const ModalImageWrapper = styled.div`
   position: relative;
-  max-width: 100%;
-  max-height: 100%;
+  width: 90vw;
+  height: 80vh;
+  max-width: 1200px;
+  max-height: 800px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 auto;
 `;
 
 const PaginationContainer = styled.div`
@@ -354,11 +364,45 @@ const AdminNotice = styled.div`
   }
 `;
 
+const DownloadAllButton = styled.button`
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 1rem 0.5rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+
+  &:hover {
+    background: ${props => props.theme.colors.primaryDark};
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  @media (min-width: 768px) {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+`;
+
 const ModalInstructions = styled.div`
   position: fixed;
   bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 0.75rem 1.5rem;
@@ -372,6 +416,233 @@ const ModalInstructions = styled.div`
     bottom: 20px;
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
+  }
+`;
+
+const ModalNavigation = styled.div`
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: translateY(-50%);
+  }
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+`;
+
+const ModalPrevButton = styled(ModalNavigation)`
+  left: 20px;
+
+  @media (max-width: 768px) {
+    left: 10px;
+  }
+`;
+
+const ModalNextButton = styled(ModalNavigation)`
+  right: 20px;
+
+  @media (max-width: 768px) {
+    right: 10px;
+  }
+`;
+
+const ModalPhotoInfo = styled.div`
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  right: 160px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  z-index: 1001;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  @media (min-width: 768px) {
+    top: 20px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    max-width: 400px;
+  }
+`;
+
+const ModalPhotoMeta = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+`;
+
+const ModalPhotoCounter = styled.div`
+  font-size: 0.8rem;
+  opacity: 0.8;
+  font-weight: 500;
+`;
+
+const UploaderRibbon = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(135deg, #d4af37, #f4d03f);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 20px 0;
+    border-color: transparent #b8941f transparent transparent;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 20px 10px;
+    border-color: transparent transparent transparent #b8941f;
+  }
+`;
+
+const GalleryUploaderRibbon = styled.div`
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: linear-gradient(135deg, #d4af37, #f4d03f);
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 15px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(212, 175, 55, 0.3);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -8px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 8px 16px 0;
+    border-color: transparent #b8941f transparent transparent;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -8px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 16px 8px;
+    border-color: transparent transparent transparent #b8941f;
+  }
+`;
+
+const ModalDownloadButton = styled.button`
+  position: fixed;
+  top: 20px;
+  right: 80px;
+  background: #d4af37;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background: #b8941f;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+    top: 15px;
+    right: 15px;
   }
 `;
 
@@ -438,49 +709,172 @@ const PersonalMessageSubtext = styled.div`
 export default function PhotoGallery({ isAdmin = false }) {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [deletingPhoto, setDeletingPhoto] = useState(null);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     totalPhotos: 0,
     hasNextPage: false,
     hasPrevPage: false,
-    limit: 20
+    limit: 50
   });
 
   useEffect(() => {
     fetchPhotos(1);
   }, []);
 
-  // Close modal on escape key
+  // Infinite scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (loadingMore || !pagination.hasNextPage) return;
+      
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.offsetHeight;
+      
+      // Load more when user is 200px from bottom
+      if (scrollTop + windowHeight >= docHeight - 200) {
+        fetchPhotos(pagination.currentPage + 1, true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [pagination.currentPage, pagination.hasNextPage, loadingMore]);
+
+  // Handle modal navigation and back button
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape' && selectedPhoto) {
-        setSelectedPhoto(null);
+        closeModal();
+      }
+    };
+
+    const handleKeyDown = (e) => {
+      if (!selectedPhoto) return;
+      
+      if (e.key === 'ArrowLeft') {
+        navigatePhoto(-1);
+      } else if (e.key === 'ArrowRight') {
+        navigatePhoto(1);
+      }
+    };
+
+    const handlePopState = (e) => {
+      if (selectedPhoto) {
+        e.preventDefault();
+        closeModal();
       }
     };
 
     if (selectedPhoto) {
       document.addEventListener('keydown', handleEscape);
+      document.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('popstate', handlePopState);
       document.body.style.overflow = 'hidden'; // Prevent background scrolling
+      
+      // Push state to handle back button
+      window.history.pushState({ modal: true }, '');
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('popstate', handlePopState);
       document.body.style.overflow = 'unset';
     };
-  }, [selectedPhoto]);
+  }, [selectedPhoto, selectedPhotoIndex]);
 
-  const fetchPhotos = async (page = 1) => {
+  const closeModal = () => {
+    setSelectedPhoto(null);
+    setSelectedPhotoIndex(0);
+    // Pop the state we pushed
+    if (window.history.state?.modal) {
+      window.history.back();
+    }
+  };
+
+  const navigatePhoto = (direction) => {
+    const newIndex = selectedPhotoIndex + direction;
+    if (newIndex >= 0 && newIndex < photos.length) {
+      setSelectedPhotoIndex(newIndex);
+      setSelectedPhoto(photos[newIndex]);
+    }
+  };
+
+  // Touch handling for swipe navigation
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && selectedPhotoIndex < photos.length - 1) {
+      navigatePhoto(1);
+    }
+    if (isRightSwipe && selectedPhotoIndex > 0) {
+      navigatePhoto(-1);
+    }
+  };
+
+  const handleDownloadPhoto = async (photo) => {
     try {
-      setLoading(true);
-      const response = await fetch(`/api/photos?page=${page}&limit=20`);
+      // Fetch the image as a blob
+      const response = await fetch(photo.url);
+      const blob = await response.blob();
+      
+      // Create a temporary link element to trigger download
+      const link = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      link.href = url;
+      link.download = `laura-joe-wedding-${photo.filename || 'photo'}.jpg`;
+      
+      // Add to DOM, click, and remove
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      // Fallback: open in new tab
+      window.open(photo.url, '_blank');
+    }
+  };
+
+  const fetchPhotos = async (page = 1, append = false) => {
+    try {
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+      const response = await fetch(`/api/photos?page=${page}&limit=50`);
       const data = await response.json();
 
       if (response.ok) {
-        setPhotos(data.photos);
+        if (append) {
+          setPhotos(prev => [...prev, ...data.photos]);
+        } else {
+          setPhotos(data.photos);
+        }
         setPagination(data.pagination);
       } else {
         setError(data.error || 'Failed to load photos');
@@ -490,6 +884,7 @@ export default function PhotoGallery({ isAdmin = false }) {
       setError('Failed to load photos. Please try again.');
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
@@ -540,55 +935,6 @@ export default function PhotoGallery({ isAdmin = false }) {
     });
   };
 
-  const renderPagination = () => {
-    if (pagination.totalPages <= 1) return null;
-
-    const pages = [];
-    const maxVisiblePages = 3; // Reduced for mobile
-    let startPage = Math.max(1, pagination.currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(pagination.totalPages, startPage + maxVisiblePages - 1);
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
-
-    // Previous button
-    pages.push(
-      <PaginationButton
-        key="prev"
-        onClick={() => handlePageChange(pagination.currentPage - 1)}
-        disabled={!pagination.hasPrevPage}
-      >
-        <FontAwesomeIcon icon={faChevronLeft} />
-      </PaginationButton>
-    );
-
-    // Page numbers
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(
-        <PaginationButton
-          key={i}
-          active={i === pagination.currentPage}
-          onClick={() => handlePageChange(i)}
-        >
-          {i}
-        </PaginationButton>
-      );
-    }
-
-    // Next button
-    pages.push(
-      <PaginationButton
-        key="next"
-        onClick={() => handlePageChange(pagination.currentPage + 1)}
-        disabled={!pagination.hasNextPage}
-      >
-        <FontAwesomeIcon icon={faChevronRight} />
-      </PaginationButton>
-    );
-
-    return pages;
-  };
 
   const isGifUrl = (url) => /\.gif(\?|$)/i.test(url || '');
 
@@ -603,14 +949,14 @@ export default function PhotoGallery({ isAdmin = false }) {
 
         <MobileOptimizedHeader>
           <UploadButton href="/photos/upload">
-            <FontAwesomeIcon icon={faUpload} />
-            <FontAwesomeIcon icon={faImages} />
+            <FontAwesomeIcon icon={faUpload} style={{ fontSize: '0.9rem' }} />
+            <FontAwesomeIcon icon={faImages} style={{ fontSize: '0.9rem' }} />
             Quick Upload
           </UploadButton>
           
           {photos.length > 0 && (
             <PhotoCount>
-              <FontAwesomeIcon icon={faHeart} style={{ marginRight: '0.5rem', color: '#d4af37' }} />
+              <FontAwesomeIcon icon={faHeart} style={{ marginRight: '0.5rem', color: '#d4af37', fontSize: '0.8rem' }} />
               {pagination.totalPhotos} Memories Shared
             </PhotoCount>
           )}
@@ -618,7 +964,7 @@ export default function PhotoGallery({ isAdmin = false }) {
 
         {loading && (
           <LoadingContainer>
-            <FontAwesomeIcon icon={faSpinner} spin style={{ marginRight: '0.5rem' }} />
+            <FontAwesomeIcon icon={faSpinner} spin style={{ marginRight: '0.5rem', fontSize: '1rem' }} />
             Loading memories...
           </LoadingContainer>
         )}
@@ -626,7 +972,7 @@ export default function PhotoGallery({ isAdmin = false }) {
         {error && (
           <EmptyState>
             <EmptyIcon>
-              <FontAwesomeIcon icon={faCamera} />
+              <FontAwesomeIcon icon={faCamera} style={{ fontSize: '2.5rem' }} />
             </EmptyIcon>
             <p>Error loading photos: {error}</p>
           </EmptyState>
@@ -635,7 +981,7 @@ export default function PhotoGallery({ isAdmin = false }) {
         {!loading && !error && photos.length === 0 && (
           <EmptyState>
             <EmptyIcon>
-              <FontAwesomeIcon icon={faCamera} />
+              <FontAwesomeIcon icon={faCamera} style={{ fontSize: '2.5rem' }} />
             </EmptyIcon>
             <p>No photos shared yet!</p>
             <p>Be the first to capture the magic! 📸</p>
@@ -645,12 +991,15 @@ export default function PhotoGallery({ isAdmin = false }) {
         {!loading && !error && photos.length > 0 && (
           <>
             <PaginationInfo>
-              Page {pagination.currentPage} of {pagination.totalPages} • {pagination.totalPhotos} total photos
+              {pagination.totalPhotos} total photos
             </PaginationInfo>
             
             <PhotoGrid>
-              {photos.map((photo) => (
-                <PhotoCard key={photo.id} onClick={() => setSelectedPhoto(photo)}>
+              {photos.map((photo, index) => (
+                <PhotoCard key={photo.id} onClick={() => {
+                  setSelectedPhoto(photo);
+                  setSelectedPhotoIndex(index);
+                }}>
                   <PhotoImage>
                     <Image
                       src={photo.url}
@@ -658,9 +1007,14 @@ export default function PhotoGallery({ isAdmin = false }) {
                       fill
                       style={{ objectFit: 'cover' }}
                       sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                      priority={photos.indexOf(photo) < 6}
                       unoptimized={isGifUrl(photo.url)}
                     />
+                    {photo.uploadedBy && (
+                      <GalleryUploaderRibbon>
+                        <FontAwesomeIcon icon={faUser} style={{ fontSize: '0.6rem' }} />
+                        {photo.uploadedBy}
+                      </GalleryUploaderRibbon>
+                    )}
                     {isAdmin && (
                       <DeleteButton 
                         onClick={(e) => handleDeletePhoto(photo.id, e)}
@@ -677,12 +1031,12 @@ export default function PhotoGallery({ isAdmin = false }) {
                   <PhotoInfo>
                     {photo.uploadedBy && (
                       <PhotoMeta>
-                        <FontAwesomeIcon icon={faUser} />
+                        <FontAwesomeIcon icon={faUser} style={{ fontSize: '0.8rem' }} />
                         {photo.uploadedBy}
                       </PhotoMeta>
                     )}
                     <PhotoDate>
-                      <FontAwesomeIcon icon={faCalendar} />
+                      <FontAwesomeIcon icon={faCalendar} style={{ fontSize: '0.8rem' }} />
                       {formatDate(photo.uploadedAt)}
                     </PhotoDate>
                   </PhotoInfo>
@@ -690,39 +1044,89 @@ export default function PhotoGallery({ isAdmin = false }) {
               ))}
             </PhotoGrid>
 
-            <PaginationContainer>
-              {renderPagination()}
-            </PaginationContainer>
+            {loadingMore && (
+              <LoadingContainer>
+                <FontAwesomeIcon icon={faSpinner} spin style={{ marginRight: '0.5rem', fontSize: '1rem' }} />
+                Loading more photos...
+              </LoadingContainer>
+            )}
+
+            {!pagination.hasNextPage && photos.length > 0 && (
+              <LoadingContainer>
+                <FontAwesomeIcon icon={faHeart} style={{ marginRight: '0.5rem', color: '#d4af37', fontSize: '0.8rem' }} />
+                You've reached the end! All {pagination.totalPhotos} photos loaded.
+              </LoadingContainer>
+            )}
           </>
         )}
       </GalleryContainer>
 
       {selectedPhoto && (
-        <Modal onClick={() => setSelectedPhoto(null)}>
-          <ModalClose onClick={() => setSelectedPhoto(null)}>
-            <FontAwesomeIcon icon={faTimes} />
+        <Modal onClick={closeModal}>
+          <ModalClose onClick={closeModal}>
+            <FontAwesomeIcon icon={faTimes} style={{ fontSize: '1.2rem' }} />
           </ModalClose>
           
-          <ModalImageWrapper onClick={(e) => e.stopPropagation()}>
+          <ModalDownloadButton 
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDownloadPhoto(selectedPhoto);
+            }}
+            title="Download this photo"
+          >
+            <FontAwesomeIcon icon={faDownload} style={{ fontSize: '1rem' }} />
+          </ModalDownloadButton>
+
+          {selectedPhoto.uploadedBy && (
+            <UploaderRibbon>
+              <FontAwesomeIcon icon={faUser} style={{ fontSize: '0.7rem' }} />
+              {selectedPhoto.uploadedBy}
+              <ModalPhotoCounter>
+              {selectedPhotoIndex + 1} of {photos.length}
+            </ModalPhotoCounter>
+            </UploaderRibbon>
+          )}
+          
+
+          <ModalPrevButton 
+            onClick={(e) => {
+              e.stopPropagation();
+              navigatePhoto(-1);
+            }}
+            disabled={selectedPhotoIndex === 0}
+          >
+            <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: '1rem' }} />
+          </ModalPrevButton>
+
+          <ModalNextButton 
+            onClick={(e) => {
+              e.stopPropagation();
+              navigatePhoto(1);
+            }}
+            disabled={selectedPhotoIndex === photos.length - 1}
+          >
+            <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: '1rem' }} />
+          </ModalNextButton>
+          
+          <ModalImageWrapper 
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
             <Image
               src={selectedPhoto.url}
               alt="Wedding photo"
-              width={800}
-              height={600}
+              fill
               style={{ 
-                objectFit: 'contain',
-                maxWidth: '100%',
-                maxHeight: '100%',
-                width: 'auto',
-                height: 'auto'
+                objectFit: 'contain'
               }}
-              priority
               unoptimized={isGifUrl(selectedPhoto.url)}
             />
           </ModalImageWrapper>
 
           <ModalInstructions>
-            Tap outside or press ESC to close
+            Swipe or use arrow keys to navigate • Download button in top right • Tap here or press ESC to close
           </ModalInstructions>
         </Modal>
       )}

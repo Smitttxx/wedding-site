@@ -1,209 +1,527 @@
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import Link from 'next/link';
 import Layout from '../components/Layout';
 import NavBar from '../components/NavBar';
-import {AnimatedSection, Section, SectionHeading} from '../components/Section';
-import {Page} from "@/components/Page";
-import {differenceInDays} from 'date-fns';
-import {TartanInfoBox} from "@/components/TartanInfoBox";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faClock, faMapLocationDot} from '@fortawesome/free-solid-svg-icons';
-import {InfoBlock} from "@/components/InfoBlock";
-import WeddingTimeline from "@/components/WeddingTimeline";
+import { Section, SectionHeading } from '../components/Section';
+import { Page } from '../components/Page';
+import { TartanInfoBox } from '../components/TartanInfoBox';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faHeart, 
+  faCamera, 
+  faImages, 
+  faUpload, 
+  faDownload,
+  faExternalLinkAlt
+} from '@fortawesome/free-solid-svg-icons';
 
-const TopNotice = styled.div`
-  background: ${props => props.theme.colors.accent};
-  color: white;
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin-bottom: 2rem;
+const HeroSection = styled.div`
+  text-align: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+  border-radius: 20px;
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: ${props => props.theme.colors.primary};
+  }
+
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
+    margin: 3rem 0;
+  }
 `;
 
-const RSVPButton = styled.a`
-  display: inline-block;
-  margin-top: 1rem;
-  background: ${props => props.theme.colors.primary};
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background 0.2s ease;
+const HeroTitle = styled.h1`
+  font-size: 2.5rem;
+  color: ${props => props.theme.colors.primary};
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  @media (min-width: 768px) {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+  }
+`;
+
+const HeroSubtitle = styled.p`
+  font-size: 1.2rem;
+  color: ${props => props.theme.colors.text};
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (min-width: 768px) {
+    font-size: 1.4rem;
+    margin-bottom: 2.5rem;
+  }
+`;
+
+const ThanksMessage = styled.div`
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid ${props => props.theme.colors.primary};
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: ${props => props.theme.colors.primary};
+  }
+
+  @media (min-width: 768px) {
+    padding: 3rem;
+    margin: 3rem 0;
+  }
+`;
+
+const ThanksTitle = styled.h2`
+  color: ${props => props.theme.colors.primary};
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+
+  @media (min-width: 768px) {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+  }
+`;
+
+const ThanksText = styled.p`
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: ${props => props.theme.colors.text};
+  margin-bottom: 1.5rem;
+
+  @media (min-width: 768px) {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+`;
+
+const FeaturedPhotos = styled.div`
+  margin: 3rem 0;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border: 2px solid ${props => props.theme.colors.primary};
+
+  @media (min-width: 768px) {
+    padding: 3rem;
+    margin: 4rem 0;
+  }
+`;
+
+const FeaturedTitle = styled.h2`
+  text-align: center;
+  color: ${props => props.theme.colors.primary};
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+
+  @media (min-width: 768px) {
+    font-size: 2.2rem;
+    margin-bottom: 2.5rem;
+  }
+`;
+
+const PhotoGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+`;
+
+const FeaturedPhoto = styled.div`
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
 
   &:hover {
+    transform: translateY(-4px);
+  }
+
+  @media (min-width: 768px) {
+    height: 400px;
+  }
+`;
+
+const PhotoCaption = styled.div`
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: ${props => props.theme.colors.text};
+  font-weight: 500;
+  font-style: italic;
+
+  @media (min-width: 768px) {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+  }
+`;
+
+const PhotoLinksSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin: 2rem 0;
+  padding: 0 0.5rem;
+
+  @media (min-width: 768px) {
+    gap: 1rem;
+    margin: 3rem 0;
+    padding: 0;
+  }
+`;
+
+const PhotoLinkCard = styled(Link)`
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid ${props => props.theme.colors.primary};
+  border-radius: 8px;
+  padding: 1rem 0.75rem;
+  text-decoration: none;
+  color: ${props => props.theme.colors.text};
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+
+  @media (min-width: 768px) {
+    padding: 1.5rem 1rem;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: ${props => props.theme.colors.primary};
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: ${props => props.theme.colors.primaryDark};
+  }
+
+  &:active {
+    transform: translateY(-2px);
+  }
+
+  @media (min-width: 768px) {
+    padding: 2.5rem;
+  }
+`;
+
+const PhotoLinkContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  touch-action: manipulation;
+`;
+
+const PhotoLinkIcon = styled.div`
+  font-size: 1.5rem;
+  color: ${props => props.theme.colors.primary};
+  margin-bottom: 0.5rem;
+
+  @media (min-width: 768px) {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+`;
+
+const PhotoLinkTitle = styled.h3`
+  font-size: 0.8rem;
+  margin-bottom: 0.4rem;
+  font-weight: 700;
+  color: ${props => props.theme.colors.primary};
+  line-height: 1.2;
+
+  @media (min-width: 768px) {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+`;
+
+const PhotoLinkDescription = styled.p`
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: ${props => props.theme.colors.text};
+  margin-bottom: 0.75rem;
+  display: none;
+
+  @media (min-width: 768px) {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+`;
+
+const PhotoLinkButton = styled.div`
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+  width: 100%;
+  margin-top: 1rem;
+  touch-action: manipulation;
+
+  ${PhotoLinkCard}:hover & {
     background: ${props => props.theme.colors.primaryDark};
   }
-`;
 
-const Paragraph = styled.p`
-  font-size: 1.15rem;
-  line-height: 1.6;
-  color: ${props => props.theme.colors.text};
-  margin: 1.5rem auto;
-  max-width: 700px;
-`;
-
-const PhotoRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin: 2rem auto;
-`;
-
-const Snapshot = styled(Image)`
-  border-radius: 12px;
-  border: 3px solid ${props => props.theme.colors.accent};
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  height: auto;
-  max-width: 80%;
-`;
-
-const ExcitedMessage = styled.p`
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: ${props => props.theme.colors.text};
-  margin-bottom: 2rem;
-  line-height: 1.6;
-  text-align: center;
-`;
-
-const Countdown = () => {
-  const weddingDate = new Date('2025-09-13');
-  const today = new Date();
-  // Set time to start of day to avoid timezone issues
-  today.setHours(0, 0, 0, 0);
-  weddingDate.setHours(0, 0, 0, 0);
-  const days = differenceInDays(weddingDate, today);
-  if (days === 0) {
-    return <><span>Today</span>Today is the big day!</>;
-  } else if (days === 1) {
-    return <><span>Tomorrow</span> is the big day!</>;
-  } else if (days < 0) {
-    return <>Congratulations to the new <span>Mr & Mrs Austin!</span></>;
-  } else {
-    return <>Only <span>{days}</span> days until the big day!</>;
+  @media (min-width: 768px) {
+    font-size: 0.9rem;
+    padding: 1rem 1.5rem;
   }
-};
+`;
+
+const ExternalLinkIcon = styled(FontAwesomeIcon)`
+  font-size: 0.8rem;
+  opacity: 0.8;
+`;
+
+const QuickStatsSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  border: 2px solid ${props => props.theme.colors.primary};
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 2rem;
+  }
+`;
+
+const StatItem = styled.div`
+  text-align: center;
+  padding: 1rem;
+`;
+
+const StatNumber = styled.div`
+  font-size: 2rem;
+  font-weight: 700;
+  color: ${props => props.theme.colors.primary};
+  margin-bottom: 0.5rem;
+
+  @media (min-width: 768px) {
+    font-size: 2.5rem;
+  }
+`;
+
+const StatLabel = styled.div`
+  font-size: 0.9rem;
+  color: ${props => props.theme.colors.text};
+  font-weight: 500;
+
+  @media (min-width: 768px) {
+    font-size: 1rem;
+  }
+`;
 
 export default function HomePage() {
+  const [photoStats, setPhotoStats] = useState({
+    totalPhotos: 0,
+    totalUploaders: 0,
+    recentUploads: 0
+  });
+
+  // Fetch photo stats
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('/api/photos?page=1&limit=1');
+        if (response.ok) {
+          const data = await response.json();
+          setPhotoStats({
+            totalPhotos: data.pagination?.totalPhotos || 0,
+            totalUploaders: data.stats?.uniqueUploaders || 0,
+            recentUploads: data.photos?.length || 0
+          });
+        }
+      } catch (error) {
+        console.log('Could not fetch photo stats:', error);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
   return (
     <>
       <NavBar />
       <Layout>
         <Page>
-          <SectionHeading>Laura & Joe&apos;s Wedding</SectionHeading>
-          <Snapshot src="/outdoor-wedding.avif" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
-          <ExcitedMessage>
-            We&apos;re so excited to welcome you to Borelands and share the beautiful views of Loch Tay with you!<br />
-            It&apos;s going to be the best weekend of our lives — and we&apos;re so happy you&apos;ll be part of it. Let&apos;s celebrate, laugh, cry, dance (a lot), and make some magical memories together. ✨
-          </ExcitedMessage>
-          <TartanInfoBox>
-            <Countdown />
+        <TartanInfoBox>
+            <div style={{ textAlign: 'center', fontSize: '1.1rem', lineHeight: '1.6' }}>
+              <FontAwesomeIcon icon={faHeart} style={{ marginRight: '0.5rem', color: '#d4af37', fontSize: '0.8em' }} />
+              <strong>Thank you for being part of our story</strong>
+              <br />
+              Every photo, every memory, every moment shared makes our wedding day even more special.
+              <br />
+              <em>With all our love, Laura & Joe</em>
+              <FontAwesomeIcon icon={faHeart} style={{ marginLeft: '0.5rem', color: '#d4af37', fontSize: '0.8em' }} />
+            </div>
           </TartanInfoBox>
 
+          <FeaturedPhotos>
+            <FeaturedTitle>
+              <FontAwesomeIcon icon={faCamera} style={{ marginRight: '0.5rem', fontSize: '0.8em' }} />
+              Sneak Peek
+            </FeaturedTitle>
+            <PhotoGrid>
+              <div>
+                <FeaturedPhoto>
+              <Image
+                src="/WakwW9rQ.jpeg"
+                alt="Laura & Joe"
+                fill
+                style={{ objectFit: 'cover' }}
+              />
+                </FeaturedPhoto>
+                <PhotoCaption>
+                  Laura & Joe - The Happy Couple
+                </PhotoCaption>
+              </div>
+              <div>
+                <FeaturedPhoto>
+              <Image
+                src="/27xdIpKg.jpeg"
+                alt="Wedding party taking tequila"
+                fill
+                style={{ objectFit: 'contain' }}
+              />
+                </FeaturedPhoto>
+                <PhotoCaption>
+                  The Wedding Party - Tequila Time! 🥃
+                </PhotoCaption>
+              </div>
+            </PhotoGrid>
+          </FeaturedPhotos>
 
-          <AnimatedSection >
-            <SectionHeading>Got your invite?</SectionHeading>
+          <PhotoLinksSection>
 
-            <Paragraph>
-              Amazing! You can head straight to the RSVP page to confirm your details — or, have a little nosey around first!
-              There&apos;s info here about Friday&apos;s welcome BBQ, the venue, the bar, and more.
-              If you have any questions, just give Laura or Joe a shout.
-            </Paragraph>
+            <PhotoLinkCard href="/photos/gallery">
+              <PhotoLinkContent>
+                <PhotoLinkIcon>
+                  <FontAwesomeIcon icon={faImages} style={{ fontSize: '1.2rem' }} />
+                </PhotoLinkIcon>
+                <PhotoLinkTitle>Guest Photos</PhotoLinkTitle>
+                <PhotoLinkDescription>
+                  Browse through all the beautiful photos our amazing guests have shared. 
+                  Download any photos you love!
+                </PhotoLinkDescription>
+              </PhotoLinkContent>
+              <PhotoLinkButton>
+                View
+              </PhotoLinkButton>
+            </PhotoLinkCard>
 
-            <RSVPButton href="/invite">Go to RSVP Page →</RSVPButton>
-          </AnimatedSection>
+            <PhotoLinkCard href="/photos/upload">
+              <PhotoLinkContent>
+                <PhotoLinkIcon>
+                  <FontAwesomeIcon icon={faUpload} style={{ fontSize: '1.2rem' }} />
+                </PhotoLinkIcon>
+                <PhotoLinkTitle>Upload Photos</PhotoLinkTitle>
+                <PhotoLinkDescription>
+                  Have photos from our wedding day? Share them with everyone! 
+                  Upload your memories and help us build the complete story.
+                </PhotoLinkDescription>
+              </PhotoLinkContent>
+              <PhotoLinkButton>
+                Upload
+              </PhotoLinkButton>
+            </PhotoLinkCard>
 
-          <AnimatedSection >
-            <SectionHeading>Our Story so far</SectionHeading>
-            <Paragraph>
-              We met at a gaming event in Liverpool and quickly became great friends. After years of laughs, late-night chats, and leveling up together, it wasn&apos;t until one unforgettable night in Scotland that Joe finally got the (Dutch) courage to share his true feelings  — and everything changed. A few years later, while on a cruise through Belgian waters, Joe proposed. Now we&apos;re getting married — and best of all, we get to share it with our little one, Sully.
-            </Paragraph>
+            <PhotoLinkCard href="https://fotoshare.co/e/vp7GNe0ASxlcB3ebVMGpX" target="_blank" rel="noopener noreferrer">
+              <PhotoLinkContent>
+                <PhotoLinkIcon>
+                  <FontAwesomeIcon icon={faCamera} style={{ fontSize: '1.2rem' }} />
+                </PhotoLinkIcon>
+                <PhotoLinkTitle>Photobooth Photos</PhotoLinkTitle>
+                <PhotoLinkDescription>
+                  Check out all the fun photobooth moments from our special day! 
+                  Download your favorites and relive the laughter.
+                </PhotoLinkDescription>
+              </PhotoLinkContent>
+              <PhotoLinkButton>
+                View
+              </PhotoLinkButton>
+            </PhotoLinkCard>
+          </PhotoLinksSection>
 
-            <PhotoRow>
-              <Snapshot src="/familyPhoto.jpg" alt="Family Photo" width={250} height={200} layout="responsive" />
-            </PhotoRow>
-
-          </AnimatedSection>
-          <AnimatedSection >
-            <SectionHeading>The Venue</SectionHeading>
-            <Snapshot
-              src="/loachtay.jpg"
-              alt="The Venue"
-              width={700}
-              height={400}
-              layout="responsive"
-            />
-            <Paragraph>
-              The wedding weekend takes place at Borelands, perched above the stunning Loch Tay. Join us for a relaxed celebration
-              full of Scottish charm — think views, bonfires, and a wee shindig under the stars.
-            </Paragraph>
-            <InfoBlock>
-              <FontAwesomeIcon icon={faMapLocationDot} /> Address: Boreland Farm, Fearnan, Aberfeldy PH15 2PG
-
-            </InfoBlock>
-
-          </AnimatedSection>
-
-
-
-
-          <AnimatedSection >
-            <SectionHeading>Friday Night</SectionHeading>
-            <Snapshot src="/cowshed.webp" alt="Friday Night" width={700} height={400} layout="responsive" />
-            <Paragraph>
-              We&apos;d love to welcome everyone to Borelands the night before the wedding with a relaxed BBQ.
-              The food&apos;s on us — and it&apos;s extra special, cooked over an open flame by the father of the bride and the father of the groom.
-              If you&apos;d like to bring a bottle of wine or something else you love to drink, we&apos;ll have glasses ready and waiting.
-              Expect fires, good music, and a chance to catch up before the big day.
-            </Paragraph>
-            <InfoBlock>
-              <FontAwesomeIcon icon={faClock} />  Festivities kick off around 6pm on Friday evening
-            </InfoBlock>
-          </AnimatedSection>
-
-          <AnimatedSection >
-            <SectionHeading>The Big Day</SectionHeading>
-            <Snapshot src="/indoor-wedding.jpeg" alt="View of Loch Tay" width={700} height={400} layout="responsive" />
-            <Paragraph>
-              {"We've planned the day to flow naturally, with plenty of time for celebration, laughter, and relaxed moments together. "}
-              {" Here's what to expect from the big day — from welcome drinks to the final song."}
-            </Paragraph>
-            <SectionHeading>Order of the Day</SectionHeading>
-            <WeddingTimeline />
-          </AnimatedSection>
-
-          <AnimatedSection >
-            <SectionHeading>Bar Details</SectionHeading>
-            <Snapshot src="/bar.jpeg" alt="Bar" width={700} height={400} layout="responsive"
-            />
-            <Paragraph>
-              Friday&apos;s a bring-your-own kind of night — whatever you fancy. On Saturday, there&apos;ll be a bar to keep you going, but if you&apos;ve got a favourite drink you can&apos;t party without, you&apos;re welcome to bring it along. Just a heads-up: there&apos;s a £10 corkage fee per bottle.
-            </Paragraph>
-          </AnimatedSection>
-
-          <AnimatedSection >
-            <SectionHeading>RSVP</SectionHeading>
-            <Paragraph>
-              Head to the RSVP page and enter your code to confirm your attendance, dietary needs, and accommodation preferences.
-              We can&apos;t wait to celebrate with you!
-            </Paragraph>
-            <RSVPButton href="/invite">Go to RSVP Page →</RSVPButton>
-          </AnimatedSection>
-
-
-          <AnimatedSection >
-            <SectionHeading>Gifts</SectionHeading>
-            <Snapshot src="/cruise.webp" alt="Gifts" width={700} height={400} layout="responsive"
-            />
-            <Paragraph>
-              {"Your presence is the best gift. But if you'd like to contribute, we've set up a page for you to view our wishes."}
-            </Paragraph>
-            <RSVPButton href="/gifts">Go to Gifts Page →</RSVPButton>
-          </AnimatedSection>
+          <QuickStatsSection>
+            <StatItem>
+              <StatNumber>{photoStats.totalPhotos}</StatNumber>
+              <StatLabel>Photos Shared</StatLabel>
+            </StatItem>
+            <StatItem>
+              <StatNumber>{photoStats.totalUploaders}</StatNumber>
+              <StatLabel>Guests Contributed</StatLabel>
+            </StatItem>
+            <StatItem>
+              <StatNumber>2</StatNumber>
+              <StatLabel>Featured Photos</StatLabel>
+            </StatItem>
+            <StatItem>
+              <StatNumber>∞</StatNumber>
+              <StatLabel>Memories Made</StatLabel>
+            </StatItem>
+          </QuickStatsSection>
         </Page>
       </Layout>
     </>

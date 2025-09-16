@@ -822,10 +822,69 @@ export default function PhotoUpload() {
     return byMime || byExt;
   };
 
-  // Helper: check if file size is within Vercel Blob limits
+  // Helper: check if file size is within limits (we'll compress large files)
   const isWithinSizeLimit = (file) => {
-    const maxSize = 4.4 * 1024 * 1024; // 4.4MB (Vercel Blob limit)
+    const maxSize = 50 * 1024 * 1024; // 50MB - we'll compress anything larger
     return file.size <= maxSize;
+  };
+
+  // Helper: compress image to fit within Vercel Blob limits
+  const compressImage = async (file, maxSizeBytes = 4.2 * 1024 * 1024) => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate new dimensions to reduce file size
+        let { width, height } = img;
+        const maxDimension = 2048; // Max width or height
+        
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = (height * maxDimension) / width;
+            width = maxDimension;
+          } else {
+            width = (width * maxDimension) / height;
+            height = maxDimension;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Try different quality levels until we get under the size limit
+        const tryCompress = (quality) => {
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              reject(new Error('Failed to compress image'));
+              return;
+            }
+            
+            if (blob.size <= maxSizeBytes || quality <= 0.1) {
+              // Create a new file with the compressed blob
+              const compressedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now()
+              });
+              resolve(compressedFile);
+            } else {
+              // Try with lower quality
+              tryCompress(quality - 0.1);
+            }
+          }, 'image/jpeg', quality);
+        };
+        
+        // Start with 0.9 quality
+        tryCompress(0.9);
+      };
+      
+      img.onerror = () => reject(new Error('Failed to load image for compression'));
+      img.src = URL.createObjectURL(file);
+    });
   };
 
   // Helper: convert HEIC/HEIF to JPEG for compatibility
@@ -892,11 +951,11 @@ export default function PhotoUpload() {
     }
 
     if (tooLargeCount > 0) {
-      setStatus({ type: 'error', message: `${tooLargeCount} file(s) were skipped — file too big (max 4.4MB).` });
+      setStatus({ type: 'error', message: `${tooLargeCount} file(s) were skipped — file too big (max 50MB).` });
     }
 
     if (validFiles.length === 0 && files.length > 0) {
-      setStatus({ type: 'error', message: 'No supported images found. Supported: HEIC/HEIF, JPG/JPEG, PNG, WebP, AVIF, GIF, BMP, TIFF (max 4.4MB each).' });
+      setStatus({ type: 'error', message: 'No supported images found. Supported: HEIC/HEIF, JPG/JPEG, PNG, WebP, AVIF, GIF, BMP, TIFF (max 50MB each, auto-compressed).' });
       return;
     }
 
@@ -953,6 +1012,21 @@ export default function PhotoUpload() {
         continue;
       }
 
+      // Compress image if it's too large for Vercel Blob
+      const originalFileSize = fileSize;
+      try {
+        if (file.size > 4.2 * 1024 * 1024) { // 4.2MB threshold
+          file = await compressImage(file);
+        }
+      } catch (err) {
+        failedFiles.push(fileName);
+        errorMessages.push(`${fileName} (${originalFileSize}MB): Compression failed - ${err.message}`);
+        setUploadProgress({ current: i + 1, total: selectedFiles.length });
+        continue;
+      }
+
+      const finalFileSize = Math.round(file.size / 1024 / 1024 * 100) / 100;
+
       try {
         // Create FormData for file upload
         const formData = new FormData();
@@ -972,14 +1046,15 @@ export default function PhotoUpload() {
           // Create detailed error message
           if (uploadRes.status === 413) {
             errorMsg = 'File too large';
-            details = `File size (${fileSize}MB) exceeds the 10MB limit`;
+            details = `File size (${finalFileSize}MB) exceeds the 4.4MB limit`;
           } else if (uploadRes.status === 415) {
             errorMsg = 'Invalid file type';
             details = err.details || 'File type not supported';
           }
           
           failedFiles.push(fileName);
-          errorMessages.push(`${fileName} (${fileSize}MB): ${errorMsg}${details ? ` - ${details}` : ''}`);
+          const sizeInfo = originalFileSize !== finalFileSize ? `${originalFileSize}MB → ${finalFileSize}MB` : `${finalFileSize}MB`;
+          errorMessages.push(`${fileName} (${sizeInfo}): ${errorMsg}${details ? ` - ${details}` : ''}`);
           setUploadProgress({ current: i + 1, total: selectedFiles.length });
           continue;
         }
@@ -994,7 +1069,8 @@ export default function PhotoUpload() {
         });
         if (!metaRes.ok) {
           failedFiles.push(fileName);
-          errorMessages.push(`${fileName} (${fileSize}MB): Upload succeeded but saving metadata failed`);
+          const sizeInfo = originalFileSize !== finalFileSize ? `${originalFileSize}MB → ${finalFileSize}MB` : `${finalFileSize}MB`;
+          errorMessages.push(`${fileName} (${sizeInfo}): Upload succeeded but saving metadata failed`);
           setUploadProgress({ current: i + 1, total: selectedFiles.length });
           continue;
         }
@@ -1003,7 +1079,8 @@ export default function PhotoUpload() {
       } catch (err) {
         console.error('Upload error:', err);
         failedFiles.push(fileName);
-        errorMessages.push(`${fileName} (${fileSize}MB): Unexpected error - ${err.message}`);
+        const sizeInfo = originalFileSize !== finalFileSize ? `${originalFileSize}MB → ${finalFileSize}MB` : `${finalFileSize}MB`;
+        errorMessages.push(`${fileName} (${sizeInfo}): Network error - ${err.message}`);
       }
 
       setUploadProgress({ current: i + 1, total: selectedFiles.length });
@@ -1119,7 +1196,7 @@ export default function PhotoUpload() {
                 <strong><FontAwesomeIcon icon={faCamera} style={{ color: '#d4af37' }} /> Upload Tips:</strong><br/>
                 • Tap the upload area to select photos<br/>
                 • You can select multiple photos at once<br/>
-                • Max 4.4MB per photo (Vercel Blob limit)<br/>
+                • Max 50MB per photo (auto-compressed)<br/>
                 • Photos will be shared with everyone once uploaded!
               </UploadInstructions>
 
@@ -1148,7 +1225,7 @@ export default function PhotoUpload() {
                   <FontAwesomeIcon icon={faCloudUploadAlt} />
                 </UploadIcon>
                 <UploadText>Tap here to select your photos</UploadText>
-                <UploadSubtext>Supports HEIC, JPG/JPEG, PNG, WebP, AVIF, GIF and more (max 4.4MB each)</UploadSubtext>
+                <UploadSubtext>Supports HEIC, JPG/JPEG, PNG, WebP, AVIF, GIF and more (max 50MB each, auto-compressed)</UploadSubtext>
                 {selectedFiles.length > 0 && (
                   <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '8px' }}>
                     <FontAwesomeIcon icon={faCheck} style={{ color: '#28a745', marginRight: '0.5rem' }} />
