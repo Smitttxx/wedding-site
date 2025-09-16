@@ -523,13 +523,13 @@ const UploaderRibbon = styled.div`
   position: absolute;
   top: 10px;
   left: 10px;
-  background: linear-gradient(135deg, #d4af37, #f4d03f);
+  background: linear-gradient(135deg, #0b3d2e, #062d21);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 2px 8px rgba(11, 61, 46, 0.3);
   z-index: 1001;
   display: flex;
   align-items: center;
@@ -548,7 +548,7 @@ const UploaderRibbon = styled.div`
     height: 0;
     border-style: solid;
     border-width: 0 10px 20px 0;
-    border-color: transparent #b8941f transparent transparent;
+    border-color: transparent #062d21 transparent transparent;
   }
 
   &::after {
@@ -560,7 +560,7 @@ const UploaderRibbon = styled.div`
     height: 0;
     border-style: solid;
     border-width: 0 0 20px 10px;
-    border-color: transparent transparent transparent #b8941f;
+    border-color: transparent transparent transparent #062d21;
   }
 `;
 
@@ -568,13 +568,13 @@ const GalleryUploaderRibbon = styled.div`
   position: absolute;
   top: 8px;
   left: 8px;
-  background: linear-gradient(135deg, #d4af37, #f4d03f);
+  background: linear-gradient(135deg, #0b3d2e, #062d21);
   color: white;
   padding: 0.3rem 0.6rem;
   border-radius: 15px;
   font-size: 0.7rem;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 2px 6px rgba(11, 61, 46, 0.3);
   z-index: 10;
   display: flex;
   align-items: center;
@@ -593,7 +593,7 @@ const GalleryUploaderRibbon = styled.div`
     height: 0;
     border-style: solid;
     border-width: 0 8px 16px 0;
-    border-color: transparent #b8941f transparent transparent;
+    border-color: transparent #062d21 transparent transparent;
   }
 
   &::after {
@@ -605,7 +605,7 @@ const GalleryUploaderRibbon = styled.div`
     height: 0;
     border-style: solid;
     border-width: 0 0 16px 8px;
-    border-color: transparent transparent transparent #b8941f;
+    border-color: transparent transparent transparent #062d21;
   }
 `;
 
