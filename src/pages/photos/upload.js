@@ -1239,6 +1239,8 @@ export default function PhotoUpload() {
                 type="file"
                 accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/avif,image/bmp,image/tiff,image/tif,.heic,.heif,.heics,.jfif"
                 multiple
+                webkitdirectory="false"
+                data-testid="file-input"
                 onChange={handleFileSelect}
               />
 
