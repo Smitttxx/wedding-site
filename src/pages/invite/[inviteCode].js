@@ -86,7 +86,7 @@ export default function GuestPage() {
 
   useEffect(() => {
     fetchParty();
-  }, [inviteCode]);
+  }, [inviteCode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const validateForm = () => {
     const messages = [];

@@ -789,7 +789,7 @@ export default function PhotoGallery({ isAdmin = false }) {
       window.removeEventListener('popstate', handlePopState);
       document.body.style.overflow = 'unset';
     };
-  }, [selectedPhoto, selectedPhotoIndex]);
+  }, [selectedPhoto, selectedPhotoIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeModal = () => {
     setSelectedPhoto(null);
@@ -1054,7 +1054,7 @@ export default function PhotoGallery({ isAdmin = false }) {
             {!pagination.hasNextPage && photos.length > 0 && (
               <LoadingContainer>
                 <FontAwesomeIcon icon={faHeart} style={{ marginRight: '0.5rem', color: '#d4af37', fontSize: '0.8rem' }} />
-                You've reached the end! All {pagination.totalPhotos} photos loaded.
+                You&apos;ve reached the end! All {pagination.totalPhotos} photos loaded.
               </LoadingContainer>
             )}
           </>

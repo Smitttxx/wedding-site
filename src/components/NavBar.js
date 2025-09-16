@@ -105,7 +105,7 @@ export default function NavBar() {
 
   return (
     <Nav>
-      <HomeLink href="/">Laura & Joe's Wedding Photos</HomeLink>
+      <HomeLink href="/">Laura & Joe&apos;s Wedding Photos</HomeLink>
       <NavLinks open={menuOpen}>
         <StyledLink href="/"><FontAwesomeIcon icon={faHome} style={{ fontSize: '0.9rem' }} />Home</StyledLink>
         <StyledLink href="https://fotoshare.co/e/vp7GNe0ASxlcB3ebVMGpX" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faCamera} style={{ fontSize: '0.9rem' }} />Photobooth</StyledLink>
