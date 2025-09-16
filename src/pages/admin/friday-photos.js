@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
+import { useDropzone } from 'react-dropzone';
 import Layout from '../../components/Layout';
 import NavBar from '../../components/NavBar';
 import { Page } from '../../components/Page';
@@ -24,11 +25,11 @@ const UploadTitle = styled.h1`
 `;
 
 const UploadArea = styled.div`
-  border: 3px dashed ${props => props.theme.colors.primary};
+  border: 3px dashed ${props => props.$isDragActive ? props.theme.colors.primaryDark : props.theme.colors.primary};
   border-radius: 16px;
   padding: 3rem 2rem;
   text-align: center;
-  background: rgba(11, 61, 46, 0.05);
+  background: ${props => props.$isDragActive ? 'rgba(11, 61, 46, 0.15)' : 'rgba(11, 61, 46, 0.05)'};
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 2rem;
@@ -37,11 +38,6 @@ const UploadArea = styled.div`
     background: rgba(11, 61, 46, 0.1);
     border-color: ${props => props.theme.colors.primaryDark};
   }
-
-  ${props => props.isDragOver && `
-    background: rgba(11, 61, 46, 0.15);
-    border-color: ${props.theme.colors.primaryDark};
-  `}
 `;
 
 const UploadIcon = styled.div`
@@ -177,36 +173,27 @@ export default function FridayPhotosAdmin() {
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [uploadResults, setUploadResults] = useState([]);
-  const [dragOver, setDragOver] = useState(false);
-  const fileInputRef = useRef(null);
 
-  const handleFileSelect = (selectedFiles) => {
-    const fileArray = Array.from(selectedFiles);
-    const newFiles = fileArray.map(file => ({
+  const onDrop = useCallback((acceptedFiles) => {
+    const newFiles = acceptedFiles.map(file => ({
       file,
       id: Date.now() + Math.random(),
       status: 'pending',
       progress: 0,
     }));
     setFiles(prev => [...prev, ...newFiles]);
-  };
+  }, []);
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragOver(false);
-    const droppedFiles = e.dataTransfer.files;
-    handleFileSelect(droppedFiles);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setDragOver(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setDragOver(false);
-  };
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp', '.avif', '.bmp', '.tiff', '.tif', '.heic', '.heif', '.heics', '.jfif']
+    },
+    multiple: true,
+    maxSize: 4.4 * 1024 * 1024, // 4.4MB
+    noClick: false,
+    noKeyboard: false
+  });
 
   const removeFile = (fileId) => {
     setFiles(prev => prev.filter(f => f.id !== fileId));
@@ -282,29 +269,19 @@ export default function FridayPhotosAdmin() {
 
             <UploadSection>
               <UploadArea
-                isDragOver={dragOver}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onClick={() => fileInputRef.current?.click()}
+                {...getRootProps()}
+                $isDragActive={isDragActive}
               >
+                <input {...getInputProps()} />
                 <UploadIcon>
                   <FontAwesomeIcon icon={faUpload} />
                 </UploadIcon>
-                <UploadText>Drop your Friday night photos here</UploadText>
+                <UploadText>
+                  {isDragActive ? 'Drop your Friday night photos here' : 'Drop your Friday night photos here'}
+                </UploadText>
                 <UploadSubtext>or click to browse files</UploadSubtext>
                 <UploadSubtext>Supports: JPG, PNG, HEIC, WebP (max 4.4MB each)</UploadSubtext>
               </UploadArea>
-
-              <FileInput
-                ref={fileInputRef}
-                type="file"
-                multiple
-                accept="image/*"
-                webkitdirectory="false"
-                data-testid="file-input"
-                onChange={(e) => handleFileSelect(e.target.files)}
-              />
 
               <div style={{ textAlign: 'center' }}>
                 <UploadButton

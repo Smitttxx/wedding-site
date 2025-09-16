@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { useDropzone } from 'react-dropzone';
 import Layout from '../../components/Layout';
 import NavBar from '../../components/NavBar';
 import { Page } from '../../components/Page';
@@ -21,11 +22,11 @@ const UploadContainer = styled.div`
 `;
 
 const UploadArea = styled.div`
-  border: 3px dashed ${props => props.isDragOver ? props.theme.colors.primary : props.theme.colors.accent};
+  border: 3px dashed ${props => props.$isDragActive ? props.theme.colors.primary : props.theme.colors.accent};
   border-radius: 16px;
   padding: 1.5rem 1rem;
   text-align: center;
-  background: ${props => props.isDragOver ? 'rgba(0, 0, 0, 0.05)' : 'transparent'};
+  background: ${props => props.$isDragActive ? 'rgba(0, 0, 0, 0.05)' : 'transparent'};
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
@@ -40,7 +41,7 @@ const UploadArea = styled.div`
     background: rgba(0, 0, 0, 0.02);
   }
 
-  ${props => props.hasFiles && `
+  ${props => props.$hasFiles && `
     border-color: ${props.theme.colors.primary};
     background: rgba(0, 0, 0, 0.02);
   `}
@@ -803,13 +804,11 @@ const PersonalMessageSubtext = styled.div`
 `;
 
 export default function PhotoUpload() {
-  const [isDragOver, setIsDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadedBy, setUploadedBy] = useState('');
   const [status, setStatus] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 });
-  const fileInputRef = useRef();
 
   const resetStatus = () => setStatus(null);
 
@@ -821,6 +820,41 @@ export default function PhotoUpload() {
     const byExt = /(\.heic|\.heif|\.heics|\.avif|\.webp|\.jpg|\.jpeg|\.jfif|\.png|\.gif|\.bmp|\.tif|\.tiff)$/i.test(name);
     return byMime || byExt;
   };
+
+  // Dropzone configuration
+  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
+    resetStatus();
+    
+    // Handle rejected files
+    if (rejectedFiles.length > 0) {
+      const errors = rejectedFiles.map(rejection => {
+        if (rejection.errors.some(e => e.code === 'file-invalid-type')) {
+          return `${rejection.file.name}: Invalid file type`;
+        }
+        if (rejection.errors.some(e => e.code === 'file-too-large')) {
+          return `${rejection.file.name}: File too large (max 50MB)`;
+        }
+        return `${rejection.file.name}: ${rejection.errors[0]?.message || 'Unknown error'}`;
+      });
+      setStatus({ type: 'error', message: errors.join('\n') });
+    }
+
+    // Add accepted files
+    if (acceptedFiles.length > 0) {
+      setSelectedFiles(prev => [...prev, ...acceptedFiles]);
+    }
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp', '.avif', '.bmp', '.tiff', '.tif', '.heic', '.heif', '.heics', '.jfif']
+    },
+    multiple: true,
+    maxSize: 50 * 1024 * 1024, // 50MB
+    noClick: false,
+    noKeyboard: false
+  });
 
   // Helper: check if file size is within limits (we'll compress large files)
   const isWithinSizeLimit = (file) => {
@@ -905,34 +939,7 @@ export default function PhotoUpload() {
   };
 
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragOver(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setIsDragOver(false);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    resetStatus();
-    const files = Array.from(e.dataTransfer.files);
-    addFiles(files);
-  };
-
-  const handleFileSelect = (e) => {
-    resetStatus();
-    const files = Array.from(e.target.files);
-    addFiles(files);
-  };
-
-  const handleClickUploadArea = () => {
-    resetStatus();
-    fileInputRef.current?.click();
-  };
+  // Remove old handlers - now handled by react-dropzone
 
   const addFiles = (files) => {
     resetStatus();
@@ -970,9 +977,6 @@ export default function PhotoUpload() {
   const clearAllFiles = () => {
     resetStatus();
     setSelectedFiles([]);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
   };
 
   const formatFileSize = (bytes) => {
@@ -1028,15 +1032,41 @@ export default function PhotoUpload() {
       const finalFileSize = Math.round(file.size / 1024 / 1024 * 100) / 100;
 
       try {
-        // Create FormData for file upload
-        const formData = new FormData();
-        formData.append('file', file);
+        // Retry logic for uploads
+        let uploadRes;
+        let retryCount = 0;
+        const maxRetries = 2;
+        
+        while (retryCount <= maxRetries) {
+          try {
+            // Create FormData for file upload
+            const formData = new FormData();
+            formData.append('file', file);
 
-        // Upload file directly to our API
-        const uploadRes = await fetch('/api/blob-upload-url', {
-          method: 'POST',
-          body: formData,
-        });
+            // Upload file directly to our API with timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+            
+            console.log(`Uploading ${fileName}: ${finalFileSize}MB (attempt ${retryCount + 1})`);
+            
+            uploadRes = await fetch('/api/blob-upload-url', {
+              method: 'POST',
+              body: formData,
+              signal: controller.signal,
+            });
+            
+            clearTimeout(timeoutId);
+            break; // Success, exit retry loop
+            
+          } catch (retryErr) {
+            retryCount++;
+            if (retryCount > maxRetries) {
+              throw retryErr; // Re-throw if we've exhausted retries
+            }
+            console.log(`Upload attempt ${retryCount} failed, retrying...`);
+            await new Promise(resolve => setTimeout(resolve, 1000 * retryCount)); // Wait before retry
+          }
+        }
 
         if (!uploadRes.ok) {
           const err = await uploadRes.json().catch(() => ({}));
@@ -1080,7 +1110,19 @@ export default function PhotoUpload() {
         console.error('Upload error:', err);
         failedFiles.push(fileName);
         const sizeInfo = originalFileSize !== finalFileSize ? `${originalFileSize}MB → ${finalFileSize}MB` : `${finalFileSize}MB`;
-        errorMessages.push(`${fileName} (${sizeInfo}): Network error - ${err.message}`);
+        
+        let errorMessage = 'Network error';
+        if (err.name === 'AbortError') {
+          errorMessage = 'Upload timeout (60s) - try smaller files or better connection';
+        } else if (err.message.includes('Failed to fetch')) {
+          errorMessage = 'Connection failed - check your internet connection';
+        } else if (err.message.includes('NetworkError')) {
+          errorMessage = 'Network error - try again';
+        } else {
+          errorMessage = err.message;
+        }
+        
+        errorMessages.push(`${fileName} (${sizeInfo}): ${errorMessage}`);
       }
 
       setUploadProgress({ current: i + 1, total: selectedFiles.length });
@@ -1091,9 +1133,6 @@ export default function PhotoUpload() {
     // Clear the form
     setSelectedFiles([]);
     setUploadedBy('');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
 
     // Prepare redirect URL with results
     let redirectUrl = '/photos/gallery';
@@ -1214,17 +1253,17 @@ export default function PhotoUpload() {
               </div>
 
               <UploadArea
-                isDragOver={isDragOver}
-                hasFiles={selectedFiles.length > 0}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={handleClickUploadArea}
+                {...getRootProps()}
+                $isDragActive={isDragActive}
+                $hasFiles={selectedFiles.length > 0}
               >
+                <input {...getInputProps()} />
                 <UploadIcon>
                   <FontAwesomeIcon icon={faCloudUploadAlt} />
                 </UploadIcon>
-                <UploadText>Tap here to select your photos</UploadText>
+                <UploadText>
+                  {isDragActive ? 'Drop your photos here' : 'Tap here to select your photos'}
+                </UploadText>
                 <UploadSubtext>Supports HEIC, JPG/JPEG, PNG, WebP, AVIF, GIF and more (max 50MB each, auto-compressed)</UploadSubtext>
                 {selectedFiles.length > 0 && (
                   <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '8px' }}>
@@ -1233,16 +1272,6 @@ export default function PhotoUpload() {
                   </div>
                 )}
               </UploadArea>
-
-              <FileInput
-                ref={fileInputRef}
-                type="file"
-                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/avif,image/bmp,image/tiff,image/tif,.heic,.heif,.heics,.jfif"
-                multiple
-                webkitdirectory="false"
-                data-testid="file-input"
-                onChange={handleFileSelect}
-              />
 
               {/* Mobile-friendly files selected banner */}
               {selectedFiles.length > 0 && (
