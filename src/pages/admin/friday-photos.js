@@ -301,6 +301,8 @@ export default function FridayPhotosAdmin() {
                 type="file"
                 multiple
                 accept="image/*"
+                webkitdirectory="false"
+                data-testid="file-input"
                 onChange={(e) => handleFileSelect(e.target.files)}
               />
 
