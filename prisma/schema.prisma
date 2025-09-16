@@ -101,6 +101,17 @@ model Photo {
   deleted    Boolean  @default(false)
 }
 
+model FridayNightPhoto {
+  id         String   @id @default(cuid())
+  filename   String
+  url        String
+  uploadedBy String?  @default("Admin")
+  uploadedAt DateTime @default(now())
+  approved   Boolean  @default(true)
+  deleted    Boolean  @default(false)
+  order      Int?     // For custom ordering of photos
+}
+
 enum GuestType {
   OnSite
   OtherAccommodation

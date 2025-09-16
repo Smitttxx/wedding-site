@@ -192,14 +192,16 @@ const PhotoCaption = styled.div`
   }
 `;
 
+
 const PhotoLinksSection = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
   margin: 2rem 0;
   padding: 0 0.5rem;
 
   @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     margin: 3rem 0;
     padding: 0;
@@ -401,6 +403,7 @@ export default function HomePage() {
     fetchStats();
   }, []);
 
+
   return (
     <>
       <NavBar />
@@ -453,7 +456,24 @@ export default function HomePage() {
             </PhotoGrid>
           </FeaturedPhotos>
 
+
           <PhotoLinksSection>
+
+            <PhotoLinkCard href="/friday-night">
+              <PhotoLinkContent>
+                <PhotoLinkIcon>
+                  <FontAwesomeIcon icon={faCamera} style={{ fontSize: '1.2rem' }} />
+                </PhotoLinkIcon>
+                <PhotoLinkTitle>Friday Night BBQ</PhotoLinkTitle>
+                <PhotoLinkDescription>
+                  The pre-wedding celebrations and all the laughs we shared. 
+                  Relive the fun moments from our Friday night party!
+                </PhotoLinkDescription>
+              </PhotoLinkContent>
+              <PhotoLinkButton>
+                View
+              </PhotoLinkButton>
+            </PhotoLinkCard>
 
             <PhotoLinkCard href="/photos/gallery">
               <PhotoLinkContent>
