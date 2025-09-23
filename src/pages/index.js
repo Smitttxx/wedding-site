@@ -498,10 +498,6 @@ export default function HomePage() {
               <StatLabel>Guests Contributed</StatLabel>
             </StatItem>
             <StatItem>
-              <StatNumber>2</StatNumber>
-              <StatLabel>Featured Photos</StatLabel>
-            </StatItem>
-            <StatItem>
               <StatNumber>∞</StatNumber>
               <StatLabel>Memories Made</StatLabel>
             </StatItem>
