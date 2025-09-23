@@ -455,7 +455,7 @@ export default function HomePage() {
               </PhotoLinkButton>
             </PhotoLinkCard>
 
-            <PhotoLinkCard href="/upload">
+            <PhotoLinkCard href="/photos/upload">
               <PhotoLinkContent>
                 <PhotoLinkIcon>
                   <FontAwesomeIcon icon={faUpload} style={{ fontSize: '1.2rem' }} />
