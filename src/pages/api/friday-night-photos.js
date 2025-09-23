@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       },
       orderBy: [
         { order: 'asc' }, // Custom order first
-        { uploadedAt: 'desc' }, // Then by upload date
+        { uploadedAt: 'asc' }, // Then by upload date (oldest first)
       ],
       skip,
       take: limitNum,
