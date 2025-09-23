@@ -1029,7 +1029,7 @@ export default function PhotoUpload() {
       // Compress image if it's too large for Vercel Blob
       const originalFileSize = fileSize;
       try {
-        if (file.size > 4.2 * 1024 * 1024) { // 4.2MB threshold
+        if (file.size > 4.0 * 1024 * 1024) { // 4.0MB threshold
           file = await compressImage(file);
         }
       } catch (err) {
