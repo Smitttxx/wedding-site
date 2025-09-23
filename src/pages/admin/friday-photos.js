@@ -184,13 +184,89 @@ export default function FridayPhotosAdmin() {
     setFiles(prev => [...prev, ...newFiles]);
   }, []);
 
+  // Helper: check if file size is within limits (we'll compress large files)
+  const isFileSizeValid = (file) => {
+    const maxSize = 50 * 1024 * 1024; // 50MB - we'll compress anything larger
+    return file.size <= maxSize;
+  };
+
+  // Helper: compress image to fit within Vercel Blob limits
+  const compressImage = async (file, maxSizeBytes = 4.2 * 1024 * 1024) => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate new dimensions to maintain aspect ratio
+        let { width, height } = img;
+        const maxDimension = 2048; // Max width/height for compression
+        
+        if (width > maxDimension || height > maxDimension) {
+          const ratio = Math.min(maxDimension / width, maxDimension / height);
+          width = Math.floor(width * ratio);
+          height = Math.floor(height * ratio);
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Try different quality levels until we get under the size limit
+        const tryCompress = (quality) => {
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              reject(new Error('Failed to compress image'));
+              return;
+            }
+            
+            if (blob.size <= maxSizeBytes || quality <= 0.1) {
+              // Create a new file with the compressed blob
+              const compressedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now()
+              });
+              resolve(compressedFile);
+            } else {
+              // Try with lower quality
+              tryCompress(quality - 0.1);
+            }
+          }, 'image/jpeg', quality);
+        };
+        
+        // Start with 0.9 quality
+        tryCompress(0.9);
+      };
+      
+      img.onerror = () => reject(new Error('Failed to load image for compression'));
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  // Helper: convert HEIC files to JPEG
+  const convertHeicToJpeg = async (file) => {
+    try {
+      const heic2any = (await import('heic2any')).default;
+      const convertedBlob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.9 });
+      return new File([convertedBlob], file.name.replace(/\.(heic|heif|heics)$/i, '.jpg'), {
+        type: 'image/jpeg',
+        lastModified: Date.now()
+      });
+    } catch (error) {
+      console.error('HEIC conversion failed:', error);
+      throw new Error('Failed to convert HEIC file');
+    }
+  };
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp', '.avif', '.bmp', '.tiff', '.tif', '.heic', '.heif', '.heics', '.jfif']
     },
     multiple: true,
-    maxSize: 4.4 * 1024 * 1024, // 4.4MB
+    maxSize: 50 * 1024 * 1024, // 50MB - we'll compress anything larger
     noClick: false,
     noKeyboard: false
   });
@@ -208,8 +284,30 @@ export default function FridayPhotosAdmin() {
 
     for (const fileItem of files) {
       try {
+        let fileToUpload = fileItem.file;
+        
+        // Convert HEIC files to JPEG
+        if (fileItem.file.name.toLowerCase().match(/\.(heic|heif|heics)$/)) {
+          try {
+            fileToUpload = await convertHeicToJpeg(fileItem.file);
+          } catch (error) {
+            console.error('HEIC conversion failed:', error);
+            throw new Error('Failed to convert HEIC file');
+          }
+        }
+        
+        // Compress large files
+        if (fileToUpload.size > 4.4 * 1024 * 1024) {
+          try {
+            fileToUpload = await compressImage(fileToUpload);
+          } catch (error) {
+            console.error('Compression failed:', error);
+            throw new Error('Failed to compress image');
+          }
+        }
+        
         const formData = new FormData();
-        formData.append('file', fileItem.file);
+        formData.append('file', fileToUpload);
         formData.append('uploadedBy', 'Admin');
 
         const response = await fetch('/api/upload-friday-photo', {
@@ -280,7 +378,7 @@ export default function FridayPhotosAdmin() {
                   {isDragActive ? 'Drop your Friday night photos here' : 'Drop your Friday night photos here'}
                 </UploadText>
                 <UploadSubtext>or click to browse files</UploadSubtext>
-                <UploadSubtext>Supports: JPG, PNG, HEIC, WebP (max 4.4MB each)</UploadSubtext>
+                <UploadSubtext>Supports HEIC, JPG/JPEG, PNG, WebP, AVIF, GIF and more (large files will be compressed automatically)</UploadSubtext>
               </UploadArea>
 
               <div style={{ textAlign: 'center' }}>

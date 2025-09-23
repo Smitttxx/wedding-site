@@ -118,7 +118,7 @@ export default function NavBar() {
     <Nav>
       <HomeLink href="/" $isActive={isActive('/')}>Laura & Joe&apos;s Wedding Photos</HomeLink>
       <NavLinks open={menuOpen}>
-        <StyledLink href="/upload" $isActive={isActive('/upload')}><FontAwesomeIcon icon={faUpload} style={{ fontSize: '0.8rem' }} />Upload</StyledLink>
+        <StyledLink href="/photos/upload" $isActive={isActive('/photos/upload')}><FontAwesomeIcon icon={faUpload} style={{ fontSize: '0.8rem' }} />Upload</StyledLink>
         <StyledLink href="/friday-night" $isActive={isActive('/friday-night')}><FontAwesomeIcon icon={faUtensils} style={{ fontSize: '0.8rem' }} />Friday BBQ</StyledLink>
         <StyledLink href="/photos/gallery" $isActive={isActive('/photos/gallery')}><FontAwesomeIcon icon={faImages} style={{ fontSize: '0.8rem' }} />Guest Photos</StyledLink>
         <StyledLink href="https://fotoshare.co/e/vp7GNe0ASxlcB3ebVMGpX" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faCamera} style={{ fontSize: '0.8rem' }} />Photobooth</StyledLink>
