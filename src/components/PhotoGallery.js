@@ -1084,6 +1084,8 @@ export default function PhotoGallery({ isAdmin = false }) {
   const clearUploaderFilter = () => {
     setUploaderQuery('');
     setShowSuggestions(false);
+    setPhotos([]);
+    setPagination({ currentPage: 1, totalPages: 0, totalPhotos: 0, hasNextPage: false, hasPrevPage: false, limit: 50 });
     fetchPhotos(1);
   };
 
