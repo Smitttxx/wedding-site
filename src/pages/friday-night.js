@@ -377,6 +377,7 @@ export default function FridayNightGallery() {
   const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const [isImageLoading, setIsImageLoading] = useState(false);
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -399,6 +400,7 @@ export default function FridayNightGallery() {
   const openModal = (photo, index) => {
     setSelectedPhoto(photo);
     setSelectedPhotoIndex(index);
+    setIsImageLoading(true);
     // Push state to history for back button handling
     window.history.pushState({ modal: true }, '');
     document.body.style.overflow = 'hidden';
@@ -417,6 +419,7 @@ export default function FridayNightGallery() {
   const navigatePhoto = (direction) => {
     const newIndex = selectedPhotoIndex + direction;
     if (newIndex >= 0 && newIndex < photos.length) {
+      setIsImageLoading(true);
       setSelectedPhotoIndex(newIndex);
       setSelectedPhoto(photos[newIndex]);
     }
@@ -574,7 +577,7 @@ export default function FridayNightGallery() {
               e.stopPropagation();
               navigatePhoto(-1);
             }}
-            disabled={selectedPhotoIndex === 0}
+            disabled={isImageLoading || selectedPhotoIndex === 0}
           >
             <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: '1rem' }} />
           </ModalPrevButton>
@@ -584,17 +587,30 @@ export default function FridayNightGallery() {
               e.stopPropagation();
               navigatePhoto(1);
             }}
-            disabled={selectedPhotoIndex === photos.length - 1}
+            disabled={isImageLoading || selectedPhotoIndex === photos.length - 1}
           >
             <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: '1rem' }} />
           </ModalNextButton>
           
           <ModalImageWrapper onClick={(e) => e.stopPropagation()}>
+            {isImageLoading && (
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(0,0,0,0.2)'
+              }}>
+                <FontAwesomeIcon icon={faSpinner} spin style={{ fontSize: '1.5rem', color: '#fff' }} />
+              </div>
+            )}
             <Image
               src={selectedPhoto.url}
               alt={`Friday night photo - ${selectedPhoto.filename}`}
               fill
               style={{ objectFit: 'contain' }}
+              onLoadingComplete={() => setIsImageLoading(false)}
             />
           </ModalImageWrapper>
         </Modal>

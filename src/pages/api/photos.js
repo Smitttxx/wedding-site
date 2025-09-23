@@ -6,26 +6,33 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { page = 1, limit = 20 } = req.query;
+    const { page = 1, limit = 20, uploader } = req.query;
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
     
+    const baseWhere = {
+      approved: true,
+      deleted: false,
+    };
+    
+    const where = {
+      ...baseWhere,
+      ...(uploader ? {
+        uploadedBy: {
+          contains: uploader,
+          mode: 'insensitive',
+        }
+      } : {})
+    };
+    
     // Get total count of approved, non-deleted photos
-    const totalPhotos = await prisma.photo.count({
-      where: {
-        approved: true,
-        deleted: false,
-      },
-    });
+    const totalPhotos = await prisma.photo.count({ where });
 
     // Get unique uploaders count
     const uniqueUploaders = await prisma.photo.findMany({
       where: {
-        approved: true,
-        deleted: false,
-        uploadedBy: {
-          not: null,
-        },
+        ...baseWhere,
+        uploadedBy: { not: null },
       },
       select: {
         uploadedBy: true,
@@ -39,10 +46,7 @@ export default async function handler(req, res) {
 
     // Get paginated photos
     const photos = await prisma.photo.findMany({
-      where: {
-        approved: true,
-        deleted: false,
-      },
+      where,
       orderBy: {
         uploadedAt: 'desc', // Newest first
       },
@@ -62,7 +66,8 @@ export default async function handler(req, res) {
       },
       stats: {
         uniqueUploaders: uniqueUploaders.length
-      }
+      },
+      uploaders: uniqueUploaders.map(u => u.uploadedBy).filter(Boolean)
     });
 
   } catch (error) {

@@ -723,6 +723,165 @@ const PersonalMessageSubtext = styled.div`
   font-style: italic;
 `;
 
+const SearchContainer = styled.div`
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1rem;
+  margin: 0.75rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid ${props => props.theme.colors.primary};
+  position: relative;
+  
+  @media (min-width: 768px) {
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+`;
+
+const SearchTitle = styled.h3`
+  color: ${props => props.theme.colors.primary};
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  text-align: center;
+  
+  @media (min-width: 768px) {
+    font-size: 1.2rem;
+    margin: 0 0 1rem 0;
+    text-align: left;
+  }
+`;
+
+const SearchInputContainer = styled.div`
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-direction: column;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+`;
+
+const SearchInput = styled.input`
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  border: 2px solid ${props => props.theme.colors.accent};
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  
+  &:focus {
+    outline: none;
+    border-color: ${props => props.theme.colors.primary};
+    box-shadow: 0 0 0 3px rgba(11, 61, 46, 0.1);
+  }
+  
+  &::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+  
+  @media (min-width: 768px) {
+    min-width: 250px;
+  }
+`;
+
+
+const ClearButton = styled.button`
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  
+  &:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
+const SuggestionsContainer = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid ${props => props.theme.colors.primary};
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: -2px;
+`;
+
+const SuggestionItem = styled.div`
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  &:hover {
+    background: ${props => props.theme.colors.primary};
+    color: white;
+  }
+  
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const SearchStats = styled.div`
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(11, 61, 46, 0.05);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: ${props => props.theme.colors.text};
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+`;
+
+const FilterTag = styled.span`
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+`;
+
 export default function PhotoGallery({ isAdmin = false }) {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -733,6 +892,7 @@ export default function PhotoGallery({ isAdmin = false }) {
   const [deletingPhoto, setDeletingPhoto] = useState(null);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
+  const [isImageLoading, setIsImageLoading] = useState(false);
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -741,10 +901,14 @@ export default function PhotoGallery({ isAdmin = false }) {
     hasPrevPage: false,
     limit: 50
   });
+  const [uploaderQuery, setUploaderQuery] = useState('');
+  const [availableUploaders, setAvailableUploaders] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
 
   useEffect(() => {
     fetchPhotos(1);
-  }, []);
+  }, [uploaderQuery]);
 
   // Infinite scroll
   useEffect(() => {
@@ -882,7 +1046,12 @@ export default function PhotoGallery({ isAdmin = false }) {
       } else {
         setLoading(true);
       }
-      const response = await fetch(`/api/photos?page=${page}&limit=50`);
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(50),
+        ...(uploaderQuery ? { uploader: uploaderQuery } : {}),
+      });
+      const response = await fetch(`/api/photos?${params.toString()}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -892,6 +1061,9 @@ export default function PhotoGallery({ isAdmin = false }) {
           setPhotos(data.photos);
         }
         setPagination(data.pagination);
+        if (Array.isArray(data.uploaders)) {
+          setAvailableUploaders(data.uploaders);
+        }
       } else {
         setError(data.error || 'Failed to load photos');
       }
@@ -908,6 +1080,33 @@ export default function PhotoGallery({ isAdmin = false }) {
     fetchPhotos(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const clearUploaderFilter = () => {
+    setUploaderQuery('');
+    setShowSuggestions(false);
+    fetchPhotos(1);
+  };
+
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setUploaderQuery(value);
+    
+    if (value.length > 0) {
+      const filtered = availableUploaders.filter(uploader =>
+        uploader.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredSuggestions(filtered);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
+
+  const selectSuggestion = (uploader) => {
+    setUploaderQuery(uploader);
+    setShowSuggestions(false);
+  };
+
 
   const handleDeletePhoto = async (photoId, e) => {
     e.stopPropagation(); // Prevent opening the modal
@@ -969,7 +1168,68 @@ export default function PhotoGallery({ isAdmin = false }) {
             <FontAwesomeIcon icon={faImages} style={{ fontSize: '0.9rem' }} />
             Quick Upload
           </UploadButton>
-          
+
+          <SearchContainer>
+            <SearchTitle>
+              <FontAwesomeIcon icon={faUser} style={{ fontSize: '1rem' }} />
+              Find Photos by Uploader
+            </SearchTitle>
+            
+            <SearchInputContainer>
+              <SearchInput
+                type="text"
+                placeholder="Type a name to search..."
+                value={uploaderQuery}
+                onChange={handleSearchInputChange}
+                onFocus={() => uploaderQuery.length > 0 && setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              />
+              {uploaderQuery && (
+                <ClearButton type="button" onClick={clearUploaderFilter}>
+                  <FontAwesomeIcon icon={faTimes} style={{ fontSize: '0.8rem' }} />
+                  Clear
+                </ClearButton>
+              )}
+            </SearchInputContainer>
+
+            {showSuggestions && filteredSuggestions.length > 0 && (
+              <SuggestionsContainer>
+                {filteredSuggestions.map((uploader, index) => (
+                  <SuggestionItem
+                    key={index}
+                    onClick={() => selectSuggestion(uploader)}
+                  >
+                    <FontAwesomeIcon icon={faUser} style={{ fontSize: '0.8rem' }} />
+                    {uploader}
+                  </SuggestionItem>
+                ))}
+              </SuggestionsContainer>
+            )}
+
+            {!showSuggestions && (
+              <SearchStats>
+                <FontAwesomeIcon icon={faHeart} style={{ color: '#d4af37', fontSize: '0.8rem' }} />
+                <span>
+                  {uploaderQuery ? `Showing photos by "${uploaderQuery}"` : 'All photos'}
+                </span>
+                {uploaderQuery && (
+                  <FilterTag>
+                    <FontAwesomeIcon icon={faUser} style={{ fontSize: '0.7rem' }} />
+                    Filtered
+                  </FilterTag>
+                )}
+                <span>•</span>
+                <span>{pagination.totalPhotos} memories</span>
+                {availableUploaders.length > 0 && (
+                  <>
+                    <span>•</span>
+                    <span>{availableUploaders.length} contributors</span>
+                  </>
+                )}
+              </SearchStats>
+            )}
+          </SearchContainer>
+
           {photos.length > 0 && (
             <PhotoCount>
               <FontAwesomeIcon icon={faHeart} style={{ marginRight: '0.5rem', color: '#d4af37', fontSize: '0.8rem' }} />
@@ -1015,6 +1275,7 @@ export default function PhotoGallery({ isAdmin = false }) {
                 <PhotoCard key={photo.id} onClick={() => {
                   setSelectedPhoto(photo);
                   setSelectedPhotoIndex(index);
+                  setIsImageLoading(true);
                 }}>
                   <PhotoImage>
                     <Image
@@ -1109,7 +1370,7 @@ export default function PhotoGallery({ isAdmin = false }) {
               e.stopPropagation();
               navigatePhoto(-1);
             }}
-            disabled={selectedPhotoIndex === 0}
+            disabled={isImageLoading || selectedPhotoIndex === 0}
           >
             <FontAwesomeIcon icon={faChevronLeft} style={{ fontSize: '1rem' }} />
           </ModalPrevButton>
@@ -1119,7 +1380,7 @@ export default function PhotoGallery({ isAdmin = false }) {
               e.stopPropagation();
               navigatePhoto(1);
             }}
-            disabled={selectedPhotoIndex === photos.length - 1}
+            disabled={isImageLoading || selectedPhotoIndex === photos.length - 1}
           >
             <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: '1rem' }} />
           </ModalNextButton>
@@ -1130,6 +1391,18 @@ export default function PhotoGallery({ isAdmin = false }) {
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
+            {isImageLoading && (
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(0,0,0,0.2)'
+              }}>
+                <FontAwesomeIcon icon={faSpinner} spin style={{ fontSize: '1.5rem', color: '#fff' }} />
+              </div>
+            )}
             <Image
               src={selectedPhoto.url}
               alt="Wedding photo"
@@ -1138,6 +1411,7 @@ export default function PhotoGallery({ isAdmin = false }) {
                 objectFit: 'contain'
               }}
               unoptimized={isGifUrl(selectedPhoto.url)}
+              onLoadingComplete={() => setIsImageLoading(false)}
             />
           </ModalImageWrapper>
 
