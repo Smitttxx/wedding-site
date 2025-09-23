@@ -1247,7 +1247,6 @@ export default function PhotoGallery({ isAdmin = false }) {
 
             {!showSuggestions && (
               <SearchStats>
-                <FontAwesomeIcon icon={faHeart} style={{ color: '#d4af37', fontSize: '0.8rem' }} />
                 <span>
                   {uploaderQuery ? `Showing photos by "${uploaderQuery}"` : 'All photos'}
                 </span>
