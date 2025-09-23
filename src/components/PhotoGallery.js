@@ -836,6 +836,7 @@ const SuggestionsContainer = styled.div`
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   margin-top: -2px;
+  transform: translateY(0);
 `;
 
 const SuggestionItem = styled.div`
@@ -1081,12 +1082,37 @@ export default function PhotoGallery({ isAdmin = false }) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const fetchAllPhotos = async (page = 1) => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(50),
+      });
+      const response = await fetch(`/api/photos?${params.toString()}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setPhotos(data.photos);
+        setPagination(data.pagination);
+        setAvailableUploaders(data.uploaders || []);
+      } else {
+        setError(data.error || 'Failed to fetch photos');
+      }
+    } catch (error) {
+      console.error('Error fetching photos:', error);
+      setError('Failed to fetch photos');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const clearUploaderFilter = () => {
     setUploaderQuery('');
     setShowSuggestions(false);
     setPhotos([]);
     setPagination({ currentPage: 1, totalPages: 0, totalPhotos: 0, hasNextPage: false, hasPrevPage: false, limit: 50 });
-    fetchPhotos(1);
+    fetchAllPhotos(1);
   };
 
   const handleSearchInputChange = (e) => {
@@ -1183,7 +1209,18 @@ export default function PhotoGallery({ isAdmin = false }) {
                 placeholder="Type a name to search..."
                 value={uploaderQuery}
                 onChange={handleSearchInputChange}
-                onFocus={() => uploaderQuery.length > 0 && setShowSuggestions(true)}
+                onFocus={() => {
+                  if (uploaderQuery.length > 0) {
+                    setShowSuggestions(true);
+                    // Scroll suggestions into view
+                    setTimeout(() => {
+                      const suggestions = document.querySelector('[data-suggestions]');
+                      if (suggestions) {
+                        suggestions.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                      }
+                    }, 100);
+                  }
+                }}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               />
               {uploaderQuery && (
@@ -1192,21 +1229,21 @@ export default function PhotoGallery({ isAdmin = false }) {
                   Clear
                 </ClearButton>
               )}
+              
+              {showSuggestions && filteredSuggestions.length > 0 && (
+                <SuggestionsContainer data-suggestions>
+                  {filteredSuggestions.map((uploader, index) => (
+                    <SuggestionItem
+                      key={index}
+                      onClick={() => selectSuggestion(uploader)}
+                    >
+                      <FontAwesomeIcon icon={faUser} style={{ fontSize: '0.8rem' }} />
+                      {uploader}
+                    </SuggestionItem>
+                  ))}
+                </SuggestionsContainer>
+              )}
             </SearchInputContainer>
-
-            {showSuggestions && filteredSuggestions.length > 0 && (
-              <SuggestionsContainer>
-                {filteredSuggestions.map((uploader, index) => (
-                  <SuggestionItem
-                    key={index}
-                    onClick={() => selectSuggestion(uploader)}
-                  >
-                    <FontAwesomeIcon icon={faUser} style={{ fontSize: '0.8rem' }} />
-                    {uploader}
-                  </SuggestionItem>
-                ))}
-              </SuggestionsContainer>
-            )}
 
             {!showSuggestions && (
               <SearchStats>
