@@ -421,42 +421,6 @@ export default function HomePage() {
             </div>
           </TartanInfoBox>
 
-          <FeaturedPhotos>
-            <FeaturedTitle>
-              <FontAwesomeIcon icon={faCamera} style={{ marginRight: '0.5rem', fontSize: '0.8em' }} />
-              Sneak Peek
-            </FeaturedTitle>
-            <PhotoGrid>
-              <div>
-                <FeaturedPhoto>
-              <Image
-                src="/WakwW9rQ.jpeg"
-                alt="Laura & Joe"
-                fill
-                style={{ objectFit: 'cover' }}
-              />
-                </FeaturedPhoto>
-                <PhotoCaption>
-                  Laura & Joe - The Happy Couple
-                </PhotoCaption>
-              </div>
-              <div>
-                <FeaturedPhoto>
-              <Image
-                src="/27xdIpKg.jpeg"
-                alt="Wedding party taking tequila"
-                fill
-                style={{ objectFit: 'contain' }}
-              />
-                </FeaturedPhoto>
-                <PhotoCaption>
-                  The Wedding Party - Tequila Time! 🥃
-                </PhotoCaption>
-              </div>
-            </PhotoGrid>
-          </FeaturedPhotos>
-
-
           <PhotoLinksSection>
 
             <PhotoLinkCard href="/friday-night">
@@ -491,7 +455,7 @@ export default function HomePage() {
               </PhotoLinkButton>
             </PhotoLinkCard>
 
-            <PhotoLinkCard href="/photos/upload">
+            <PhotoLinkCard href="/upload">
               <PhotoLinkContent>
                 <PhotoLinkIcon>
                   <FontAwesomeIcon icon={faUpload} style={{ fontSize: '1.2rem' }} />
