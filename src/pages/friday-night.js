@@ -344,7 +344,6 @@ const ModalUploaderRibbon = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  max-width: 200px;
   white-space: normal;
   word-wrap: break-word;
   line-height: 1.2;
@@ -511,18 +510,12 @@ export default function FridayNightGallery() {
     setSelectedPhoto(photo);
     setSelectedPhotoIndex(index);
     setIsImageLoading(true);
-    // Push state to history for back button handling
-    window.history.pushState({ modal: true }, '');
     document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
     setSelectedPhoto(null);
     setSelectedPhotoIndex(0);
-    // Pop the state we pushed
-    if (window.history.state?.modal) {
-      window.history.back();
-    }
     document.body.style.overflow = 'unset';
   };
 
