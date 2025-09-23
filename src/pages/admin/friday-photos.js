@@ -308,7 +308,7 @@ export default function FridayPhotosAdmin() {
         
         const formData = new FormData();
         formData.append('file', fileToUpload);
-        formData.append('uploadedBy', 'Admin');
+        formData.append('uploadedBy', 'Bride & Groom');
 
         const response = await fetch('/api/upload-friday-photo', {
           method: 'POST',
