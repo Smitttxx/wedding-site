@@ -519,14 +519,21 @@ export default function FridayNightUpload() {
         setUploadProgress({ current: i + 1, total: selectedFiles.length });
       }
 
-      // Show final results
+      // Show final results and redirect on success
       if (successCount > 0 && failedFiles.length === 0) {
-        setStatus({ 
-          type: 'success', 
-          message: `Successfully uploaded ${successCount} photo${successCount !== 1 ? 's' : ''}!` 
-        });
+        // All successful - redirect to Friday night gallery
+        let redirectUrl = '/friday-night';
+        let urlParams = new URLSearchParams();
+        urlParams.set('upload', 'success');
+        urlParams.set('count', successCount.toString());
+        
+        // Clear the form
         setSelectedFiles([]);
         setUploadedBy('');
+        
+        // Redirect to gallery with results
+        window.location.href = `${redirectUrl}?${urlParams.toString()}`;
+        return;
       } else if (successCount > 0 && failedFiles.length > 0) {
         setStatus({ 
           type: 'warning', 

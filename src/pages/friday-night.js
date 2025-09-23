@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -16,7 +17,9 @@ import {
   faUser,
   faSpinner,
   faUpload,
-  faUtensils
+  faUtensils,
+  faCheckCircle,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 
 const GalleryContainer = styled.div`
@@ -415,12 +418,60 @@ const EmptyIcon = styled.div`
   margin-bottom: 1rem;
 `;
 
+const UploadResultMessage = styled.div`
+  padding: 1rem;
+  border-radius: 12px;
+  margin: 1rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 1rem;
+  white-space: pre-line;
+  max-height: 300px;
+  overflow-y: auto;
+
+  &.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  &.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  &.partial {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+  }
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
 export default function FridayNightGallery() {
+  const router = useRouter();
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [isImageLoading, setIsImageLoading] = useState(false);
+  const [uploadResult, setUploadResult] = useState(null);
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -439,6 +490,27 @@ export default function FridayNightGallery() {
 
     fetchPhotos();
   }, []);
+
+  // Handle upload results
+  useEffect(() => {
+    const { upload, count } = router.query;
+    
+    if (upload === 'success') {
+      setUploadResult({
+        message: `🎉 Successfully uploaded ${count} photo${count !== '1' ? 's' : ''}!`,
+        type: 'success'
+      });
+      
+      // Clear URL parameters after showing message
+      const newUrl = new URL(window.location);
+      newUrl.search = '';
+      window.history.replaceState({}, '', newUrl);
+    }
+  }, [router.query]);
+
+  const closeResult = () => {
+    setUploadResult(null);
+  };
 
   const openModal = (photo, index) => {
     setSelectedPhoto(photo);
@@ -555,6 +627,26 @@ export default function FridayNightGallery() {
               <GallerySubtitle>
                 The pre-wedding celebrations and all the laughs we shared
               </GallerySubtitle>
+
+              {uploadResult && (
+                <UploadResultMessage className={uploadResult.type}>
+                  <div style={{ flexShrink: 0, marginTop: '0.1rem' }}>
+                    <FontAwesomeIcon 
+                      icon={
+                        uploadResult.type === 'success' ? faCheckCircle :
+                        uploadResult.type === 'error' ? faExclamationTriangle :
+                        faExclamationTriangle
+                      }
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    {uploadResult.message}
+                  </div>
+                  <CloseButton onClick={closeResult}>
+                    <FontAwesomeIcon icon={faTimes} />
+                  </CloseButton>
+                </UploadResultMessage>
+              )}
 
               <UploadButton href="/friday-night/upload">
                 <FontAwesomeIcon icon={faUpload} style={{ fontSize: '0.9rem' }} />

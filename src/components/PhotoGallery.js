@@ -909,7 +909,7 @@ export default function PhotoGallery({ isAdmin = false }) {
 
   useEffect(() => {
     fetchPhotos(1);
-  }, [fetchPhotos]);
+  }, [uploaderQuery]);
 
   // Infinite scroll
   useEffect(() => {
@@ -930,7 +930,7 @@ export default function PhotoGallery({ isAdmin = false }) {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [pagination.currentPage, pagination.hasNextPage, loadingMore, fetchPhotos]);
+  }, [pagination.currentPage, pagination.hasNextPage, loadingMore, uploaderQuery]);
 
   // Handle modal navigation and back button
   useEffect(() => {
@@ -1042,7 +1042,7 @@ export default function PhotoGallery({ isAdmin = false }) {
     }
   };
 
-  const fetchPhotos = useCallback(async (page = 1, append = false) => {
+  const fetchPhotos = async (page = 1, append = false) => {
     try {
       if (append) {
         setLoadingMore(true);
@@ -1077,14 +1077,14 @@ export default function PhotoGallery({ isAdmin = false }) {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, [uploaderQuery]);
+  };
 
   const handlePageChange = (page) => {
     fetchPhotos(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const fetchAllPhotos = useCallback(async (page = 1) => {
+  const fetchAllPhotos = async (page = 1) => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -1107,7 +1107,7 @@ export default function PhotoGallery({ isAdmin = false }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   const clearUploaderFilter = () => {
     setUploaderQuery('');
@@ -1246,28 +1246,6 @@ export default function PhotoGallery({ isAdmin = false }) {
                 </SuggestionsContainer>
               )}
             </SearchInputContainer>
-
-            {!showSuggestions && (
-              <SearchStats>
-                <span>
-                  {uploaderQuery ? `Showing photos by "${uploaderQuery}"` : 'All photos'}
-                </span>
-                {uploaderQuery && (
-                  <FilterTag>
-                    <FontAwesomeIcon icon={faUser} style={{ fontSize: '0.7rem' }} />
-                    Filtered
-                  </FilterTag>
-                )}
-                <span>•</span>
-                <span>{pagination.totalPhotos} memories</span>
-                {availableUploaders.length > 0 && (
-                  <>
-                    <span>•</span>
-                    <span>{availableUploaders.length} contributors</span>
-                  </>
-                )}
-              </SearchStats>
-            )}
           </SearchContainer>
 
           {photos.length > 0 && (
