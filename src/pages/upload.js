@@ -211,7 +211,7 @@ export default function Upload() {
                 <FontAwesomeIcon icon={faUpload} style={{ marginRight: '0.5rem', color: '#d4af37', fontSize: '1rem' }} />
                 <strong>Share Your Wedding Memories!</strong>
                 <br />
-                Choose which type of photos you'd like to upload. Photos will be added to the gallery immediately.
+                Choose which type of photos you&apos;d like to upload. Photos will be added to the gallery immediately.
               </TartanInfoBox>
 
               <UploadOptions>
