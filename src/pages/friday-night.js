@@ -418,6 +418,14 @@ const EmptyIcon = styled.div`
 export default function FridayNightGallery() {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalPhotos: 0,
+    hasNextPage: false,
+    hasPrevPage: false
+  });
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [isImageLoading, setIsImageLoading] = useState(false);
@@ -427,23 +435,57 @@ export default function FridayNightGallery() {
     return uploadedBy === 'Admin' ? 'Bride & Groom' : uploadedBy;
   };
 
-  useEffect(() => {
-    const fetchPhotos = async () => {
-      try {
-        const response = await fetch('/api/friday-night-photos?limit=100');
-        if (response.ok) {
-          const data = await response.json();
+  const fetchPhotos = async (page = 1, append = false) => {
+    try {
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+      
+      const response = await fetch(`/api/friday-night-photos?page=${page}&limit=50`);
+      if (response.ok) {
+        const data = await response.json();
+        
+        if (append) {
+          setPhotos(prev => [...prev, ...data.photos]);
+        } else {
           setPhotos(data.photos || []);
         }
-      } catch (error) {
-        console.error('Error fetching Friday night photos:', error);
-      } finally {
-        setLoading(false);
+        setPagination(data.pagination);
+      }
+    } catch (error) {
+      console.error('Error fetching Friday night photos:', error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPhotos(1);
+  }, []);
+
+  // Infinite scroll
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const handleScroll = () => {
+      if (loadingMore || !pagination.hasNextPage) return;
+      
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.offsetHeight;
+      
+      // Load more when user is 200px from bottom
+      if (scrollTop + windowHeight >= docHeight - 200) {
+        fetchPhotos(pagination.currentPage + 1, true);
       }
     };
 
-    fetchPhotos();
-  }, []);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [pagination.currentPage, pagination.hasNextPage, loadingMore]);
 
 
   const openModal = (photo, index) => {
@@ -561,6 +603,12 @@ export default function FridayNightGallery() {
               <GallerySubtitle>
                 The pre-wedding celebrations and all the laughs we shared
               </GallerySubtitle>
+              
+              {pagination.totalPhotos > 0 && (
+                <div style={{ textAlign: 'center', marginBottom: '1rem', color: '#666', fontSize: '0.9rem' }}>
+                  {pagination.totalPhotos} photo{pagination.totalPhotos !== 1 ? 's' : ''} • Page {pagination.currentPage} of {pagination.totalPages}
+                </div>
+              )}
 
 
 
@@ -594,6 +642,13 @@ export default function FridayNightGallery() {
                     </PhotoItem>
                   ))}
                 </PhotoGrid>
+              )}
+              
+              {loadingMore && (
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                  <FontAwesomeIcon icon={faSpinner} spin style={{ marginRight: '0.5rem' }} />
+                  Loading more photos...
+                </div>
               )}
             </GalleryContainer>
           </Section>
