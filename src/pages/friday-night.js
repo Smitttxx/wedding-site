@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Layout from '../components/Layout';
@@ -13,7 +14,9 @@ import {
   faTimes, 
   faDownload,
   faUser,
-  faSpinner
+  faSpinner,
+  faUpload,
+  faUtensils
 } from '@fortawesome/free-solid-svg-icons';
 
 const GalleryContainer = styled.div`
@@ -306,6 +309,26 @@ const ModalImageWrapper = styled.div`
   margin: 0 auto;
 `;
 
+const UploadButton = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin: 1rem 0;
+  
+  &:hover {
+    background: ${props => props.theme.colors.primaryDark};
+    transform: translateY(-2px);
+    color: white;
+  }
+`;
+
 const ModalUploaderRibbon = styled.div`
   position: fixed;
   top: 20px;
@@ -348,6 +371,26 @@ const ModalUploaderRibbon = styled.div`
     border-style: solid;
     border-width: 0 0 20px 10px;
     border-color: transparent transparent transparent #062d21;
+  }
+`;
+
+const ModalInstructions = styled.div`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  text-align: center;
+  z-index: 10;
+  max-width: 90%;
+  
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
   }
 `;
 
@@ -513,6 +556,12 @@ export default function FridayNightGallery() {
                 The pre-wedding celebrations and all the laughs we shared
               </GallerySubtitle>
 
+              <UploadButton href="/friday-night/upload">
+                <FontAwesomeIcon icon={faUpload} style={{ fontSize: '0.9rem' }} />
+                <FontAwesomeIcon icon={faUtensils} style={{ fontSize: '0.9rem' }} />
+                Upload Friday Photos
+              </UploadButton>
+
               {photos.length === 0 ? (
                 <EmptyState>
                   <EmptyIcon>
@@ -613,6 +662,10 @@ export default function FridayNightGallery() {
               onLoadingComplete={() => setIsImageLoading(false)}
             />
           </ModalImageWrapper>
+
+          <ModalInstructions>
+            Swipe or use arrow keys to navigate • Download button in top right • Tap here or press ESC to close
+          </ModalInstructions>
         </Modal>
       )}
     </>

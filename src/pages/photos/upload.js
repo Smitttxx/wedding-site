@@ -11,78 +11,43 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudUploadAlt, faCamera, faSpinner, faCheckCircle, faExclamationTriangle, faTimes, faWarning, faImages, faCheck, faHeart, faChurch } from '@fortawesome/free-solid-svg-icons';
 
 const UploadContainer = styled.div`
-  max-width: 100%;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 0.5rem;
-  
-  @media (min-width: 768px) {
-    max-width: 600px;
-    padding: 2rem;
-  }
+  padding: 1rem;
 `;
 
 const UploadArea = styled.div`
   border: 3px dashed ${props => props.$isDragActive ? props.theme.colors.primary : props.theme.colors.accent};
   border-radius: 16px;
-  padding: 1.5rem 1rem;
+  padding: 3rem 2rem;
   text-align: center;
-  background: ${props => props.$isDragActive ? 'rgba(0, 0, 0, 0.05)' : 'transparent'};
+  background: ${props => props.$isDragActive ? 'rgba(11, 61, 46, 0.05)' : 'rgba(255, 255, 255, 0.8)'};
   transition: all 0.3s ease;
   cursor: pointer;
-  position: relative;
-  min-height: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
+  margin: 2rem 0;
+  
   &:hover {
     border-color: ${props => props.theme.colors.primary};
-    background: rgba(0, 0, 0, 0.02);
-  }
-
-  ${props => props.$hasFiles && `
-    border-color: ${props.theme.colors.primary};
-    background: rgba(0, 0, 0, 0.02);
-  `}
-
-  @media (min-width: 768px) {
-    padding: 3rem 2rem;
-    min-height: 250px;
+    background: rgba(11, 61, 46, 0.05);
   }
 `;
 
 const UploadIcon = styled.div`
-  font-size: 2rem;
-  color: ${props => props.theme.colors.accent};
-  margin-bottom: 0.75rem;
-  
-  @media (min-width: 768px) {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
+  font-size: 3rem;
+  color: ${props => props.theme.colors.primary};
+  margin-bottom: 1rem;
 `;
 
-const UploadText = styled.p`
-  font-size: 1rem;
-  color: ${props => props.theme.colors.text};
-  margin-bottom: 0.25rem;
-  font-weight: 600;
-  
-  @media (min-width: 768px) {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-  }
+const UploadText = styled.h3`
+  color: ${props => props.theme.colors.primary};
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
 `;
 
 const UploadSubtext = styled.p`
-  font-size: 0.85rem;
-  color: ${props => props.theme.colors.textLight || '#666'};
-  line-height: 1.4;
-  
-  @media (min-width: 768px) {
-    font-size: 1rem;
-  }
+  color: ${props => props.theme.colors.text};
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
 `;
 
 const FileInput = styled.input`
@@ -803,12 +768,57 @@ const PersonalMessageSubtext = styled.div`
   font-style: italic;
 `;
 
+const FileListHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: ${props => props.theme.colors.primary};
+  color: white;
+  border-radius: 8px 8px 0 0;
+  font-weight: 600;
+`;
+
+const FileCount = styled.span`
+  font-size: 0.9rem;
+`;
+
+const ToggleButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+`;
+
+const FileListContent = styled.div`
+  max-height: ${props => props.$isExpanded ? '250px' : '0'};
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+`;
+
+const CompactView = styled.div`
+  padding: 0.75rem;
+  background: rgba(11, 61, 46, 0.05);
+  border-radius: 0 0 8px 8px;
+  font-size: 0.9rem;
+  color: ${props => props.theme.colors.text};
+  text-align: center;
+`;
+
 export default function PhotoUpload() {
   const [uploading, setUploading] = useState(false);
   const [uploadedBy, setUploadedBy] = useState('');
   const [status, setStatus] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 });
+  const [showFileList, setShowFileList] = useState(false);
 
   const resetStatus = () => setStatus(null);
 
@@ -1230,15 +1240,6 @@ export default function PhotoUpload() {
                   capturing moments they might have missed and memories they&apos;ll treasure forever!
                 </PersonalMessageSubtext>
               </PersonalMessage>
-
-              <UploadInstructions>
-                <strong><FontAwesomeIcon icon={faCamera} style={{ color: '#d4af37' }} /> Upload Tips:</strong><br/>
-                • Tap the upload area to select photos<br/>
-                • You can select multiple photos at once<br/>
-                • Max 50MB per photo (auto-compressed)<br/>
-                • Photos will be shared with everyone once uploaded!
-              </UploadInstructions>
-
               <div>
                 <label htmlFor="uploadedBy" style={{ fontSize: '0.9rem', fontWeight: '500', marginBottom: '0.25rem', display: 'block' }}>
                   Your name (optional):
@@ -1255,16 +1256,15 @@ export default function PhotoUpload() {
               <UploadArea
                 {...getRootProps()}
                 $isDragActive={isDragActive}
-                $hasFiles={selectedFiles.length > 0}
               >
                 <input {...getInputProps()} />
                 <UploadIcon>
                   <FontAwesomeIcon icon={faCloudUploadAlt} />
                 </UploadIcon>
                 <UploadText>
-                  {isDragActive ? 'Drop your photos here' : 'Tap here to select your photos'}
+                  {isDragActive ? 'Drop your wedding photos here' : 'Tap here to select your wedding photos'}
                 </UploadText>
-                <UploadSubtext>Supports HEIC, JPG/JPEG, PNG, WebP, AVIF, GIF and more (max 50MB each, auto-compressed)</UploadSubtext>
+                <UploadSubtext>Supports HEIC, JPG/JPEG, PNG, WebP, AVIF, GIF and more (large files will be compressed automatically)</UploadSubtext>
                 {selectedFiles.length > 0 && (
                   <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '8px' }}>
                     <FontAwesomeIcon icon={faCheck} style={{ color: '#28a745', marginRight: '0.5rem' }} />
@@ -1273,38 +1273,37 @@ export default function PhotoUpload() {
                 )}
               </UploadArea>
 
-              {/* Mobile-friendly files selected banner */}
-              {selectedFiles.length > 0 && (
-                <FilesSelectedBanner>
-                  <FilesSelectedText>
-                    <FontAwesomeIcon icon={faCheck} />
-                    Photos Selected
-                  </FilesSelectedText>
-                  <FilesSelectedCount>
-                    {selectedFiles.length}
-                  </FilesSelectedCount>
-                </FilesSelectedBanner>
-              )}
-
-              {/* Mobile-friendly upload section */}
               {selectedFiles.length > 0 && (
                 <UploadSection>
-                  <UploadSectionTitle>
-                    <FontAwesomeIcon icon={faCamera} />
-                    Ready to Share
-                  </UploadSectionTitle>
+                  <FileListHeader>
+                    <FileCount>
+                      <FontAwesomeIcon icon={faCamera} style={{ marginRight: '0.5rem' }} />
+                      {selectedFiles.length} Photo{selectedFiles.length !== 1 ? 's' : ''} Selected
+                    </FileCount>
+                    <ToggleButton onClick={() => setShowFileList(!showFileList)}>
+                      {showFileList ? 'Hide' : 'Show'} Details
+                    </ToggleButton>
+                  </FileListHeader>
                   
-                  <SelectedFilesPreview>
-                    {selectedFiles.map((file, index) => (
-                      <FilePreviewItem key={index}>
-                        <FilePreviewName>{file.name}</FilePreviewName>
-                        <FilePreviewSize>{formatFileSize(file.size)}</FilePreviewSize>
-                        <FilePreviewRemove onClick={() => removeFile(index)}>
-                          <FontAwesomeIcon icon={faTimes} />
-                        </FilePreviewRemove>
-                      </FilePreviewItem>
-                    ))}
-                  </SelectedFilesPreview>
+                  {showFileList ? (
+                    <FileListContent $isExpanded={showFileList}>
+                      <SelectedFilesPreview>
+                        {selectedFiles.map((file, index) => (
+                          <FilePreviewItem key={index}>
+                            <FilePreviewName>{file.name}</FilePreviewName>
+                            <FilePreviewSize>{formatFileSize(file.size)}</FilePreviewSize>
+                            <FilePreviewRemove onClick={() => removeFile(index)}>
+                              <FontAwesomeIcon icon={faTimes} />
+                            </FilePreviewRemove>
+                          </FilePreviewItem>
+                        ))}
+                      </SelectedFilesPreview>
+                    </FileListContent>
+                  ) : (
+                    <CompactView>
+                      Click "Show Details" to see individual files or remove specific photos
+                    </CompactView>
+                  )}
 
                   <ActionButtonsContainer>
                     <ClearAllButton onClick={clearAllFiles}>

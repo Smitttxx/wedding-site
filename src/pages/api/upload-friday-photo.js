@@ -1,4 +1,4 @@
-import { prisma } from '../../lib/prisma';
+import prisma from '../../lib/prisma';
 import { put } from '@vercel/blob';
 import formidable from 'formidable';
 import fs from 'fs';
@@ -34,9 +34,9 @@ export default async function handler(req, res) {
 
     // Read the file
     const fileBuffer = fs.readFileSync(file.filepath);
-    const filename = `friday-night-${Date.now()}-${file.originalFilename}`;
+    const filename = `friday-night/${Date.now()}-${file.originalFilename}`;
 
-    // Upload to Vercel Blob
+    // Upload to Vercel Blob in friday-night folder
     const blob = await put(filename, fileBuffer, {
       access: 'public',
       contentType: file.mimetype,

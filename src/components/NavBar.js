@@ -121,8 +121,8 @@ export default function NavBar() {
         <StyledLink href="/" $isActive={isActive('/')}><FontAwesomeIcon icon={faHome} style={{ fontSize: '0.8rem' }} />Home</StyledLink>
         <StyledLink href="/friday-night" $isActive={isActive('/friday-night')}><FontAwesomeIcon icon={faUtensils} style={{ fontSize: '0.8rem' }} />Friday BBQ</StyledLink>
         <StyledLink href="https://fotoshare.co/e/vp7GNe0ASxlcB3ebVMGpX" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faCamera} style={{ fontSize: '0.8rem' }} />Photobooth</StyledLink>
-        <StyledLink href="/photos/gallery" $isActive={isActive('/photos/gallery')}><FontAwesomeIcon icon={faImages} style={{ fontSize: '0.8rem' }} />Guest Photos</StyledLink>
-        <StyledLink href="/photos/upload" $isActive={isActive('/photos/upload')}><FontAwesomeIcon icon={faUpload} style={{ fontSize: '0.8rem' }} />Upload Photos</StyledLink>
+        <StyledLink href="/photos/gallery" $isActive={isActive('/photos/gallery')}><FontAwesomeIcon icon={faImages} style={{ fontSize: '0.8rem' }} />Guest Wedding Photos</StyledLink>
+        <StyledLink href="/upload" $isActive={isActive('/upload')}><FontAwesomeIcon icon={faUpload} style={{ fontSize: '0.8rem' }} />Upload Photos</StyledLink>
         <StyledLink href="/gifts" $isActive={isActive('/gifts')}><FontAwesomeIcon icon={faGift} style={{ fontSize: '0.8rem' }} />Gifts</StyledLink>
       </NavLinks>
       <MenuToggle onClick={() => setMenuOpen(!menuOpen)}>☰</MenuToggle>
