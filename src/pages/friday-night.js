@@ -15,7 +15,8 @@ import {
   faDownload,
   faUser,
   faSpinner,
-  faUtensils
+  faUtensils,
+  faHeart
 } from '@fortawesome/free-solid-svg-icons';
 
 const GalleryContainer = styled.div`
@@ -414,6 +415,24 @@ const EmptyIcon = styled.div`
   margin-bottom: 1rem;
 `;
 
+const PhotoCount = styled.div`
+  background: rgba(255, 255, 255, 0.9);
+  color: ${props => props.theme.colors.text};
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin: 0.75rem 0;
+  display: inline-block;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  text-align: center;
+  min-width: 180px;
+  
+  @media (min-width: 768px) {
+    min-width: 250px;
+  }
+`;
+
 
 export default function FridayNightGallery() {
   const [photos, setPhotos] = useState([]);
@@ -605,9 +624,10 @@ export default function FridayNightGallery() {
               </GallerySubtitle>
               
               {pagination.totalPhotos > 0 && (
-                <div style={{ textAlign: 'center', marginBottom: '1rem', color: '#666', fontSize: '0.9rem' }}>
-                  {pagination.totalPhotos} photo{pagination.totalPhotos !== 1 ? 's' : ''} • Page {pagination.currentPage} of {pagination.totalPages}
-                </div>
+                <PhotoCount>
+                  <FontAwesomeIcon icon={faHeart} style={{ marginRight: '0.5rem', color: '#d4af37', fontSize: '0.8rem' }} />
+                  {pagination.totalPhotos} Memories Created
+                </PhotoCount>
               )}
 
 
