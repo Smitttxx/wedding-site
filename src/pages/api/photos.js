@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       ...baseWhere,
       ...(uploader ? {
         uploadedBy: {
-          contains: uploader,
+          equals: uploader,
           mode: 'insensitive',
         }
       } : {})
