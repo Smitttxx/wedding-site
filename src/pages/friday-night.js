@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -459,14 +459,14 @@ export default function FridayNightGallery() {
     document.body.style.overflow = 'unset';
   };
 
-  const navigatePhoto = (direction) => {
+  const navigatePhoto = useCallback((direction) => {
     const newIndex = selectedPhotoIndex + direction;
     if (newIndex >= 0 && newIndex < photos.length) {
       setIsImageLoading(true);
       setSelectedPhotoIndex(newIndex);
       setSelectedPhoto(photos[newIndex]);
     }
-  };
+  }, [selectedPhotoIndex, photos]);
 
   const handleDownloadPhoto = async (photo) => {
     try {
@@ -521,7 +521,7 @@ export default function FridayNightGallery() {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [selectedPhoto, selectedPhotoIndex, photos.length]);
+  }, [selectedPhoto, selectedPhotoIndex, photos.length, navigatePhoto]);
 
   if (loading) {
     return (

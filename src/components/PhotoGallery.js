@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -909,10 +909,12 @@ export default function PhotoGallery({ isAdmin = false }) {
 
   useEffect(() => {
     fetchPhotos(1);
-  }, [uploaderQuery]);
+  }, [fetchPhotos]);
 
   // Infinite scroll
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       if (loadingMore || !pagination.hasNextPage) return;
       
@@ -928,7 +930,7 @@ export default function PhotoGallery({ isAdmin = false }) {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [pagination.currentPage, pagination.hasNextPage, loadingMore]);
+  }, [pagination.currentPage, pagination.hasNextPage, loadingMore, fetchPhotos]);
 
   // Handle modal navigation and back button
   useEffect(() => {
@@ -1040,7 +1042,7 @@ export default function PhotoGallery({ isAdmin = false }) {
     }
   };
 
-  const fetchPhotos = async (page = 1, append = false) => {
+  const fetchPhotos = useCallback(async (page = 1, append = false) => {
     try {
       if (append) {
         setLoadingMore(true);
@@ -1075,14 +1077,14 @@ export default function PhotoGallery({ isAdmin = false }) {
       setLoading(false);
       setLoadingMore(false);
     }
-  };
+  }, [uploaderQuery]);
 
   const handlePageChange = (page) => {
     fetchPhotos(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const fetchAllPhotos = async (page = 1) => {
+  const fetchAllPhotos = useCallback(async (page = 1) => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -1105,7 +1107,7 @@ export default function PhotoGallery({ isAdmin = false }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const clearUploaderFilter = () => {
     setUploaderQuery('');

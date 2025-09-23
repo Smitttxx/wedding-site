@@ -1301,7 +1301,7 @@ export default function PhotoUpload() {
                     </FileListContent>
                   ) : (
                     <CompactView>
-                      Click "Show Details" to see individual files or remove specific photos
+                      Click &quot;Show Details&quot; to see individual files or remove specific photos
                     </CompactView>
                   )}
 
