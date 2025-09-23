@@ -115,9 +115,9 @@ const UploaderRibbon = styled.div`
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.2;
 
   &::before {
     content: '';
@@ -322,9 +322,9 @@ const ModalUploaderRibbon = styled.div`
   align-items: center;
   gap: 0.5rem;
   max-width: 200px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.2;
 
   &::before {
     content: '';

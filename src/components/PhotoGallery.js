@@ -597,9 +597,9 @@ const GalleryUploaderRibbon = styled.div`
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.2;
 
   &::before {
     content: '';
