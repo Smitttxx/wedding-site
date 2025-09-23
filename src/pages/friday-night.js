@@ -115,7 +115,6 @@ const UploaderRibbon = styled.div`
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  max-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
