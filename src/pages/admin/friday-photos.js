@@ -296,8 +296,8 @@ export default function FridayPhotosAdmin() {
           }
         }
         
-        // Compress large files
-        if (fileToUpload.size > 4.4 * 1024 * 1024) {
+        // Compress files that are close to or over the limit
+        if (fileToUpload.size > 4.0 * 1024 * 1024) {
           try {
             fileToUpload = await compressImage(fileToUpload);
           } catch (error) {

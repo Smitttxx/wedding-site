@@ -422,6 +422,11 @@ export default function FridayNightGallery() {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [isImageLoading, setIsImageLoading] = useState(false);
 
+  // Helper function to display uploader name (replace "Admin" with "Bride & Groom")
+  const getDisplayUploader = (uploadedBy) => {
+    return uploadedBy === 'Admin' ? 'Bride & Groom' : uploadedBy;
+  };
+
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
@@ -583,7 +588,7 @@ export default function FridayNightGallery() {
                       {photo.uploadedBy && (
                         <UploaderRibbon>
                           <FontAwesomeIcon icon={faUser} style={{ fontSize: '0.6rem' }} />
-                          {photo.uploadedBy}
+                          {getDisplayUploader(photo.uploadedBy)}
                         </UploaderRibbon>
                       )}
                     </PhotoItem>
@@ -614,7 +619,7 @@ export default function FridayNightGallery() {
           {selectedPhoto.uploadedBy && (
             <ModalUploaderRibbon>
               <FontAwesomeIcon icon={faUser} style={{ fontSize: '0.7rem' }} />
-              {selectedPhoto.uploadedBy}
+              {getDisplayUploader(selectedPhoto.uploadedBy)}
             </ModalUploaderRibbon>
           )}
 
