@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       ...baseWhere,
       ...(uploader ? {
         uploadedBy: {
-          equals: uploader,
+          startsWith: uploader,
           mode: 'insensitive',
         }
       } : {})
@@ -28,16 +28,16 @@ export default async function handler(req, res) {
     // Get total count of approved, non-deleted photos
     const totalPhotos = await prisma.photo.count({ where });
 
-    // Get unique uploaders count
-    const uniqueUploaders = await prisma.photo.findMany({
+    // Get unique uploaders count - use groupBy to ensure we get ALL uploaders
+    const uniqueUploaders = await prisma.photo.groupBy({
+      by: ['uploadedBy'],
       where: {
         ...baseWhere,
         uploadedBy: { not: null },
       },
-      select: {
+      _count: {
         uploadedBy: true,
       },
-      distinct: ['uploadedBy'],
     });
 
     // Calculate pagination
